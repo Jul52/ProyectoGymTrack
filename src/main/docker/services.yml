@@ -5,3 +5,5 @@ services:
     extends:
       file: ./mariadb.yml
       service: mariadb
+    ports:
+      - 3306:33060
