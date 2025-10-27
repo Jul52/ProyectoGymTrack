@@ -1,0 +1,46 @@
+{
+  "annotations": {
+    "changelogDate": "20251027202708"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "quantity",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "subtotal",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "salePrice",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "InvoiceService",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "invoice",
+      "otherEntityRelationshipName": "invoiceService",
+      "relationshipName": "invoice",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "gymService",
+      "otherEntityRelationshipName": "invoiceService",
+      "relationshipName": "service",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,28 @@
+{
+  "gymtrackApp": {
+    "invoiceService": {
+      "home": {
+        "title": "Invoice Services",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Invoice Service",
+        "createOrEditLabel": "Crear o editar Invoice Service",
+        "notFound": "Ningún Invoice Services encontrado"
+      },
+      "created": "Un nuevo Invoice Service ha sido creado con el identificador {{ param }}",
+      "updated": "Un Invoice Service ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Invoice Service ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Invoice Service {{ id }}?"
+      },
+      "detail": {
+        "title": "Invoice Service"
+      },
+      "id": "ID",
+      "quantity": "Quantity",
+      "subtotal": "Subtotal",
+      "salePrice": "Sale Price",
+      "invoice": "Invoice",
+      "service": "Service"
+    }
+  }
+}

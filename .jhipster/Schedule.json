@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20251027202908"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dayOfWeek",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "startTime",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "endTime",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Schedule",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "courseName",
+      "otherEntityName": "course",
+      "otherEntityRelationshipName": "schedule",
+      "relationshipName": "course",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

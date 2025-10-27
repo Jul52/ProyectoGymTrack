@@ -1,0 +1,26 @@
+{
+  "gymtrackApp": {
+    "zone": {
+      "home": {
+        "title": "Zones",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Zone",
+        "createOrEditLabel": "Crear o editar Zone",
+        "notFound": "Ningún Zones encontrado"
+      },
+      "created": "Un nuevo Zone ha sido creado con el identificador {{ param }}",
+      "updated": "Un Zone ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Zone ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Zone {{ id }}?"
+      },
+      "detail": {
+        "title": "Zone"
+      },
+      "id": "ID",
+      "name": "Name",
+      "status": "Status",
+      "course": "Course"
+    }
+  }
+}

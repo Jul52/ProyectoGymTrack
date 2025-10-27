@@ -1,0 +1,55 @@
+{
+  "annotations": {
+    "changelogDate": "20251027202608"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "total",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "createdDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "Invoice",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "invoice",
+      "relationshipName": "payment",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "invoiceService",
+      "otherEntityRelationshipName": "invoice",
+      "relationshipName": "invoiceService",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "methodName",
+      "otherEntityName": "paymentMethod",
+      "relationshipName": "paymentMethod",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "document",
+      "otherEntityName": "userData",
+      "otherEntityRelationshipName": "invoice",
+      "relationshipName": "userData",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
