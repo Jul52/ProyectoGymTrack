@@ -1,11 +1,7 @@
 id;description;image;image_content_type;video;incident_id;machine_id
-1;noisily on hopelessly;../fake-data/blob/hipster.png;image/png;fond modulo;1;1
-2;for negative;../fake-data/blob/hipster.png;image/png;acidic but;2;2
-3;where wherever;../fake-data/blob/hipster.png;image/png;nifty list ew;3;3
-4;however darn;../fake-data/blob/hipster.png;image/png;etch ugh metabolite;4;4
-5;yowza;../fake-data/blob/hipster.png;image/png;deplore gadzooks angrily;5;5
-6;knife porter;../fake-data/blob/hipster.png;image/png;chunter;6;6
-7;rundown maul;../fake-data/blob/hipster.png;image/png;lazily yearningly;7;7
-8;nightlife;../fake-data/blob/hipster.png;image/png;yuck;8;8
-9;meh furthermore apud;../fake-data/blob/hipster.png;image/png;bus phooey;9;9
-10;off think whoever;../fake-data/blob/hipster.png;image/png;modulo past;10;10
+1;Fallo en el sistema de pesas;../fake-data/blob/hipster.png;image/png;video;1;5
+2;Cable del equipo roto;../fake-data/blob/hipster.png;image/png;video;2;7
+3;Falta de limpieza en máquina;../fake-data/blob/hipster.png;image/png;video;3;1
+4;Grieta en la base;../fake-data/blob/hipster.png;image/png;video;4;8
+5;Máquina detenida por mal funcionamiento;../fake-data/blob/hipster.png;image/png;video;5;9
+6;Necesita lubricación;../fake-data/blob/hipster.png;image/png;video;6;1

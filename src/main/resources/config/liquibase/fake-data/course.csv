@@ -1,11 +1,6 @@
 id;course_name;status;start_date;end_date;capacity;trainer_id
-1;gee unto proofread;true;2025-10-27;2025-10-27;28503;1
-2;gallery trained intelligent;false;2025-10-27;2025-10-27;25654;2
-3;lightly across;true;2025-10-27;2025-10-27;31436;2
-4;finer potentially inwardly;false;2025-10-27;2025-10-27;7060;2
-5;bank;true;2025-10-27;2025-10-27;11724;1
-6;flimsy;true;2025-10-27;2025-10-26;16788;1
-7;failing curiously below;true;2025-10-27;2025-10-27;27563;2
-8;pfft radiant since;false;2025-10-27;2025-10-27;6258;1
-9;er gulp as;false;2025-10-27;2025-10-27;32075;2
-10;ouch;false;2025-10-27;2025-10-27;20873;1
+1;Yoga matutino;true;2025-09-18 08:00:00;2025-09-18 09:00:00;20;1
+2;Clase de Zumba;true;2025-09-18 10:00:00;2025-09-18 11:00:00;25;2
+3;Pilates de tarde;true;2025-09-18 17:00:00;2025-09-18 18:00:00;15;1
+4;Boxeo principiantes;true;2025-09-18 19:30:00;2025-09-18 20:30:00;12;2
+5;Spinning avanzado;true;2025-09-19 07:00:00;2025-09-19 08:00:00;20;1
