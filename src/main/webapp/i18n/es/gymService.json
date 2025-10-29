@@ -2,29 +2,29 @@
   "gymtrackApp": {
     "gymService": {
       "home": {
-        "title": "Gym Services",
-        "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Gym Service",
-        "createOrEditLabel": "Crear o editar Gym Service",
-        "notFound": "Ningún Gym Services encontrado"
+        "title": "Servicios de gimnasio",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Servicio de gimnasio",
+        "createOrEditLabel": "Crear o editar Servicio de gimnasio",
+        "notFound": "No se encontraron Servicios de gimnasio"
       },
-      "created": "Un nuevo Gym Service ha sido creado con el identificador {{ param }}",
-      "updated": "Un Gym Service ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Gym Service ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Servicio de gimnasio ha sido creado con el identificador {{ param }}",
+      "updated": "Un Servicio de gimnasio ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Servicio de gimnasio ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Gym Service {{ id }}?"
+        "question": "¿Está seguro que quiere eliminar el Servicio de gimnasio {{ id }}?"
       },
       "detail": {
-        "title": "Gym Service"
+        "title": "Servicio de gimnasio"
       },
       "id": "ID",
-      "serviceName": "Service Name",
-      "serviceDescription": "Service Description",
-      "price": "Price",
-      "status": "Status",
-      "invoiceService": "Invoice Service",
-      "category": "Category",
-      "reservations": "Reservations"
+      "serviceName": "Nombre del servicio",
+      "serviceDescription": "Descripción del servicio",
+      "price": "Precio",
+      "status": "Estado",
+      "invoiceService": "Servicio de Factura",
+      "category": "Categoría",
+      "reservations": "Reservas"
     }
   }
 }

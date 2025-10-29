@@ -7,7 +7,7 @@
       },
       "messages": {
         "info": "Introduzca la dirección de correo electrónico que utilizó para registrarse",
-        "success": "Revise su correo electrónico para obtener más información sobre cómo restablecer su contraseña."
+        "success": "Hemos enviado un correo electrónico con instrucciones para restablecer su contraseña."
       }
     },
     "finish": {
@@ -16,10 +16,10 @@
         "button": "Validar la nueva contraseña"
       },
       "messages": {
-        "info": "Elija una contraseña nueva",
-        "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, ",
+        "info": "Elija una nueva contraseña",
+        "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, inicie sesión para entrar.",
         "keymissing": "Falta la clave de reinicio.",
-        "error": "Su contraseña no puede ser restablecida. Recuerde que una solicitud de reinicio de contraseña sólo es válida durante 24 horas."
+        "error": "Su contraseña no puede ser restablecida. Tenga en cuenta que una solicitud de reinicio de contraseña es válida solo por 24 horas."
       }
     }
   }

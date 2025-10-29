@@ -2,27 +2,27 @@
   "gymtrackApp": {
     "machine": {
       "home": {
-        "title": "Machines",
-        "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Machine",
-        "createOrEditLabel": "Crear o editar Machine",
-        "notFound": "Ningún Machines encontrado"
+        "title": "Máquinas",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nueva máquina",
+        "createOrEditLabel": "Crear o editar máquina",
+        "notFound": "No se encontraron máquinas"
       },
-      "created": "Un nuevo Machine ha sido creado con el identificador {{ param }}",
-      "updated": "Un Machine ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Machine ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva máquina ha sido creada con el identificador {{ param }}",
+      "updated": "Una máquina ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una máquina ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Machine {{ id }}?"
+        "question": "¿Está seguro que quiere eliminar la máquina {{ id }}?"
       },
       "detail": {
-        "title": "Machine"
+        "title": "Máquina"
       },
       "id": "ID",
-      "serial": "Serial",
-      "description": "Description",
-      "status": "Status",
-      "machineIncidents": "Machine Incidents",
-      "admin": "Admin"
+      "serial": "Número de serie",
+      "description": "Descripción",
+      "status": "Estado",
+      "machineIncidents": "Incidentes de máquina",
+      "admin": "Administrador"
     }
   }
 }

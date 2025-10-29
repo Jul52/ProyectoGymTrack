@@ -2,26 +2,26 @@
   "gymtrackApp": {
     "schedule": {
       "home": {
-        "title": "Schedules",
-        "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Schedule",
-        "createOrEditLabel": "Crear o editar Schedule",
-        "notFound": "Ningún Schedules encontrado"
+        "title": "Horarios",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Horario",
+        "createOrEditLabel": "Crear o editar Horario",
+        "notFound": "No se encontraron Horarios"
       },
-      "created": "Un nuevo Schedule ha sido creado con el identificador {{ param }}",
-      "updated": "Un Schedule ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Schedule ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Horario ha sido creado con el identificador {{ param }}",
+      "updated": "Un Horario ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Horario ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Schedule {{ id }}?"
+        "question": "¿Está seguro que quiere eliminar el Horario {{ id }}?"
       },
       "detail": {
-        "title": "Schedule"
+        "title": "Horario"
       },
       "id": "ID",
-      "dayOfWeek": "Day Of Week",
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "course": "Course"
+      "dayOfWeek": "Día de la semana",
+      "startTime": "Hora de inicio",
+      "endTime": "Hora de fin",
+      "course": "Curso"
     }
   }
 }

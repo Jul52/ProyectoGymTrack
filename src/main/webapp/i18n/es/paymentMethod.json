@@ -2,23 +2,23 @@
   "gymtrackApp": {
     "paymentMethod": {
       "home": {
-        "title": "Payment Methods",
-        "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Payment Method",
-        "createOrEditLabel": "Crear o editar Payment Method",
-        "notFound": "Ningún Payment Methods encontrado"
+        "title": "Métodos de pago",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Método de pago",
+        "createOrEditLabel": "Crear o editar Método de pago",
+        "notFound": "No se encontraron Métodos de pago"
       },
-      "created": "Un nuevo Payment Method ha sido creado con el identificador {{ param }}",
-      "updated": "Un Payment Method ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Payment Method ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Método de pago ha sido creado con el identificador {{ param }}",
+      "updated": "Un Método de pago ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Método de pago ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Payment Method {{ id }}?"
+        "question": "¿Está seguro que quiere eliminar el Método de pago {{ id }}?"
       },
       "detail": {
-        "title": "Payment Method"
+        "title": "Método de pago"
       },
       "id": "ID",
-      "methodName": "Method Name"
+      "methodName": "Nombre del método"
     }
   }
 }
