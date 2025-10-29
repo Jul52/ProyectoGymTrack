@@ -30,7 +30,8 @@
         "invoiceService": "Servicio de Factura",
         "course": "Curso",
         "schedule": "Horario",
-        "zone": "Zona"
+        "zone": "Zona",
+        "payment": "Pagos"
       },
       "account": {
         "main": "Cuenta",
