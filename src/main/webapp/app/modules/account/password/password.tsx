@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
 import { Button, Col, Row } from 'reactstrap';
 import { toast } from 'react-toastify';
+import './password.scss';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
@@ -43,12 +44,12 @@ export const PasswordPage = () => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="password-title">
-            <Translate contentKey="password.title" interpolate={{ username: account.login }}>
-              Password for {account.login}
-            </Translate>
-          </h2>
           <ValidatedForm id="password-form" onSubmit={handleValidSubmit}>
+            <h2 id="password-title">
+              <Translate contentKey="password.title" interpolate={{ username: account.login }}>
+                Password for {account.login}
+              </Translate>
+            </h2>
             <ValidatedField
               name="currentPassword"
               label={translate('global.form.currentpassword.label')}

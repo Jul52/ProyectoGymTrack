@@ -3,6 +3,7 @@ import { Translate, ValidatedField, translate } from 'react-jhipster';
 import { Alert, Button, Col, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { type FieldError, useForm } from 'react-hook-form';
+import './login-modal.scss'; // 👈 archivo nuevo para estilos específicos del modal
 
 export interface ILoginModalProps {
   showModal: boolean;
@@ -29,21 +30,21 @@ const LoginModal = (props: ILoginModalProps) => {
   };
 
   return (
-    <Modal isOpen={props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
+    <Modal isOpen={props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false} className="login-modal">
       <Form onSubmit={handleLoginSubmit}>
         <ModalHeader id="login-title" data-cy="loginTitle" toggle={handleClose}>
-          <Translate contentKey="login.title">Sign in</Translate>
+          <Translate contentKey="login.title">Iniciar sesión</Translate>
         </ModalHeader>
         <ModalBody>
           <Row>
             <Col md="12">
-              {loginError ? (
-                <Alert color="danger" data-cy="loginError">
+              {loginError && (
+                <Alert color="danger" data-cy="loginError" className="text-center fw-semibold">
                   <Translate contentKey="login.messages.error.authentication">
-                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                    <strong>¡Error al iniciar sesión!</strong> Revisa tus credenciales e inténtalo de nuevo.
                   </Translate>
                 </Alert>
-              ) : null}
+              )}
             </Col>
             <Col md="12">
               <ValidatedField
@@ -80,27 +81,30 @@ const LoginModal = (props: ILoginModalProps) => {
               />
             </Col>
           </Row>
-          <div className="mt-1">&nbsp;</div>
-          <Alert color="warning">
-            <Link to="/account/reset/request" data-cy="forgetYourPasswordSelector">
-              <Translate contentKey="login.password.forgot">Did you forget your password?</Translate>
-            </Link>
-          </Alert>
-          <Alert color="warning">
-            <span>
-              <Translate contentKey="global.messages.info.register.noaccount">You don&apos;t have an account yet?</Translate>
-            </span>{' '}
-            <Link to="/account/register">
-              <Translate contentKey="global.messages.info.register.link">Register a new account</Translate>
-            </Link>
-          </Alert>
+
+          <div className="mt-3">
+            <Alert color="warning" className="p-2 text-center">
+              <Link to="/account/reset/request" data-cy="forgetYourPasswordSelector" className="link-reset">
+                <Translate contentKey="login.password.forgot">¿Olvidaste tu contraseña?</Translate>
+              </Link>
+            </Alert>
+            <Alert color="warning" className="p-2 text-center">
+              <span>
+                <Translate contentKey="global.messages.info.register.noaccount">¿No tienes una cuenta todavía?</Translate>
+              </span>{' '}
+              <Link to="/account/register" className="link-register">
+                <Translate contentKey="global.messages.info.register.link">Regístrate</Translate>
+              </Link>
+            </Alert>
+          </div>
         </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={handleClose} tabIndex={1}>
-            <Translate contentKey="entity.action.cancel">Cancel</Translate>
-          </Button>{' '}
-          <Button color="primary" type="submit" data-cy="submit">
-            <Translate contentKey="login.form.button">Sign in</Translate>
+
+        <ModalFooter className="d-flex justify-content-between">
+          <Button onClick={handleClose} tabIndex={1} className="btn-login">
+            <Translate contentKey="entity.action.cancel">Cancelar</Translate>
+          </Button>
+          <Button type="submit" data-cy="submit" className="btn-registrarse">
+            <Translate contentKey="login.form.button">Iniciar sesión</Translate>
           </Button>
         </ModalFooter>
       </Form>
