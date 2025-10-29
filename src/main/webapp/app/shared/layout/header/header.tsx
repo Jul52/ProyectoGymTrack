@@ -9,6 +9,7 @@ import { useAppDispatch } from 'app/config/store';
 import { setLocale } from 'app/shared/reducers/locale';
 import { AccountMenu, AdminMenu, EntitiesMenu, LocaleMenu } from '../menus';
 import { Brand, Home } from './header-components';
+import { NavLink as Link } from 'react-router-dom';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -41,17 +42,24 @@ const Header = (props: IHeaderProps) => {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
+  const CustomBrand = () => (
+    <Link to="/" className="navbar-brand d-flex align-items-center">
+      <img src="content/images/logo-gymtrack2.png" alt="GymTrack Logo" className="logo-img" />
+      <span className="brand-title ms-2">
+        <Translate contentKey="global.title">GYMTRACK</Translate>
+      </span>
+    </Link>
+  );
+
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
   return (
     <div id="app-header">
-      {renderDevRibbon()}
       <LoadingBar className="loading-bar" />
-      <Navbar data-cy="navbar" dark expand="md" fixed="top" className="bg-dark">
-        <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
-        <Brand />
+      <Navbar data-cy="navbar" expand="md" fixed="top" className="navbar-custom">
+        <CustomBrand />
         <Collapse isOpen={menuOpen} navbar>
-          <Nav id="header-tabs" className="ms-auto" navbar>
+          <Nav id="header-tabs" className="ms-auto navbar-center-links" navbar>
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin && <AdminMenu showOpenAPI={props.isOpenAPIEnabled} />}

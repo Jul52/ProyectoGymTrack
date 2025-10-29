@@ -3,6 +3,7 @@ import { Button, Col, Row } from 'reactstrap';
 import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import './password-reset-finish.scss';
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 import { useAppDispatch, useAppSelector } from 'app/config/store';

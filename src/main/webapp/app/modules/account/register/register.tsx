@@ -3,6 +3,7 @@ import { Translate, ValidatedField, ValidatedForm, isEmail, translate } from 're
 import { Alert, Button, Col, Row } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import './register.scss';
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -39,14 +40,10 @@ export const RegisterPage = () => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h1 id="register-title" data-cy="registerTitle">
-            <Translate contentKey="register.title">Registration</Translate>
-          </h1>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col md="8">
           <ValidatedForm id="register-form" onSubmit={handleValidSubmit}>
+            <h1 id="register-title" data-cy="registerTitle">
+              <Translate contentKey="register.title">Registration</Translate>
+            </h1>
             <ValidatedField
               name="username"
               label={translate('global.form.username.label')}

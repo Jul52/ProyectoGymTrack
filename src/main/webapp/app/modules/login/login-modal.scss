@@ -1,0 +1,88 @@
+.login-modal {
+  .modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .modal-header {
+    background: linear-gradient(90deg, #2cd3cf, #176d6b);
+    color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    font-weight: 600;
+  }
+
+  .modal-body {
+    background-color: #fdfdfd;
+  }
+
+  .alert-warning {
+    background-color: #e0f7f7;
+    color: #176d6b;
+    border: none;
+    border-radius: 12px;
+  }
+
+  .link-reset,
+  .link-register {
+    color: #176d6b;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      color: #2cd3cf;
+      text-decoration: underline;
+    }
+  }
+
+  .modal-footer {
+    background-color: #f9f9f9;
+    border-top: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  /* 🎨 Botón cancelar */
+  .btn-login {
+    background-color: #176d6b;
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #2cd3cf;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(44, 211, 207, 0.3);
+    }
+  }
+
+  /* 💪 Botón iniciar sesión */
+  .btn-registrarse {
+    background: linear-gradient(90deg, #2cd3cf, #176d6b);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 8px 24px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(90deg, #176d6b, #2cd3cf);
+      transform: scale(1.05);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(23, 109, 107, 0.3);
+    }
+  }
+}

@@ -1,17 +1,31 @@
-$header-color: #fff;
-$header-color-secondary: #bbb;
-$header-color-hover: darken($header-color, 20%);
+// ==============================
+// Colores principales del header
+// ==============================
+$header-color: #000; // texto principal negro
+$header-color-secondary: #555; // gris secundario
+$header-color-hover: #2cd3cf; // color turquesa al pasar el mouse
 
-/* ==========================================================================
-Development Ribbon
-========================================================================== */
+// ==============================
+// Fondo del header/navbar
+// ==============================
+.navbar,
+.jh-navbar {
+  background-color: #fff; // fondo blanco limpio
+  color: $header-color;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+// ==========================================================================
+// Development Ribbon
+// ==========================================================================
 .ribbon {
-  background-color: rgba(170, 0, 0, 0.5);
+  background-color: rgba(44, 211, 207, 0.6);
   left: -3.5em;
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
   overflow: hidden;
   position: absolute;
@@ -21,6 +35,7 @@ Development Ribbon
   z-index: 99999;
   pointer-events: none;
   opacity: 0.75;
+
   a {
     color: #fff;
     display: block;
@@ -34,16 +49,23 @@ Development Ribbon
   }
 }
 
-/* ==========================================================================
-Navbar styles
-========================================================================== */
+// ==========================================================================
+// Navbar styles
+// ==========================================================================
 .navbar-brand {
   overflow: hidden;
 }
 
 .jh-navbar .navbar-nav .nav-link {
-  padding-right: 0;
-  padding-left: 0;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+  font-size: 1.1rem;
+  color: black !important;
+  font-weight: 500;
+
+  &:hover {
+    color: $header-color-hover !important;
+  }
 }
 
 .navbar-version {
@@ -78,8 +100,60 @@ Navbar styles
 
 .loading-bar {
   height: 3px;
-  background-color: #009cd8;
+  background-color: #2cd3cf;
   position: absolute;
   top: 0;
   z-index: 1031;
+}
+
+// ==========================================================================
+// Botones de login y registro
+// ==========================================================================
+.btn-login {
+  background-color: black;
+  color: white;
+  border-radius: 50px;
+  padding: 6px 20px;
+  border: none;
+  font-weight: 500;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #2cd3cf;
+    color: black;
+  }
+}
+
+.btn-registrarse {
+  background: linear-gradient(90deg, #2cd3cf, #176d6b);
+  color: white;
+  border-radius: 50px;
+  padding: 6px 20px;
+  border: none;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+// ==========================================================================
+// Logo y enlaces
+// ==========================================================================
+.logo-img {
+  height: 90px;
+  object-fit: contain;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-center-links .nav-link {
+  font-size: 1.1rem;
+  color: black !important;
+  font-weight: 500;
+
+  &:hover {
+    color: $header-color-hover !important;
+  }
 }
