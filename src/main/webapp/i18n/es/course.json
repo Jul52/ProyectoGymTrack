@@ -2,31 +2,31 @@
   "gymtrackApp": {
     "course": {
       "home": {
-        "title": "Courses",
-        "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Course",
-        "createOrEditLabel": "Crear o editar Course",
-        "notFound": "Ningún Courses encontrado"
+        "title": "Cursos",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Curso",
+        "createOrEditLabel": "Crear o editar Curso",
+        "notFound": "No se encontraron Cursos"
       },
-      "created": "Un nuevo Course ha sido creado con el identificador {{ param }}",
-      "updated": "Un Course ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Course ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Curso ha sido creado con el identificador {{ param }}",
+      "updated": "Un Curso ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Curso ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Course {{ id }}?"
+        "question": "¿Está seguro que quiere eliminar el Curso {{ id }}?"
       },
       "detail": {
-        "title": "Course"
+        "title": "Curso"
       },
       "id": "ID",
-      "courseName": "Course Name",
-      "status": "Status",
-      "startDate": "Start Date",
-      "endDate": "End Date",
-      "capacity": "Capacity",
-      "schedule": "Schedule",
-      "zone": "Zone",
-      "trainer": "Trainer",
-      "reservations": "Reservations"
+      "courseName": "Nombre del Curso",
+      "status": "Estado",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Fin",
+      "capacity": "Capacidad",
+      "schedule": "Horario",
+      "zone": "Zona",
+      "trainer": "Entrenador",
+      "reservations": "Reservaciones"
     }
   }
 }

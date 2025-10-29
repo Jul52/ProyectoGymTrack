@@ -2,23 +2,23 @@
   "userManagement": {
     "home": {
       "title": "Usuarios",
-      "refreshListLabel": "Refrescar lista",
+      "refreshListLabel": "Actualizar lista",
       "createLabel": "Crear un nuevo usuario",
       "createOrEditLabel": "Crear o editar un usuario"
     },
     "created": "Se creó un nuevo usuario con identificador {{ param }}",
     "updated": "Se actualizó el usuario con identificador {{ param }}",
-    "deleted": "Se borró el usuario con identificador {{ param }}",
+    "deleted": "Se eliminó el usuario con identificador {{ param }}",
     "delete": {
-      "question": "¿Seguro que quieres eliminar el usuario {{ login }}?"
+      "question": "¿Está seguro que quiere eliminar al usuario {{ login }}?"
     },
     "detail": {
       "title": "Usuario"
     },
-    "login": "Login",
+    "login": "Nombre de usuario",
     "firstName": "Nombre",
     "lastName": "Apellidos",
-    "email": "Email",
+    "email": "Correo electrónico",
     "activated": "Activado",
     "deactivated": "Desactivado",
     "profiles": "Perfiles",

@@ -2,29 +2,29 @@
   "gymtrackApp": {
     "payment": {
       "home": {
-        "title": "Payments",
+        "title": "Pagos",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Payment",
-        "createOrEditLabel": "Crear o editar Payment",
-        "notFound": "Ningún Payments encontrado"
+        "createLabel": "Crear nuevo Pago",
+        "createOrEditLabel": "Crear o editar Pago",
+        "notFound": "Ningún Pago encontrado"
       },
-      "created": "Un nuevo Payment ha sido creado con el identificador {{ param }}",
-      "updated": "Un Payment ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Payment ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Pago ha sido creado con el identificador {{ param }}",
+      "updated": "Un Pago ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Pago ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Payment {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el Pago {{ id }}?"
       },
       "detail": {
-        "title": "Payment"
+        "title": "Pago"
       },
       "id": "ID",
-      "amountPaid": "Amount Paid",
-      "paymentDate": "Payment Date",
-      "transactionId": "Transaction Id",
-      "status": "Status",
-      "paymentMethod": "Payment Method",
-      "invoice": "Invoice",
-      "registeredBy": "Registered By"
+      "amountPaid": "Monto Pagado",
+      "paymentDate": "Fecha de Pago",
+      "transactionId": "ID de Transacción",
+      "status": "Estado",
+      "paymentMethod": "Método de Pago",
+      "invoice": "Factura",
+      "registeredBy": "Registrado Por"
     }
   }
 }

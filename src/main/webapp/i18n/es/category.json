@@ -2,24 +2,24 @@
   "gymtrackApp": {
     "category": {
       "home": {
-        "title": "Categories",
-        "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Category",
-        "createOrEditLabel": "Crear o editar Category",
-        "notFound": "Ningún Categories encontrado"
+        "title": "Categorías",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nueva categoría",
+        "createOrEditLabel": "Crear o editar categoría",
+        "notFound": "No se encontraron categorías"
       },
-      "created": "Un nuevo Category ha sido creado con el identificador {{ param }}",
-      "updated": "Un Category ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Category ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva categoría ha sido creada con el identificador {{ param }}",
+      "updated": "Una categoría ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una categoría ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Category {{ id }}?"
+        "question": "¿Está seguro que quiere eliminar la categoría {{ id }}?"
       },
       "detail": {
-        "title": "Category"
+        "title": "Categoría"
       },
       "id": "ID",
-      "categoryName": "Category Name",
-      "gymService": "Gym Service"
+      "categoryName": "Nombre de la categoría",
+      "gymService": "Servicio de Gimnasio"
     }
   }
 }

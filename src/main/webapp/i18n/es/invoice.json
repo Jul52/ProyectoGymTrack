@@ -2,28 +2,27 @@
   "gymtrackApp": {
     "invoice": {
       "home": {
-        "title": "Invoices",
-        "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Invoice",
-        "createOrEditLabel": "Crear o editar Invoice",
-        "notFound": "Ningún Invoices encontrado"
+        "title": "Facturas",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nueva Factura",
+        "createOrEditLabel": "Crear o editar Factura",
+        "notFound": "No se encontraron Facturas"
       },
-      "created": "Un nuevo Invoice ha sido creado con el identificador {{ param }}",
-      "updated": "Un Invoice ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Invoice ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva Factura ha sido creada con el identificador {{ param }}",
+      "updated": "Una Factura ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una Factura ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Invoice {{ id }}?"
+        "question": "¿Está seguro que quiere eliminar la Factura {{ id }}?"
       },
       "detail": {
-        "title": "Invoice"
+        "title": "Factura"
       },
       "id": "ID",
       "total": "Total",
-      "createdDate": "Created Date",
-      "payment": "Payment",
-      "invoiceService": "Invoice Service",
-      "paymentMethod": "Payment Method",
-      "userData": "User Data"
+      "createdDate": "Fecha de Creación",
+      "invoiceService": "Servicio de Factura",
+      "paymentMethod": "Método de Pago",
+      "userData": "Datos de Usuario"
     }
   }
 }

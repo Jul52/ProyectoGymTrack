@@ -1,42 +1,42 @@
 {
   "metrics": {
-    "title": "Métricas de aplicación",
-    "refresh.button": "Refrescar",
+    "title": "Métricas de la aplicación",
+    "refresh.button": "Actualizar",
     "updating": "Actualizando...",
     "jvm": {
-      "title": "Métricas de JVM",
+      "title": "Métricas de la JVM",
       "memory": {
         "title": "Memoria",
         "total": "Memoria total",
-        "heap": "Memoria del Heap",
-        "nonheap": "Memoria no Heap"
+        "heap": "Memoria del montón",
+        "nonheap": "Memoria no del montón"
       },
       "threads": {
         "title": "Hilos",
-        "all": "Todo",
+        "all": "Todos",
         "runnable": "Ejecutables",
-        "timedwaiting": "Tiempo esperando",
+        "timedwaiting": "Espera programada",
         "waiting": "Esperando",
         "blocked": "Bloqueados",
         "dump": {
           "title": "Volcado de hilos",
           "id": "Id: ",
           "blockedtime": "Tiempo bloqueado",
-          "blockedcount": "Contador bloqueados",
+          "blockedcount": "Recuento de bloqueos",
           "waitedtime": "Tiempo en espera",
-          "waitedcount": "Contador en espera",
+          "waitedcount": "Recuento de esperas",
           "lockname": "Nombre del bloqueo",
-          "stacktrace": "Stacktrace",
+          "stacktrace": "Rastro de pila",
           "show": "Mostrar",
           "hide": "Ocultar"
         }
       },
       "gc": {
-        "title": "Colecciones de basura",
-        "marksweepcount": "Mark Sweep count",
-        "marksweeptime": "Mark Sweep time",
-        "scavengecount": "Scavenge count",
-        "scavengetime": "Scavenge time"
+        "title": "Recolección de basura",
+        "marksweepcount": "Recuento de Mark Sweep",
+        "marksweeptime": "Tiempo de Mark Sweep",
+        "scavengecount": "Recuento de Scavenge",
+        "scavengetime": "Tiempo de Scavenge"
       },
       "http": {
         "title": "Peticiones HTTP (eventos por segundo)",
@@ -47,12 +47,12 @@
           "count": "Recuento",
           "mean": "Media",
           "average": "Promedio",
-          "max": "Max"
+          "max": "Máx."
         },
         "code": {
-          "ok": "Ok",
+          "ok": "OK",
           "notfound": "No encontrado",
-          "servererror": "Error de servidor"
+          "servererror": "Error del servidor"
         }
       }
     },
@@ -60,10 +60,10 @@
       "title": "Estadísticas de servicios (tiempo en milisegundos)",
       "table": {
         "name": "Nombre del servicio",
-        "count": "Contador",
+        "count": "Recuento",
         "mean": "Media",
-        "min": "Min",
-        "max": "Max",
+        "min": "Mín.",
+        "max": "Máx.",
         "p50": "p50",
         "p75": "p75",
         "p95": "p95",
@@ -71,11 +71,11 @@
       }
     },
     "cache": {
-      "title": "Estadísticas de cache",
-      "cachename": "Nombre cache",
-      "hits": "Accesos",
+      "title": "Estadísticas de caché",
+      "cachename": "Nombre de la caché",
+      "hits": "Aciertos",
       "misses": "Fallos",
-      "evictions": "Contador desalojo"
+      "evictions": "Recuento de desalojos"
     },
     "datasource": {
       "usage": "Uso",
@@ -83,8 +83,8 @@
       "name": "Uso del pool",
       "count": "Recuento",
       "mean": "Media",
-      "min": "Min",
-      "max": "Max",
+      "min": "Mín.",
+      "max": "Máx.",
       "p50": "p50",
       "p75": "p75",
       "p95": "p95",

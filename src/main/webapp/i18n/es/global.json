@@ -4,25 +4,33 @@
     "browsehappy": "Está usando un navegador <strong>no actualizado</strong>. Por favor, <a href=\"http://browsehappy.com/?locale=es\">actualice su navegador</a> para mejorar su experiencia.",
     "menu": {
       "home": "Inicio",
-      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "trainer": {
+        "main": "Entrenador"
+      },
+      "user": {
+        "main": "Usuario"
+      },
+      "administrator": {
+        "main": "Administrador"
+      },
+      "jhipster-needle-menu-add-element": "GymTrack will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entidades",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "payment": "Payment",
-        "userData": "User Data",
-        "documentType": "Document Type",
-        "reservation": "Reservation",
-        "machine": "Machine",
-        "incident": "Incident",
-        "machineIncidents": "Machine Incidents",
-        "category": "Category",
-        "paymentMethod": "Payment Method",
-        "gymService": "Gym Service",
-        "invoice": "Invoice",
-        "invoiceService": "Invoice Service",
-        "course": "Course",
-        "schedule": "Schedule",
-        "zone": "Zone"
+        "jhipster-needle-menu-add-entry": "GymTrack will add additional entities here (do not translate!)",
+        "userData": "Datos de Usuario",
+        "documentType": "Tipo de Documento",
+        "reservation": "Reserva",
+        "machine": "Máquina",
+        "incident": "Incidente",
+        "machineIncidents": "Incidentes de Máquina",
+        "category": "Categoría",
+        "paymentMethod": "Método de Pago",
+        "gymService": "Servicio de Gimnasio",
+        "invoice": "Factura",
+        "invoiceService": "Servicio de Factura",
+        "course": "Curso",
+        "schedule": "Horario",
+        "zone": "Zona"
       },
       "account": {
         "main": "Cuenta",
@@ -31,31 +39,31 @@
         "sessions": "Sesiones",
         "login": "Iniciar sesión",
         "logout": "Cerrar la sesión",
-        "register": "Crear una cuenta"
+        "register": "Registrarse"
       },
       "admin": {
         "main": "Administración",
         "userManagement": "Gestión de usuarios",
-        "tracker": "Registro de usuarios",
+        "tracker": "Rastreador de usuario",
         "metrics": "Métricas",
         "health": "Salud",
         "configuration": "Configuración",
-        "logs": "Logs",
+        "logs": "Registros",
         "apidocs": "API",
         "database": "Base de datos",
-        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+        "jhipster-needle-menu-add-admin-element": "GymTrack will add additional menu entries here (do not translate!)"
       },
       "language": "Idioma"
     },
     "form": {
-      "username.label": "Usuario",
+      "username.label": "Nombre de usuario",
       "username.placeholder": "Nombre de usuario",
       "currentpassword.label": "Contraseña actual",
       "currentpassword.placeholder": "Contraseña actual",
       "newpassword.label": "Nueva contraseña",
       "newpassword.placeholder": "Nueva contraseña",
-      "confirmpassword.label": "Confirmación de la nueva contraseña",
-      "confirmpassword.placeholder": "Confirmación de la nueva contraseña",
+      "confirmpassword.label": "Confirmación de contraseña",
+      "confirmpassword.placeholder": "Confirmación de contraseña",
       "email.label": "Correo electrónico",
       "email.placeholder": "Su correo electrónico"
     },
@@ -64,32 +72,34 @@
         "authenticated": {
           "prefix": "Si desea ",
           "link": "iniciar sesión",
-          "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\")."
+          "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
+          "nopermissions": "No tienes permiso para ver este contenido."
         },
         "register": {
-          "noaccount": "¿Aún no tienes una cuenta?",
-          "link": "Crea una cuenta"
+          "noaccount": "¿Aún no tiene una cuenta?",
+          "link": "Crear una nueva cuenta"
         }
       },
       "error": {
-        "dontmatch": "¡La contraseña y la confirmación de contraseña no coinciden!"
+        "dontmatch": "¡La contraseña y su confirmación no coinciden!",
+        "unauthorized": "No tiene permisos para acceder a la página."
       },
       "validate": {
         "newpassword": {
-          "required": "Se requiere que ingrese una contraseña.",
-          "minlength": "Se requiere que su contraseña tenga por lo menos 4 caracteres",
+          "required": "Su contraseña es obligatoria.",
+          "minlength": "Su contraseña debe tener al menos 4 caracteres",
           "maxlength": "Su contraseña no puede tener más de 50 caracteres",
           "strength": "Seguridad de la contraseña:"
         },
         "confirmpassword": {
-          "required": "Se requiere que confirme la contraseña.",
-          "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 4 caracteres",
+          "required": "Se requiere la confirmación de la contraseña.",
+          "minlength": "Su contraseña de confirmación debe tener al menos 4 caracteres",
           "maxlength": "Su contraseña de confirmación no puede tener más de 50 caracteres"
         },
         "email": {
           "required": "Se requiere un correo electrónico.",
           "invalid": "Su correo electrónico no es válido.",
-          "minlength": "Se requiere que su correo electrónico tenga por lo menos 5 caracteres",
+          "minlength": "Su correo electrónico debe tener al menos 5 caracteres",
           "maxlength": "Su correo electrónico no puede tener más de 50 caracteres"
         }
       }
@@ -98,13 +108,13 @@
       "id": "ID"
     },
     "ribbon": {
-      "dev": "Development"
+      "dev": "Desarrollo"
     },
     "item-count": "Mostrando {{first}} - {{second}} de {{total}} elementos."
   },
   "entity": {
     "action": {
-      "addblob": "Añadir fichero",
+      "addblob": "Añadir archivo",
       "addimage": "Añadir imagen",
       "back": "Volver",
       "cancel": "Cancelar",
@@ -112,8 +122,8 @@
       "edit": "Editar",
       "open": "Abrir",
       "save": "Guardar",
-      "view": "Vista",
-      "show": "Show {{otherEntity}}"
+      "view": "Ver",
+      "show": "Mostrar {{otherEntity}}"
     },
     "detail": {
       "field": "Campo",
@@ -125,9 +135,9 @@
     "validation": {
       "required": "Este campo es obligatorio.",
       "minlength": "Este campo requiere al menos {{min}} caracteres.",
-      "maxlength": "Este campo no puede superar más de {{max}} caracteres.",
-      "min": "Este campo debe ser mayor que {{min}}.",
-      "max": "Este campo no puede ser mayor que {{max}}.",
+      "maxlength": "Este campo no puede tener más de {{max}} caracteres.",
+      "min": "Este campo debe ser como mínimo {{min}}.",
+      "max": "Este campo no puede ser más de {{max}}.",
       "minbytes": "Este campo debe tener como mínimo {{min}} bytes.",
       "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
       "pattern": "Este campo debe seguir el patrón {{pattern}}.",
@@ -135,26 +145,26 @@
       "datetimelocal": "Este campo debe ser una fecha y hora."
     },
     "filters": {
-      "set": "Following filters are set",
-      "clear": "Clear filter",
-      "clearAll": "Clear all filters"
+      "set": "Los siguientes filtros están configurados",
+      "clear": "Limpiar filtro",
+      "clearAll": "Limpiar todos los filtros"
     }
   },
   "error": {
-    "internalServerError": "Error interno en el servidor",
+    "internalServerError": "Error interno del servidor",
     "server.not.reachable": "Servidor no accesible",
     "url.not.found": "No existe",
     "NotNull": "¡El campo {{fieldName}} no puede estar vacío!",
     "Size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
     "userexists": "¡El nombre de usuario ya existe!",
     "emailexists": "¡La cuenta de correo ya está en uso!",
-    "idexists": "Un/a nuevo/a {{entityName}} no puede tener ID",
+    "idexists": "Una nueva entidad {{entityName}} no puede tener ID",
     "idnull": "ID inválido",
     "idinvalid": "ID inválido",
     "idnotfound": "ID no encontrado",
     "file": {
-      "could.not.extract": "No se pudo extraer el fichero",
-      "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\""
+      "could.not.extract": "No se pudo extraer el archivo",
+      "not.image": "Se esperaba que el archivo fuera una imagen pero se encontró \"{{ fileType }}\""
     }
   },
   "footer": "Pie de página"

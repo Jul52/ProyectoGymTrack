@@ -2,27 +2,27 @@
   "gymtrackApp": {
     "invoiceService": {
       "home": {
-        "title": "Invoice Services",
-        "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Invoice Service",
-        "createOrEditLabel": "Crear o editar Invoice Service",
-        "notFound": "Ningún Invoice Services encontrado"
+        "title": "Servicios de Factura",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Servicio de Factura",
+        "createOrEditLabel": "Crear o editar Servicio de Factura",
+        "notFound": "No se encontraron Servicios de Factura"
       },
-      "created": "Un nuevo Invoice Service ha sido creado con el identificador {{ param }}",
-      "updated": "Un Invoice Service ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Invoice Service ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Servicio de Factura ha sido creado con el identificador {{ param }}",
+      "updated": "Un Servicio de Factura ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Servicio de Factura ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Invoice Service {{ id }}?"
+        "question": "¿Está seguro que quiere eliminar el Servicio de Factura {{ id }}?"
       },
       "detail": {
-        "title": "Invoice Service"
+        "title": "Servicio de Factura"
       },
       "id": "ID",
-      "quantity": "Quantity",
+      "quantity": "Cantidad",
       "subtotal": "Subtotal",
-      "salePrice": "Sale Price",
-      "invoice": "Invoice",
-      "service": "Service"
+      "salePrice": "Precio de Venta",
+      "invoice": "Factura",
+      "service": "Servicio"
     }
   }
 }

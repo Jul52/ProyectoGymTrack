@@ -1,8 +1,8 @@
 {
   "health": {
     "title": "Control de salud",
-    "refresh.button": "Refrescar",
-    "stacktrace": "Stacktrace",
+    "refresh.button": "Actualizar",
+    "stacktrace": "Rastro de pila",
     "details": {
       "details": "Detalles",
       "properties": "Propiedades",
@@ -12,11 +12,11 @@
     },
     "indicator": {
       "diskSpace": "Espacio en disco",
-      "mail": "Correo Electrónico",
-      "livenessState": "Liveness state",
-      "readinessState": "Readiness state",
+      "mail": "Correo electrónico",
+      "livenessState": "Estado de vitalidad",
+      "readinessState": "Estado de disponibilidad",
       "ping": "Aplicación",
-      "db": "Base de Datos"
+      "db": "Base de datos"
     },
     "table": {
       "service": "Nombre del servicio",
@@ -24,8 +24,8 @@
     },
     "status": {
       "UNKNOWN": "DESCONOCIDO",
-      "UP": "LEVANTADO",
-      "DOWN": "CAÍDO"
+      "UP": "ACTIVO",
+      "DOWN": "INACTIVO"
     }
   }
 }
