@@ -1,0 +1,27 @@
+{
+  "gymtrackApp": {
+    "incident": {
+      "home": {
+        "title": "Incidentes",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo incidente",
+        "createOrEditLabel": "Crear o editar incidente",
+        "notFound": "No se encontraron incidentes"
+      },
+      "created": "Un nuevo incidente ha sido creado con el identificador {{ param }}",
+      "updated": "Un incidente ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un incidente ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Está seguro que quiere eliminar el incidente {{ id }}?"
+      },
+      "detail": {
+        "title": "Incidente"
+      },
+      "id": "ID",
+      "incidentType": "Tipo de incidente",
+      "description": "Descripción",
+      "reportedDate": "Fecha de reporte",
+      "machineIncidents": "Incidentes de máquina"
+    }
+  }
+}

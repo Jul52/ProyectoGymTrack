@@ -1,0 +1,7 @@
+id;incident_type;description;reported_date
+1;Fallo eléctrico;Problema con el suministro de energía en la sala de pesas;2025-09-18 12:43:30
+2;Daño en equipo;Ruptura de cable en la máquina de remo;2025-09-18 01:07:49
+3;Problema de higiene;Falta de limpieza en los baños;2025-09-18 16:15:33
+4;Daño a la infraestructura;Grieta en el piso cerca de la zona de pesas libres;2025-09-18 15:35:53
+5;Equipo fuera de servicio;Máquina de aductores descompuesta;2025-09-18 03:43:43
+6;Mantenimiento;Necesidad de lubricar la caminadora;2025-09-17 20:37:50

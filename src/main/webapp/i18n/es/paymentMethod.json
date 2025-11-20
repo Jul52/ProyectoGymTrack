@@ -1,0 +1,24 @@
+{
+  "gymtrackApp": {
+    "paymentMethod": {
+      "home": {
+        "title": "Métodos de pago",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Método de pago",
+        "createOrEditLabel": "Crear o editar Método de pago",
+        "notFound": "No se encontraron Métodos de pago"
+      },
+      "created": "Un nuevo Método de pago ha sido creado con el identificador {{ param }}",
+      "updated": "Un Método de pago ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Método de pago ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Está seguro que quiere eliminar el Método de pago {{ id }}?"
+      },
+      "detail": {
+        "title": "Método de pago"
+      },
+      "id": "ID",
+      "methodName": "Nombre del método"
+    }
+  }
+}

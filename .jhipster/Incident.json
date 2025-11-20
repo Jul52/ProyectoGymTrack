@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20251027202108"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "incidentType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
+      "fieldName": "reportedDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "Incident",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "machineIncidents",
+      "otherEntityRelationshipName": "incident",
+      "relationshipName": "machineIncidents",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

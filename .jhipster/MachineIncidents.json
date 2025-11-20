@@ -1,0 +1,49 @@
+{
+  "annotations": {
+    "changelogDate": "20251027202208"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
+      "fieldName": "image",
+      "fieldType": "ImageBlob"
+    },
+    {
+      "fieldName": "video",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    }
+  ],
+  "name": "MachineIncidents",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "incidentType",
+      "otherEntityName": "incident",
+      "otherEntityRelationshipName": "machineIncidents",
+      "relationshipName": "incident",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "machine",
+      "otherEntityRelationshipName": "machineIncidents",
+      "relationshipName": "machine",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

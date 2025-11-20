@@ -1,0 +1,156 @@
+application {
+    config {
+        baseName gymtrack
+        applicationType monolith
+        packageName co.edu.sena.gymtrack
+        authenticationType jwt
+        devDatabaseType mariadb
+        prodDatabaseType mariadb
+        cacheProvider no
+        buildTool maven
+        clientFramework react
+        enableTranslation true
+        nativeLanguage es
+        languages [en, es]
+        websocket false
+        jhiPrefix qm
+        reactive false
+        serverPort 8080
+        searchEngine false
+        clientTheme cyborg
+        clientThemeVariant dark
+    }
+    entities*
+}
+
+// Entidad de Pago (nueva)
+entity Payment {
+    amountPaid BigDecimal required
+    paymentDate Instant required
+    transactionId String maxlength(100) unique
+    status String required maxlength(20) // Ej: PENDIENTE, COMPLETADO, RECHAZADO
+}
+
+entity UserData {
+    firstName String required maxlength(100)
+    secondName String maxlength(100)
+    firstLastName String required maxlength(100)
+    secondLastName String maxlength(100)
+    document String required maxlength(20)
+    phoneNumber String required maxlength(20)
+    birthDate LocalDate
+}
+
+entity DocumentType {
+    name String required maxlength(50)
+    code String required maxlength(10)
+}
+
+entity Reservation {
+    status Boolean required
+    description String maxlength(255)
+    reservationDate LocalDate required
+}
+
+entity Machine {
+    serial String required maxlength(50)
+    description String required maxlength(255)
+    status Boolean required
+}
+
+entity Incident {
+    incidentType String required maxlength(50)
+    description String maxlength(255)
+    reportedDate Instant
+}
+
+entity MachineIncidents {
+    description String maxlength(255)
+    image ImageBlob
+    video String maxlength(255)
+}
+
+entity Category {
+    categoryName String required maxlength(100)
+}
+
+entity PaymentMethod {
+    methodName String required maxlength(50)
+}
+
+entity GymService {
+    serviceName String required maxlength(100) unique
+    serviceDescription String maxlength(255)
+    price BigDecimal required
+    status Boolean required
+}
+
+entity Invoice {
+    total BigDecimal required
+    createdDate Instant
+}
+
+entity InvoiceService {
+    quantity Integer required
+    subtotal BigDecimal required
+    salePrice BigDecimal required
+}
+
+entity Course {
+    courseName String required maxlength(100)
+    status Boolean required
+    startDate LocalDate required
+    endDate LocalDate required
+    capacity Integer
+}
+
+entity Schedule {
+    dayOfWeek String required maxlength(20)
+    startTime Instant required
+    endTime Instant required
+}
+
+entity Zone {
+    name String required maxlength(100)
+    status Boolean required
+}
+
+relationship OneToOne {
+    UserData{user(login) required} to User with builtInEntity
+    // Una Factura tiene un Pago (o lo tendrá)
+    Invoice{payment} to Payment{invoice(id) required} 
+}
+
+relationship OneToMany {
+    DocumentType{userData} to UserData{documentType(name) required}
+    UserData{reservation} to Reservation{userData(document) required}
+    UserData{machine} to Machine{admin(document) required}
+    UserData{invoice} to Invoice{userData(document) required}
+    UserData{course} to Course{trainer required}
+    Invoice{invoiceService} to InvoiceService{invoice required}
+    Category{gymService} to GymService{category(categoryName) required}
+    GymService{invoiceService} to InvoiceService{service required}
+    Incident{machineIncidents} to MachineIncidents{incident(incidentType) required}
+    Machine{machineIncidents} to MachineIncidents{machine(description) required}
+    Course{schedule} to Schedule{course(courseName) required}
+    
+    // Un administrador registra muchos pagos
+    UserData{payment} to Payment{registeredBy(document) required}
+}
+
+relationship ManyToOne {
+    Invoice{paymentMethod(methodName) required} to PaymentMethod
+    Reservation{course(courseName) required} to Course{reservations}
+    Reservation{gymService(serviceName) required} to GymService{reservations}
+    
+    // Un método de pago puede usarse en muchos pagos
+    Payment{paymentMethod(methodName) required} to PaymentMethod
+}
+
+relationship ManyToMany {
+    Course{zone(name) required} to Zone{course(courseName) required}
+}
+
+dto * with mapstruct
+service * with serviceImpl
+paginate * with pagination

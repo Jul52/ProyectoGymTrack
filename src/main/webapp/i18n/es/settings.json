@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "title": "Ajustes del usuario [<strong>{{username}}</strong>]",
+    "form": {
+      "firstname": "Nombre",
+      "firstname.placeholder": "Su nombre",
+      "lastname": "Apellidos",
+      "lastname.placeholder": "Sus apellidos",
+      "language": "Idioma",
+      "button": "Guardar"
+    },
+    "messages": {
+      "error": {
+        "fail": "<strong>¡Ha ocurrido un error!</strong> Los ajustes no se pudieron guardar.",
+        "emailexists": "<strong>¡La dirección de correo electrónico ya existe!</strong> Por favor, escoja otra."
+      },
+      "success": "<strong>¡Ajustes guardados!</strong>",
+      "validate": {
+        "firstname": {
+          "required": "Se requiere que ingrese su nombre.",
+          "minlength": "Su nombre debe tener al menos 1 carácter",
+          "maxlength": "Su nombre no puede tener más de 50 caracteres"
+        },
+        "lastname": {
+          "required": "Se requiere que ingrese sus apellidos.",
+          "minlength": "Sus apellidos deben tener al menos 1 carácter",
+          "maxlength": "Sus apellidos no pueden tener más de 50 caracteres"
+        }
+      }
+    }
+  }
+}
