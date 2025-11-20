@@ -1,6 +1,7 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.CategoryRepository;
+import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.service.CategoryService;
 import co.edu.sena.gymtrack.service.dto.CategoryDTO;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -29,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/categories")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
 public class CategoryResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(CategoryResource.class);
@@ -55,6 +58,7 @@ public class CategoryResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws URISyntaxException {
         LOG.debug("REST request to save Category : {}", categoryDTO);
         if (categoryDTO.getId() != null) {
@@ -77,6 +81,7 @@ public class CategoryResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<CategoryDTO> updateCategory(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody CategoryDTO categoryDTO
@@ -111,6 +116,7 @@ public class CategoryResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<CategoryDTO> partialUpdateCategory(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody CategoryDTO categoryDTO
@@ -142,6 +148,7 @@ public class CategoryResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categories in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<List<CategoryDTO>> getAllCategories(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Categories");
         Page<CategoryDTO> page = categoryService.findAll(pageable);
@@ -156,6 +163,7 @@ public class CategoryResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the categoryDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<CategoryDTO> getCategory(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Category : {}", id);
         Optional<CategoryDTO> categoryDTO = categoryService.findOne(id);
@@ -169,6 +177,7 @@ public class CategoryResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<Void> deleteCategory(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Category : {}", id);
         categoryService.delete(id);

@@ -2,6 +2,7 @@ package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.domain.User;
 import co.edu.sena.gymtrack.repository.UserRepository;
+import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.security.SecurityUtils;
 import co.edu.sena.gymtrack.service.MailService;
 import co.edu.sena.gymtrack.service.UserService;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**

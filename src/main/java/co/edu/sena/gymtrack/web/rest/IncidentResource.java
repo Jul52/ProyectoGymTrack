@@ -1,6 +1,7 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.IncidentRepository;
+import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.service.IncidentService;
 import co.edu.sena.gymtrack.service.dto.IncidentDTO;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -29,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/incidents")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
 public class IncidentResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(IncidentResource.class);
@@ -55,6 +58,7 @@ public class IncidentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<IncidentDTO> createIncident(@Valid @RequestBody IncidentDTO incidentDTO) throws URISyntaxException {
         LOG.debug("REST request to save Incident : {}", incidentDTO);
         if (incidentDTO.getId() != null) {
@@ -77,6 +81,7 @@ public class IncidentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<IncidentDTO> updateIncident(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody IncidentDTO incidentDTO
@@ -111,6 +116,7 @@ public class IncidentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<IncidentDTO> partialUpdateIncident(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody IncidentDTO incidentDTO
@@ -142,6 +148,7 @@ public class IncidentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of incidents in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<List<IncidentDTO>> getAllIncidents(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Incidents");
         Page<IncidentDTO> page = incidentService.findAll(pageable);
@@ -156,6 +163,7 @@ public class IncidentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the incidentDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<IncidentDTO> getIncident(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Incident : {}", id);
         Optional<IncidentDTO> incidentDTO = incidentService.findOne(id);
@@ -169,6 +177,7 @@ public class IncidentResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Void> deleteIncident(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Incident : {}", id);
         incidentService.delete(id);

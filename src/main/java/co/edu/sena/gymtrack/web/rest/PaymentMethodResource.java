@@ -1,6 +1,7 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.PaymentMethodRepository;
+import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.service.PaymentMethodService;
 import co.edu.sena.gymtrack.service.dto.PaymentMethodDTO;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -29,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/payment-methods")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
 public class PaymentMethodResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentMethodResource.class);
@@ -55,6 +58,7 @@ public class PaymentMethodResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<PaymentMethodDTO> createPaymentMethod(@Valid @RequestBody PaymentMethodDTO paymentMethodDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save PaymentMethod : {}", paymentMethodDTO);
@@ -78,6 +82,7 @@ public class PaymentMethodResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<PaymentMethodDTO> updatePaymentMethod(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody PaymentMethodDTO paymentMethodDTO
@@ -112,6 +117,7 @@ public class PaymentMethodResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<PaymentMethodDTO> partialUpdatePaymentMethod(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody PaymentMethodDTO paymentMethodDTO
@@ -143,6 +149,7 @@ public class PaymentMethodResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of paymentMethods in body.
      */
     @GetMapping("")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<List<PaymentMethodDTO>> getAllPaymentMethods(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of PaymentMethods");
         Page<PaymentMethodDTO> page = paymentMethodService.findAll(pageable);
@@ -157,6 +164,7 @@ public class PaymentMethodResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the paymentMethodDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<PaymentMethodDTO> getPaymentMethod(@PathVariable("id") Long id) {
         LOG.debug("REST request to get PaymentMethod : {}", id);
         Optional<PaymentMethodDTO> paymentMethodDTO = paymentMethodService.findOne(id);
@@ -170,6 +178,7 @@ public class PaymentMethodResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<Void> deletePaymentMethod(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete PaymentMethod : {}", id);
         paymentMethodService.delete(id);
