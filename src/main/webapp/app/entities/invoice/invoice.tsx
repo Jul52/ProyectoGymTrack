@@ -143,7 +143,15 @@ export const Invoice = () => {
                   </td>
                   <td>{invoice.total}</td>
                   <td>{invoice.createdDate ? <TextFormat type="date" value={invoice.createdDate} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{invoice.payment ? <Link to={`/payment/${invoice.payment.id}`}>{invoice.payment.id}</Link> : ''}</td>
+                  <td>
+                    {invoice.payment ? (
+                      <Link to={`/payment/${invoice.payment.id}`}>
+                        <TextFormat type="date" value={invoice.payment.paymentDate} format={APP_DATE_FORMAT} />
+                      </Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
                   <td>
                     {invoice.paymentMethod ? (
                       <Link to={`/payment-method/${invoice.paymentMethod.id}`}>{invoice.paymentMethod.methodName}</Link>

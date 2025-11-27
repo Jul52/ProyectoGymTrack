@@ -20,6 +20,7 @@
       "id": "ID",
       "total": "Total",
       "createdDate": "Fecha de Creación",
+      "payment": "Pago",
       "invoiceService": "Servicio de Factura",
       "paymentMethod": "Método de Pago",
       "userData": "Datos de Usuario"

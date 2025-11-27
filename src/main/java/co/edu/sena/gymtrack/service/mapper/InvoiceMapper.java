@@ -23,6 +23,7 @@ public interface InvoiceMapper extends EntityMapper<InvoiceDTO, Invoice> {
     @Named("paymentId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "transactionId", source = "transactionId")
     PaymentDTO toDtoPaymentId(Payment payment);
 
     @Named("paymentMethodMethodName")
