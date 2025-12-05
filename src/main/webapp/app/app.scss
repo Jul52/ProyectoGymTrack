@@ -1,15 +1,43 @@
+// ***************************************************************
+// ARCHIVO: src/main/webapp/app/app.scss (DEFINITIVO - TURQUESA GLOBAL FORZADO - MÁXIMA PRECEDENCIA)
+// ***************************************************************
+
+// 1. DEFINICIÓN GLOBAL DE COLOR TURQUESA
+$primary-turquesa: #00bfa5;
+
+// Sobreescribimos las variables de Bootstrap/JHipster antes de las importaciones
+$brand-primary: $primary-turquesa;
+$primary: $primary-turquesa;
+
+// SOBRESCRITURA CRÍTICA: Forzamos INFO y SUCCESS al turquesa para eliminar el azul y el verde por defecto.
+$info: $primary-turquesa;
+$success: $primary-turquesa;
+$link-color: $primary-turquesa;
+
 // Override Bootstrap variables
 @import 'bootstrap-variables';
-@import 'bootswatch/dist/cyborg/variables';
+
+// COMENTADO: Desactivamos el tema oscuro Cyborg (variables)
+// @import 'bootswatch/dist/cyborg/variables';
+
 // Import Bootstrap source files from node_modules
 @import 'bootstrap/scss/bootstrap';
-@import 'bootswatch/dist/cyborg/bootswatch';
+
+// COMENTADO: Desactivamos el tema oscuro Cyborg (estilos)
+// @import 'bootswatch/dist/cyborg/bootswatch';
+
+/* ==========================================================================
+   Ajustes Globales (Fondo Blanco)
+   ========================================================================== */
 body {
   margin: 0;
+  /* Fuerza el fondo de la aplicación a blanco/gris muy claro */
+  background-color: #f8f9fa !important;
 }
 
 a {
-  color: #533f03;
+  // CAMBIADO: Usamos el color turquesa para los enlaces de texto primarios (como "Ver todas las notificaciones")
+  color: $primary-turquesa;
   font-weight: bold;
 }
 
@@ -33,6 +61,9 @@ a {
     padding: 1rem;
     .card {
       padding: 1rem;
+      /* Aseguramos que la card base de JHipster sea blanca y tenga bordes sutiles */
+      background-color: #ffffff !important;
+      border: 1px solid #dee2e6;
     }
     .view-routes {
       height: 100%;
@@ -145,7 +176,7 @@ Generic styles
       }
     }
   } @else {
-    @if $side== '' {
+    @if $size== '' {
       .pad-#{$size} {
         padding: #{$size}px !important;
       }
@@ -314,3 +345,135 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+/* ==========================================================================
+   Estilos de Tarjeta (CATEGORY)
+   APLICANDO EL COLOR TURQUESA PRIMARIO
+   ========================================================================== */
+
+.category-card {
+  /* Fondo blanco, sombra sutil y esquinas redondeadas */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  border: 1px solid #e9ecef !important;
+  background-color: #ffffff;
+}
+
+.category-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
+}
+
+.category-card .card-title {
+  font-weight: 700;
+  color: #343a40;
+  /* La línea bajo el título ahora es TURQUESA */
+  border-bottom: 2px solid $primary-turquesa;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* Estilos de los botones de acción */
+.category-action-btn {
+  font-weight: 500;
+  border-radius: 8px; /* Bordes redondeados en los botones */
+  padding: 0.375rem 0.75rem;
+  margin-right: 5px !important;
+}
+
+/* ----------------------------------------------------------------------
+   FORZADO DEFINITIVO DE COLOR TURQUESA EN BOTONES RELLENOS (PRIMARY, INFO, SUCCESS)
+   Esto es lo que debe solucionar el problema de precedencia.
+   ---------------------------------------------------------------------- */
+.btn-primary,
+.btn-info,
+.btn-success {
+  // ESTADO NORMAL Y ACTIVO
+  background-color: $primary-turquesa !important;
+  border-color: $primary-turquesa !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-info:hover,
+.btn-success:hover {
+  // ESTADO HOVER (Un tono ligeramente más oscuro si quieres, pero lo mantengo igual para la máxima consistencia)
+  background-color: darken($primary-turquesa, 5%) !important;
+  border-color: darken($primary-turquesa, 5%) !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:focus,
+.btn-info:focus,
+.btn-success:focus,
+.btn-primary.active,
+.btn-info.active,
+.btn-success.active {
+  // ESTADO FOCUS Y ACTIVO (PARA EVITAR QUE VUELVA AL AZUL/VERDE POR DEFECTO)
+  background-color: darken($primary-turquesa, 10%) !important;
+  border-color: darken($primary-turquesa, 10%) !important;
+  box-shadow: 0 0 0 0.2rem rgba($primary-turquesa, 0.5) !important; // Sombra de enfoque turquesa
+  color: #ffffff !important;
+}
+
+/* ----------------------------------------------------------------------
+   AJUSTES ESPECÍFICOS PARA BOTONES TURQUESA (OUTLINE)
+   ---------------------------------------------------------------------- */
+
+// Ajuste para los botones outline (Ver, Editar)
+.btn-outline-primary,
+.btn-outline-info,
+.btn-outline-success {
+  border-width: 2px;
+  color: $primary-turquesa !important;
+  border-color: $primary-turquesa !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-info:hover,
+.btn-outline-success:hover {
+  background-color: $primary-turquesa !important; /* Relleno turquesa al hacer hover */
+  color: #ffffff !important; /* Texto blanco al hacer hover */
+}
+
+// Sobreescribimos cualquier posible conflicto de btn-class.btn-outline
+.btn-primary.btn-outline,
+.btn-info.btn-outline,
+.btn-success.btn-outline {
+  border-width: 2px;
+  color: $primary-turquesa !important;
+  border-color: $primary-turquesa !important;
+  background-color: transparent !important;
+}
+
+.btn-primary.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-success.btn-outline:hover {
+  background-color: $primary-turquesa !important;
+  color: #ffffff !important;
+}
+
+/* Ajuste para el botón de eliminar (mantenemos el rojo de peligro) */
+.btn-danger.btn-outline {
+  border-width: 2px;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#app-view-container {
+  min-height: calc(100vh - 80px); /* Ajusta según la altura del footer */
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  margin-top: auto;
+}
