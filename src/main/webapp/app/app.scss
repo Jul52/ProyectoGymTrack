@@ -1,5 +1,5 @@
 // ***************************************************************
-// ARCHIVO: src/main/webapp/app/app.scss (DEFINITIVO - TURQUESA GLOBAL FORZADO - MÁXIMA PRECEDENCIA)
+// ARCHIVO: src/main/webapp/app/app.scss (DEFINITIVO - TURQUESA Y LAYOUT)
 // ***************************************************************
 
 // 1. DEFINICIÓN GLOBAL DE COLOR TURQUESA
@@ -27,16 +27,68 @@ $link-color: $primary-turquesa;
 // @import 'bootswatch/dist/cyborg/bootswatch';
 
 /* ==========================================================================
-   Ajustes Globales (Fondo Blanco)
+   ESTILOS DE LAYOUT (Sticky Footer y Separación de Header)
    ========================================================================== */
+
+/* 1. La raíz del documento debe ocupar el 100% de la altura visible */
+html,
 body {
+  height: 100%;
   margin: 0;
   /* Fuerza el fondo de la aplicación a blanco/gris muy claro */
   background-color: #f8f9fa !important;
 }
 
+/* 2. Contenedor Principal: Flexbox vertical que ocupa toda la ventana (100vh) */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ¡Fuerza a ocupar toda la ventana! */
+  box-sizing: border-box;
+}
+
+/* 3. Contenedor de Contenido: Se estira y crea la separación */
+.app-container .view-container {
+  // CLAVE: Se estira para ocupar todo el espacio disponible y empujar el footer
+  flex: 1 0 auto;
+  width: 100%;
+
+  // CORRECCIÓN: Eliminamos la altura fija (height: calc...) que rompía el Sticky Footer.
+  // Ahora la altura la maneja automáticamente Flexbox.
+
+  // CLAVE PARA LA SEPARACIÓN: Padding superior para dejar espacio al Header fijo
+  padding-top: 4.5rem; /* Separación estética (ajustar si tu Header es más alto) */
+  padding-left: 1.5rem; /* Margen lateral más limpio */
+  padding-right: 1.5rem;
+  padding-bottom: 1rem; /* Pequeño padding inferior para no pegar al footer */
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .card {
+    padding: 1rem;
+    /* Aseguramos que la card base de JHipster sea blanca y tenga bordes sutiles */
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6;
+  }
+}
+
+/* 4. Footer (Si usas un .footer-container) - Solo asegurar que no se encoja. */
+.footer-container {
+  flex-shrink: 0;
+  // Nota: Los estilos de color del footer deben estar en tu footer.scss o añadidos aquí
+}
+
+/* REGLAS OBSOLETAS ELIMINADAS/REEMPLAZADAS:
+   Las reglas de #app-view-container y footer al final han sido reemplazadas por
+   el layout de Flexbox en .app-container y .view-container. */
+
+/* ==========================================================================
+   Ajustes Globales
+   ========================================================================== */
+
 a {
-  // CAMBIADO: Usamos el color turquesa para los enlaces de texto primarios (como "Ver todas las notificaciones")
+  // CAMBIADO: Usamos el color turquesa para los enlaces de texto primarios
   color: $primary-turquesa;
   font-weight: bold;
 }
@@ -48,29 +100,6 @@ a {
   &::before {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-  }
-}
-
-.app-container {
-  box-sizing: border-box;
-  .view-container {
-    width: 100%;
-    height: calc(100% - 40px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 1rem;
-    .card {
-      padding: 1rem;
-      /* Aseguramos que la card base de JHipster sea blanca y tenga bordes sutiles */
-      background-color: #ffffff !important;
-      border: 1px solid #dee2e6;
-    }
-    .view-routes {
-      height: 100%;
-      > div {
-        height: 100%;
-      }
-    }
   }
 }
 
@@ -460,20 +489,4 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 /* Ajuste para el botón de eliminar (mantenemos el rojo de peligro) */
 .btn-danger.btn-outline {
   border-width: 2px;
-}
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-#app-view-container {
-  min-height: calc(100vh - 80px); /* Ajusta según la altura del footer */
-  display: flex;
-  flex-direction: column;
-}
-
-footer {
-  margin-top: auto;
 }
