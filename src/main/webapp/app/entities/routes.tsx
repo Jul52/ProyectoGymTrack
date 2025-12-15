@@ -18,14 +18,17 @@ import InvoiceService from './invoice-service';
 import Course from './course';
 import Schedule from './schedule';
 import Zone from './zone';
-/* jhipster-needle-add-route-import - JHipster will add routes here */
+import PaymentRoutes from './payment';
+import PrivateRoute from 'app/shared/auth/private-route';
+import { AUTHORITIES } from 'app/config/constants';
+import ReservationRoutes from 'app/entities/reservation';
 
 export default () => {
   return (
     <div>
       <ErrorBoundaryRoutes>
         {/* prettier-ignore */}
-        <Route path="payment/*" element={<Payment />} />
+        <Route path="payment/*" element={<PaymentRoutes />} />
         <Route path="user-data/*" element={<UserData />} />
         <Route path="document-type/*" element={<DocumentType />} />
         <Route path="reservation/*" element={<Reservation />} />
@@ -40,7 +43,6 @@ export default () => {
         <Route path="course/*" element={<Course />} />
         <Route path="schedule/*" element={<Schedule />} />
         <Route path="zone/*" element={<Zone />} />
-        {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>
   );

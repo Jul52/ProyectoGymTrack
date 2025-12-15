@@ -1,4 +1,4 @@
-id;status;description;reservation_date;course_id;gym_service_id;user_data_id
+id;status;description;reservation_date;course_id;gym_service_id;registered_by_id
 1;true;Reserva para curso 1;2025-09-21 08:00:00;1;1;1
 2;false;Reserva para curso 2;2025-09-21 10:00:00;2;2;2
 3;true;Reserva para curso 3;2025-09-22 09:00:00;3;3;2

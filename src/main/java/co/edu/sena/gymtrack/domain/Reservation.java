@@ -17,8 +17,7 @@ public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -50,7 +49,8 @@ public class Reservation implements Serializable {
         value = { "user", "reservations", "machines", "invoices", "courses", "payments", "documentType" },
         allowSetters = true
     )
-    private UserData userData;
+    @JoinColumn(name = "registered_by_id")
+    private UserData registeredBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -132,16 +132,16 @@ public class Reservation implements Serializable {
         return this;
     }
 
-    public UserData getUserData() {
-        return this.userData;
+    public UserData getRegisteredBy() { // CAMBIO: Getter para registeredBy
+        return this.registeredBy;
     }
 
-    public void setUserData(UserData userData) {
-        this.userData = userData;
+    public void setRegisteredBy(UserData registeredBy) { // CAMBIO: Setter para registeredBy
+        this.registeredBy = registeredBy;
     }
 
-    public Reservation userData(UserData userData) {
-        this.setUserData(userData);
+    public Reservation registeredBy(UserData registeredBy) { // CAMBIO: Fluent setter para registeredBy
+        this.setRegisteredBy(registeredBy);
         return this;
     }
 

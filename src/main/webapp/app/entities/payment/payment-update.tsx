@@ -10,14 +10,17 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getPaymentMethods } from 'app/entities/payment-method/payment-method.reducer';
 import { getEntities as getUserData } from 'app/entities/user-data/user-data.reducer';
 import { createEntity, getEntity, reset, updateEntity } from './payment.reducer';
+import { AUTHORITIES } from 'app/config/constants';
 
 export const PaymentUpdate = () => {
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
 
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
+
+  const account = useAppSelector(state => state.authentication.account);
+  const isAdmin = account.authorities.includes(AUTHORITIES.ADMIN);
 
   const paymentMethods = useAppSelector(state => state.paymentMethod.entities);
   const userData = useAppSelector(state => state.userData.entities);
@@ -37,9 +40,14 @@ export const PaymentUpdate = () => {
       dispatch(getEntity(id));
     }
 
+    // Cargar Métodos de Pago SIEMPRE (para que el User/Trainer pueda seleccionarlo)
     dispatch(getPaymentMethods({}));
-    dispatch(getUserData({}));
-  }, []);
+
+    // Cargar UserData SOLO si es Admin (para que pueda elegir quién registró el pago)
+    if (isAdmin) {
+      dispatch(getUserData({}));
+    }
+  }, [isAdmin, isNew]);
 
   useEffect(() => {
     if (updateSuccess) {
@@ -48,7 +56,8 @@ export const PaymentUpdate = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-    if (values.id !== undefined && typeof values.id !== 'number') {
+    // Si no es nuevo, aseguramos que el ID y AmountPaid sean números
+    if (!isNew && values.id !== undefined && typeof values.id !== 'number') {
       values.id = Number(values.id);
     }
     if (values.amountPaid !== undefined && typeof values.amountPaid !== 'number') {
@@ -60,10 +69,14 @@ export const PaymentUpdate = () => {
       ...paymentEntity,
       ...values,
       paymentMethod: paymentMethods.find(it => it.id.toString() === values.paymentMethod?.toString()),
-      registeredBy: userData.find(it => it.id.toString() === values.registeredBy?.toString()),
+
+      // Si no es Admin, registeredBy se deja como NULL para que el Backend lo asigne automáticamente.
+      registeredBy: isAdmin ? userData.find(it => it.id.toString() === values.registeredBy?.toString()) : null,
     };
 
+    // Si es una nueva creación, quitamos el ID de la entidad para asegurar que se autogenere.
     if (isNew) {
+      delete entity.id;
       dispatch(createEntity(entity));
     } else {
       dispatch(updateEntity(entity));
@@ -74,6 +87,7 @@ export const PaymentUpdate = () => {
     isNew
       ? {
           paymentDate: displayDefaultDateTime(),
+          // El ID se deja vacío/nulo si es nuevo para que se autogenere
         }
       : {
           ...paymentEntity,
@@ -97,6 +111,7 @@ export const PaymentUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
+              {/* CAMPO ID: Solo visible y editable al EDITAR (isNew es false) */}
               {!isNew ? (
                 <ValidatedField
                   name="id"
@@ -107,6 +122,7 @@ export const PaymentUpdate = () => {
                   validate={{ required: true }}
                 />
               ) : null}
+              {/* Resto de campos... */}
               <ValidatedField
                 label={translate('gymtrackApp.payment.amountPaid')}
                 id="payment-amountPaid"
@@ -150,6 +166,7 @@ export const PaymentUpdate = () => {
                   maxLength: { value: 20, message: translate('entity.validation.maxlength', { max: 20 }) },
                 }}
               />
+              {/* CAMPO MÉTODO DE PAGO: VISIBLE para TODOS */}
               <ValidatedField
                 id="payment-paymentMethod"
                 name="paymentMethod"
@@ -170,26 +187,31 @@ export const PaymentUpdate = () => {
               <FormText>
                 <Translate contentKey="entity.validation.required">This field is required.</Translate>
               </FormText>
-              <ValidatedField
-                id="payment-registeredBy"
-                name="registeredBy"
-                data-cy="registeredBy"
-                label={translate('gymtrackApp.payment.registeredBy')}
-                type="select"
-                required
-              >
-                <option value="" key="0" />
-                {userData
-                  ? userData.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.document}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
+              {/* CAMPO REGISTRADO POR: Solo visible para ADMIN. Si no es Admin, se oculta y el Backend lo asigna automáticamente. */}
+              {isAdmin && (
+                <>
+                  <ValidatedField
+                    id="payment-registeredBy"
+                    name="registeredBy"
+                    data-cy="registeredBy"
+                    label={translate('gymtrackApp.payment.registeredBy')}
+                    type="select"
+                    required
+                  >
+                    <option value="" key="0" />
+                    {userData
+                      ? userData.map(otherEntity => (
+                          <option value={otherEntity.id} key={otherEntity.id}>
+                            {otherEntity.document}
+                          </option>
+                        ))
+                      : null}
+                  </ValidatedField>
+                  <FormText>
+                    <Translate contentKey="entity.validation.required">This field is required.</Translate>
+                  </FormText>
+                </>
+              )}
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/payment" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

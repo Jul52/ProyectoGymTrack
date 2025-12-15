@@ -119,7 +119,7 @@ class ReservationResourceIT {
         } else {
             userData = TestUtil.findAll(em, UserData.class).get(0);
         }
-        reservation.setUserData(userData);
+        reservation.setRegisteredBy(userData);
         return reservation;
     }
 
@@ -153,7 +153,7 @@ class ReservationResourceIT {
         } else {
             userData = TestUtil.findAll(em, UserData.class).get(0);
         }
-        updatedReservation.setUserData(userData);
+        updatedReservation.setRegisteredBy(userData);
         return updatedReservation;
     }
 

@@ -1,7 +1,10 @@
 package co.edu.sena.gymtrack.service.impl;
 
 import co.edu.sena.gymtrack.domain.Reservation;
+import co.edu.sena.gymtrack.domain.UserData;
 import co.edu.sena.gymtrack.repository.ReservationRepository;
+import co.edu.sena.gymtrack.repository.UserDataRepository; // Nueva Importación
+import co.edu.sena.gymtrack.security.SecurityUtils; // Nueva Importación
 import co.edu.sena.gymtrack.service.ReservationService;
 import co.edu.sena.gymtrack.service.dto.ReservationDTO;
 import co.edu.sena.gymtrack.service.mapper.ReservationMapper;
@@ -23,18 +26,42 @@ public class ReservationServiceImpl implements ReservationService {
     private static final Logger LOG = LoggerFactory.getLogger(ReservationServiceImpl.class);
 
     private final ReservationRepository reservationRepository;
-
     private final ReservationMapper reservationMapper;
+    private final UserDataRepository userDataRepository; // Nueva dependencia
 
-    public ReservationServiceImpl(ReservationRepository reservationRepository, ReservationMapper reservationMapper) {
+    public ReservationServiceImpl(
+        ReservationRepository reservationRepository,
+        ReservationMapper reservationMapper,
+        UserDataRepository userDataRepository // Inyección de dependencia
+    ) {
         this.reservationRepository = reservationRepository;
         this.reservationMapper = reservationMapper;
+        this.userDataRepository = userDataRepository;
     }
 
     @Override
     public ReservationDTO save(ReservationDTO reservationDTO) {
         LOG.debug("Request to save Reservation : {}", reservationDTO);
+
+        // --- INYECCIÓN DE SEGURIDAD: Asignar al usuario logueado ---
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElse(null);
+
+        if (userLogin == null) {
+            throw new RuntimeException("No hay usuario autenticado.");
+        }
+
+        Optional<UserData> registeredByUserData = userDataRepository.findOneByUserLogin(userLogin);
+
+        if (registeredByUserData.isEmpty()) {
+            throw new RuntimeException("Error: UserData no encontrado para el usuario: " + userLogin);
+        }
+        // -----------------------------------------------------------
+
         Reservation reservation = reservationMapper.toEntity(reservationDTO);
+
+        // Asignar el UserData encontrado a la entidad
+        reservation.setRegisteredBy(registeredByUserData.get()); // IMPORTANTE: Usar setRegisteredBy()
+
         reservation = reservationRepository.save(reservation);
         return reservationMapper.toDto(reservation);
     }
@@ -42,6 +69,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationDTO update(ReservationDTO reservationDTO) {
         LOG.debug("Request to update Reservation : {}", reservationDTO);
+        // NOTA: En un update real, deberías verificar que el usuario logueado sea el dueño de la reserva o un ADMIN.
         Reservation reservation = reservationMapper.toEntity(reservationDTO);
         reservation = reservationRepository.save(reservation);
         return reservationMapper.toDto(reservation);

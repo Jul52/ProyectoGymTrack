@@ -149,7 +149,15 @@ public class InvoiceServiceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of invoiceServices in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
+    @PreAuthorize(
+        "hasAuthority(\"" +
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
+    )
     public ResponseEntity<List<InvoiceServiceDTO>> getAllInvoiceServices(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
@@ -166,7 +174,15 @@ public class InvoiceServiceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the invoiceServiceDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
+    @PreAuthorize(
+        "hasAuthority(\"" +
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
+    )
     public ResponseEntity<InvoiceServiceDTO> getInvoiceService(@PathVariable("id") Long id) {
         LOG.debug("REST request to get InvoiceService : {}", id);
         Optional<InvoiceServiceDTO> invoiceServiceDTO = invoiceServiceService.findOne(id);

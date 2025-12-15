@@ -15,10 +15,15 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ReservationMapper extends EntityMapper<ReservationDTO, Reservation> {
+    // toDto: Entidad -> DTO (Lee de registeredBy, escribe a userData)
     @Mapping(target = "course", source = "course", qualifiedByName = "courseCourseName")
     @Mapping(target = "gymService", source = "gymService", qualifiedByName = "gymServiceServiceName")
-    @Mapping(target = "userData", source = "userData", qualifiedByName = "userDataDocument")
+    @Mapping(target = "userData", source = "registeredBy", qualifiedByName = "userDataDocument")
     ReservationDTO toDto(Reservation s);
+
+    // toEntity: DTO -> Entidad (Lee de userData, escribe a registeredBy)
+    @Mapping(target = "registeredBy", source = "userData")
+    Reservation toEntity(ReservationDTO reservationDTO);
 
     @Named("courseCourseName")
     @BeanMapping(ignoreByDefault = true)
@@ -32,6 +37,8 @@ public interface ReservationMapper extends EntityMapper<ReservationDTO, Reservat
     @Mapping(target = "serviceName", source = "serviceName")
     GymServiceDTO toDtoGymServiceServiceName(GymService gymService);
 
+    // Este QualifiedByName puede permanecer igual, solo necesita el id y el document
+    // (Asegúrate de que UserDataMapper tenga un método con @Named("userDataDocument")
     @Named("userDataDocument")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

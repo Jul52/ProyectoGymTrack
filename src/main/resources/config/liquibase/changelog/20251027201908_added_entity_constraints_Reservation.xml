@@ -24,7 +24,7 @@
                                  referencedTableName="gym_service"
                                  />
 
-        <addForeignKeyConstraint baseColumnNames="user_data_id"
+        <addForeignKeyConstraint baseColumnNames="registered_by_id"
                                  baseTableName="reservation"
                                  constraintName="fk_reservation__user_data_id"
                                  referencedColumnNames="id"

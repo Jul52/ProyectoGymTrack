@@ -149,7 +149,15 @@ public class PaymentMethodResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of paymentMethods in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
+    @PreAuthorize(
+        "hasAuthority(\"" +
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
+    )
     public ResponseEntity<List<PaymentMethodDTO>> getAllPaymentMethods(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of PaymentMethods");
         Page<PaymentMethodDTO> page = paymentMethodService.findAll(pageable);

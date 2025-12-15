@@ -30,7 +30,6 @@ public class PaymentDTO implements Serializable {
     @NotNull
     private PaymentMethodDTO paymentMethod;
 
-    @NotNull
     private UserDataDTO registeredBy;
 
     public Long getId() {

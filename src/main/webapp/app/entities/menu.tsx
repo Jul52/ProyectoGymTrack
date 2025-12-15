@@ -50,9 +50,11 @@ const EntitiesMenu = () => {
       <MenuItem icon="asterisk" to="/payment">
         <Translate contentKey="global.menu.entities.payment" />
       </MenuItem>
-      <MenuItem icon="asterisk" to="/reservation">
-        <Translate contentKey="global.menu.entities.reservation" />
-      </MenuItem>
+      {/*
+        <MenuItem icon="asterisk" to="/reservation">
+          {translate('global.menu.entities.reservation')}
+        </MenuItem>
+       */}
       <MenuItem icon="asterisk" to="/machine-incidents">
         <Translate contentKey="global.menu.entities.machineIncidents" />
       </MenuItem>

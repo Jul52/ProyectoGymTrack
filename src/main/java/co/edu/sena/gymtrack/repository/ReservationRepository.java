@@ -27,18 +27,18 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     }
 
     @Query(
-        value = "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.userData",
+        value = "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.registeredBy", // CAMBIO EN FETCH
         countQuery = "select count(reservation) from Reservation reservation"
     )
     Page<Reservation> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.userData"
+        "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.registeredBy" // CAMBIO EN FETCH
     )
     List<Reservation> findAllWithToOneRelationships();
 
     @Query(
-        "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.userData where reservation.id =:id"
+        "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.registeredBy where reservation.id =:id" // CAMBIO EN FETCH
     )
     Optional<Reservation> findOneWithToOneRelationships(@Param("id") Long id);
 }

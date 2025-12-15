@@ -58,6 +58,7 @@ public class IncidentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<IncidentDTO> createIncident(@Valid @RequestBody IncidentDTO incidentDTO) throws URISyntaxException {
         LOG.debug("REST request to save Incident : {}", incidentDTO);
         if (incidentDTO.getId() != null) {
@@ -80,6 +81,7 @@ public class IncidentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<IncidentDTO> updateIncident(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody IncidentDTO incidentDTO
@@ -114,6 +116,7 @@ public class IncidentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<IncidentDTO> partialUpdateIncident(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody IncidentDTO incidentDTO
@@ -145,6 +148,15 @@ public class IncidentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of incidents in body.
      */
     @GetMapping("")
+    @PreAuthorize(
+        "hasAuthority(\"" +
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
+    )
     public ResponseEntity<List<IncidentDTO>> getAllIncidents(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Incidents");
         Page<IncidentDTO> page = incidentService.findAll(pageable);
@@ -159,6 +171,15 @@ public class IncidentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the incidentDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
+    @PreAuthorize(
+        "hasAuthority(\"" +
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
+    )
     public ResponseEntity<IncidentDTO> getIncident(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Incident : {}", id);
         Optional<IncidentDTO> incidentDTO = incidentService.findOne(id);
@@ -172,6 +193,7 @@ public class IncidentResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<Void> deleteIncident(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Incident : {}", id);
         incidentService.delete(id);

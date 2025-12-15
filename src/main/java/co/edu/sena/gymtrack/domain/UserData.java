@@ -60,8 +60,7 @@ public class UserData implements Serializable {
     @JoinColumn(unique = true)
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userData")
-    @JsonIgnoreProperties(value = { "course", "gymService", "userData" }, allowSetters = true)
+    @OneToMany(mappedBy = "registeredBy")
     private Set<Reservation> reservations = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
@@ -210,10 +209,12 @@ public class UserData implements Serializable {
 
     public void setReservations(Set<Reservation> reservations) {
         if (this.reservations != null) {
-            this.reservations.forEach(i -> i.setUserData(null));
+            // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
+            this.reservations.forEach(i -> i.setRegisteredBy(null));
         }
         if (reservations != null) {
-            reservations.forEach(i -> i.setUserData(this));
+            // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
+            reservations.forEach(i -> i.setRegisteredBy(this));
         }
         this.reservations = reservations;
     }
@@ -225,13 +226,15 @@ public class UserData implements Serializable {
 
     public UserData addReservation(Reservation reservation) {
         this.reservations.add(reservation);
-        reservation.setUserData(this);
+        // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
+        reservation.setRegisteredBy(this);
         return this;
     }
 
     public UserData removeReservation(Reservation reservation) {
         this.reservations.remove(reservation);
-        reservation.setUserData(null);
+        // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
+        reservation.setRegisteredBy(null);
         return this;
     }
 
