@@ -3,8 +3,8 @@ package co.edu.sena.gymtrack.web.rest;
 import co.edu.sena.gymtrack.repository.PaymentRepository;
 import co.edu.sena.gymtrack.repository.UserDataRepository;
 import co.edu.sena.gymtrack.security.AuthoritiesConstants;
-import co.edu.sena.gymtrack.security.SecurityUtils;
 import co.edu.sena.gymtrack.security.AuthoritiesConstants;
+import co.edu.sena.gymtrack.security.SecurityUtils;
 import co.edu.sena.gymtrack.service.PaymentService;
 import co.edu.sena.gymtrack.service.dto.PaymentDTO;
 import co.edu.sena.gymtrack.service.mapper.UserDataMapper;
@@ -79,8 +79,14 @@ public class PaymentResource {
 
         if (paymentDTO.getRegisteredBy() == null) {
             SecurityUtils.getCurrentUserLogin()
-                .flatMap(userDataRepository::findByUserLogin) // <-- AHORA USA EL MÉTODO EAGERLY CARGADO
-                .ifPresent(userData -> paymentDTO.setRegisteredBy(userDataMapper.toDto(userData)));
+                .ifPresent(login -> {
+                    userDataRepository
+                        .findOneByUserLogin(login)
+                        .ifPresent(userData -> {
+                            // Aquí, 'userData' es sin ambigüedad la entidad UserData
+                            paymentDTO.setRegisteredBy(userDataMapper.toDto(userData));
+                        });
+                });
         }
 
         // Opcional: Si el campo debe ser OBLIGATORIO en la BD, se lanza error si no se encontró usuario logueado.
