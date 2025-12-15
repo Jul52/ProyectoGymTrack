@@ -31,6 +31,15 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/schedules")
+@PreAuthorize(
+    "hasAuthority(\"" +
+    AuthoritiesConstants.ADMIN +
+    "\") or hasAuthority(\"" +
+    AuthoritiesConstants.TRAINER +
+    "\") or hasAuthority(\"" +
+    AuthoritiesConstants.USER +
+    "\")"
+)
 public class ScheduleResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScheduleResource.class);

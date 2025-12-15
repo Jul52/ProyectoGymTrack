@@ -4,6 +4,7 @@ import co.edu.sena.gymtrack.repository.PaymentRepository;
 import co.edu.sena.gymtrack.repository.UserDataRepository;
 import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.security.SecurityUtils;
+import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.service.PaymentService;
 import co.edu.sena.gymtrack.service.dto.PaymentDTO;
 import co.edu.sena.gymtrack.service.mapper.UserDataMapper;
@@ -32,6 +33,7 @@ import tech.jhipster.web.util.ResponseUtil;
 
 @RestController
 @RequestMapping("/api/payments")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
 public class PaymentResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentResource.class);

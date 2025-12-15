@@ -31,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/reservations")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
 public class ReservationResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReservationResource.class);

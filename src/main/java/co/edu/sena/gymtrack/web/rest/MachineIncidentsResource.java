@@ -31,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/machine-incidents")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
 public class MachineIncidentsResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(MachineIncidentsResource.class);

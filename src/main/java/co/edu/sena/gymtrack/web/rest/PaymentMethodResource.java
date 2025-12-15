@@ -31,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/payment-methods")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
 public class PaymentMethodResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentMethodResource.class);

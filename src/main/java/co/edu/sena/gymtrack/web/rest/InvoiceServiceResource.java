@@ -31,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/invoice-services")
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
 public class InvoiceServiceResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(InvoiceServiceResource.class);
