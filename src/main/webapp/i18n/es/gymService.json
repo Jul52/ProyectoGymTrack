@@ -1,0 +1,30 @@
+{
+  "gymtrackApp": {
+    "gymService": {
+      "home": {
+        "title": "Servicios de gimnasio",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Servicio de gimnasio",
+        "createOrEditLabel": "Crear o editar Servicio de gimnasio",
+        "notFound": "No se encontraron Servicios de gimnasio"
+      },
+      "created": "Un nuevo Servicio de gimnasio ha sido creado con el identificador {{ param }}",
+      "updated": "Un Servicio de gimnasio ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Servicio de gimnasio ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Está seguro que quiere eliminar el Servicio de gimnasio {{ id }}?"
+      },
+      "detail": {
+        "title": "Servicio de gimnasio"
+      },
+      "id": "ID",
+      "serviceName": "Nombre del servicio",
+      "serviceDescription": "Descripción del servicio",
+      "price": "Precio",
+      "status": "Estado",
+      "invoiceService": "Servicio de Factura",
+      "category": "Categoría",
+      "reservations": "Reservas"
+    }
+  }
+}

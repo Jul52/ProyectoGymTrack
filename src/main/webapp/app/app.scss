@@ -1,0 +1,492 @@
+// ***************************************************************
+// ARCHIVO: src/main/webapp/app/app.scss (DEFINITIVO - TURQUESA Y LAYOUT)
+// ***************************************************************
+
+// 1. DEFINICIÓN GLOBAL DE COLOR TURQUESA
+$primary-turquesa: #00bfa5;
+
+// Sobreescribimos las variables de Bootstrap/JHipster antes de las importaciones
+$brand-primary: $primary-turquesa;
+$primary: $primary-turquesa;
+
+// SOBRESCRITURA CRÍTICA: Forzamos INFO y SUCCESS al turquesa para eliminar el azul y el verde por defecto.
+$info: $primary-turquesa;
+$success: $primary-turquesa;
+$link-color: $primary-turquesa;
+
+// Override Bootstrap variables
+@import 'bootstrap-variables';
+
+// COMENTADO: Desactivamos el tema oscuro Cyborg (variables)
+// @import 'bootswatch/dist/cyborg/variables';
+
+// Import Bootstrap source files from node_modules
+@import 'bootstrap/scss/bootstrap';
+
+// COMENTADO: Desactivamos el tema oscuro Cyborg (estilos)
+// @import 'bootswatch/dist/cyborg/bootswatch';
+
+/* ==========================================================================
+   ESTILOS DE LAYOUT (Sticky Footer y Separación de Header)
+   ========================================================================== */
+
+/* 1. La raíz del documento debe ocupar el 100% de la altura visible */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  /* Fuerza el fondo de la aplicación a blanco/gris muy claro */
+  background-color: #f8f9fa !important;
+}
+
+/* 2. Contenedor Principal: Flexbox vertical que ocupa toda la ventana (100vh) */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ¡Fuerza a ocupar toda la ventana! */
+  box-sizing: border-box;
+}
+
+/* 3. Contenedor de Contenido: Se estira y crea la separación */
+.app-container .view-container {
+  // CLAVE: Se estira para ocupar todo el espacio disponible y empujar el footer
+  flex: 1 0 auto;
+  width: 100%;
+
+  // CORRECCIÓN: Eliminamos la altura fija (height: calc...) que rompía el Sticky Footer.
+  // Ahora la altura la maneja automáticamente Flexbox.
+
+  // CLAVE PARA LA SEPARACIÓN: Padding superior para dejar espacio al Header fijo
+  padding-top: 4.5rem; /* Separación estética (ajustar si tu Header es más alto) */
+  padding-left: 1.5rem; /* Margen lateral más limpio */
+  padding-right: 1.5rem;
+  padding-bottom: 1rem; /* Pequeño padding inferior para no pegar al footer */
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .card {
+    padding: 1rem;
+    /* Aseguramos que la card base de JHipster sea blanca y tenga bordes sutiles */
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6;
+  }
+}
+
+/* 4. Footer (Si usas un .footer-container) - Solo asegurar que no se encoja. */
+.footer-container {
+  flex-shrink: 0;
+  // Nota: Los estilos de color del footer deben estar en tu footer.scss o añadidos aquí
+}
+
+/* REGLAS OBSOLETAS ELIMINADAS/REEMPLAZADAS:
+   Las reglas de #app-view-container y footer al final han sido reemplazadas por
+   el layout de Flexbox en .app-container y .view-container. */
+
+/* ==========================================================================
+   Ajustes Globales
+   ========================================================================== */
+
+a {
+  // CAMBIADO: Usamos el color turquesa para los enlaces de texto primarios
+  color: $primary-turquesa;
+  font-weight: bold;
+}
+
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  &:after,
+  &::before {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}
+
+.fullscreen {
+  position: fixed;
+  top: 100px;
+  left: 0;
+  width: 99% !important;
+  height: calc(100vh - 110px) !important;
+  margin: 5px;
+  z-index: 1000;
+  padding: 5px 25px 50px 25px !important;
+}
+
+/* ==========================================================================
+Browser Upgrade Prompt
+========================================================================== */
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+/* ==========================================================================
+Custom button styles
+========================================================================== */
+
+.icon-button > .btn {
+  background-color: transparent;
+  border-color: transparent;
+  padding: 0.5rem;
+  line-height: 1rem;
+  &:hover {
+    background-color: transparent;
+    border-color: transparent;
+  }
+  &:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+/* ==========================================================================
+Generic styles
+========================================================================== */
+
+/* Temporary workaround for availity-reactstrap-validation */
+.invalid-feedback {
+  display: inline;
+}
+
+/* other generic styles */
+
+.title {
+  font-size: 1.25em;
+  margin: 1px 10px 1px 10px;
+}
+
+.description {
+  font-size: 0.9em;
+  margin: 1px 10px 1px 10px;
+}
+
+.shadow {
+  box-shadow:
+    rgba(0, 0, 0, 0.12) 0 1px 6px,
+    rgba(0, 0, 0, 0.12) 0 1px 4px;
+  border-radius: 2px;
+}
+
+.error {
+  color: white;
+  background-color: red;
+}
+
+.break {
+  white-space: normal;
+  word-break: break-all;
+}
+
+.break-word {
+  white-space: normal;
+  word-break: keep-all;
+}
+
+.preserve-space {
+  white-space: pre-wrap;
+}
+
+/* padding helpers */
+
+@mixin pad($size, $side) {
+  @if $size== '' {
+    @if $side== '' {
+      .pad {
+        padding: 10px !important;
+      }
+    } @else {
+      .pad {
+        padding-#{$side}: 10px !important;
+      }
+    }
+  } @else {
+    @if $size== '' {
+      .pad-#{$size} {
+        padding: #{$size}px !important;
+      }
+    } @else {
+      .pad-#{$side}-#{$size} {
+        padding-#{$side}: #{$size}px !important;
+      }
+    }
+  }
+}
+
+@include pad('', '');
+@include pad('2', '');
+@include pad('3', '');
+@include pad('5', '');
+@include pad('10', '');
+@include pad('20', '');
+@include pad('25', '');
+@include pad('30', '');
+@include pad('50', '');
+@include pad('75', '');
+@include pad('100', '');
+@include pad('4', 'top');
+@include pad('5', 'top');
+@include pad('10', 'top');
+@include pad('20', 'top');
+@include pad('25', 'top');
+@include pad('30', 'top');
+@include pad('50', 'top');
+@include pad('75', 'top');
+@include pad('100', 'top');
+@include pad('4', 'bottom');
+@include pad('5', 'bottom');
+@include pad('10', 'bottom');
+@include pad('20', 'bottom');
+@include pad('25', 'bottom');
+@include pad('30', 'bottom');
+@include pad('50', 'bottom');
+@include pad('75', 'bottom');
+@include pad('100', 'bottom');
+@include pad('5', 'right');
+@include pad('10', 'right');
+@include pad('20', 'right');
+@include pad('25', 'right');
+@include pad('30', 'right');
+@include pad('50', 'right');
+@include pad('75', 'right');
+@include pad('100', 'right');
+@include pad('5', 'left');
+@include pad('10', 'left');
+@include pad('20', 'left');
+@include pad('25', 'left');
+@include pad('30', 'left');
+@include pad('50', 'left');
+@include pad('75', 'left');
+@include pad('100', 'left');
+
+@mixin no-padding($side) {
+  @if $side== 'all' {
+    .no-padding {
+      padding: 0 !important;
+    }
+  } @else {
+    .no-padding-#{$side} {
+      padding-#{$side}: 0 !important;
+    }
+  }
+}
+
+@include no-padding('left');
+@include no-padding('right');
+@include no-padding('top');
+@include no-padding('bottom');
+@include no-padding('all');
+
+/* end of padding helpers */
+
+.no-margin {
+  margin: 0;
+}
+@mixin voffset($size) {
+  @if $size== '' {
+    .voffset {
+      margin-top: 2px !important;
+    }
+  } @else {
+    .voffset-#{$size} {
+      margin-top: #{$size}px !important;
+    }
+  }
+}
+
+@include voffset('');
+@include voffset('5');
+@include voffset('10');
+@include voffset('15');
+@include voffset('30');
+@include voffset('40');
+@include voffset('60');
+@include voffset('80');
+@include voffset('100');
+@include voffset('150');
+
+.readonly {
+  background-color: #eee;
+  opacity: 1;
+}
+
+/* ==========================================================================
+make sure browsers use the pointer cursor for anchors, even with no href
+========================================================================== */
+
+a:hover {
+  cursor: pointer;
+}
+
+.hand {
+  cursor: pointer;
+}
+
+button.anchor-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  align-items: initial;
+  text-align: initial;
+  width: 100%;
+}
+
+a.anchor-btn:hover {
+  text-decoration: none;
+}
+
+/* ==========================================================================
+Metrics and Health styles
+========================================================================== */
+
+#threadDump .popover,
+#healthCheck .popover {
+  top: inherit;
+  display: block;
+  font-size: 10px;
+  max-width: 1024px;
+}
+
+.thread-dump-modal-lock {
+  max-width: 450px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#healthCheck .popover {
+  margin-left: -50px;
+}
+
+.health-details {
+  min-width: 400px;
+}
+
+/* bootstrap 3 input-group 100% width
+http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
+
+.width-min {
+  width: 1% !important;
+}
+
+/* jhipster-needle-scss-add-main JHipster will add new css style */
+
+/* ==========================================================================
+   Estilos de Tarjeta (CATEGORY)
+   APLICANDO EL COLOR TURQUESA PRIMARIO
+   ========================================================================== */
+
+.category-card {
+  /* Fondo blanco, sombra sutil y esquinas redondeadas */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  border: 1px solid #e9ecef !important;
+  background-color: #ffffff;
+}
+
+.category-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
+}
+
+.category-card .card-title {
+  font-weight: 700;
+  color: #343a40;
+  /* La línea bajo el título ahora es TURQUESA */
+  border-bottom: 2px solid $primary-turquesa;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* Estilos de los botones de acción */
+.category-action-btn {
+  font-weight: 500;
+  border-radius: 8px; /* Bordes redondeados en los botones */
+  padding: 0.375rem 0.75rem;
+  margin-right: 5px !important;
+}
+
+/* ----------------------------------------------------------------------
+   FORZADO DEFINITIVO DE COLOR TURQUESA EN BOTONES RELLENOS (PRIMARY, INFO, SUCCESS)
+   Esto es lo que debe solucionar el problema de precedencia.
+   ---------------------------------------------------------------------- */
+.btn-primary,
+.btn-info,
+.btn-success {
+  // ESTADO NORMAL Y ACTIVO
+  background-color: $primary-turquesa !important;
+  border-color: $primary-turquesa !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-info:hover,
+.btn-success:hover {
+  // ESTADO HOVER (Un tono ligeramente más oscuro si quieres, pero lo mantengo igual para la máxima consistencia)
+  background-color: darken($primary-turquesa, 5%) !important;
+  border-color: darken($primary-turquesa, 5%) !important;
+  color: #ffffff !important;
+}
+
+.btn-primary:focus,
+.btn-info:focus,
+.btn-success:focus,
+.btn-primary.active,
+.btn-info.active,
+.btn-success.active {
+  // ESTADO FOCUS Y ACTIVO (PARA EVITAR QUE VUELVA AL AZUL/VERDE POR DEFECTO)
+  background-color: darken($primary-turquesa, 10%) !important;
+  border-color: darken($primary-turquesa, 10%) !important;
+  box-shadow: 0 0 0 0.2rem rgba($primary-turquesa, 0.5) !important; // Sombra de enfoque turquesa
+  color: #ffffff !important;
+}
+
+/* ----------------------------------------------------------------------
+   AJUSTES ESPECÍFICOS PARA BOTONES TURQUESA (OUTLINE)
+   ---------------------------------------------------------------------- */
+
+// Ajuste para los botones outline (Ver, Editar)
+.btn-outline-primary,
+.btn-outline-info,
+.btn-outline-success {
+  border-width: 2px;
+  color: $primary-turquesa !important;
+  border-color: $primary-turquesa !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-info:hover,
+.btn-outline-success:hover {
+  background-color: $primary-turquesa !important; /* Relleno turquesa al hacer hover */
+  color: #ffffff !important; /* Texto blanco al hacer hover */
+}
+
+// Sobreescribimos cualquier posible conflicto de btn-class.btn-outline
+.btn-primary.btn-outline,
+.btn-info.btn-outline,
+.btn-success.btn-outline {
+  border-width: 2px;
+  color: $primary-turquesa !important;
+  border-color: $primary-turquesa !important;
+  background-color: transparent !important;
+}
+
+.btn-primary.btn-outline:hover,
+.btn-info.btn-outline:hover,
+.btn-success.btn-outline:hover {
+  background-color: $primary-turquesa !important;
+  color: #ffffff !important;
+}
+
+/* Ajuste para el botón de eliminar (mantenemos el rojo de peligro) */
+.btn-danger.btn-outline {
+  border-width: 2px;
+}

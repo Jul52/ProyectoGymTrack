@@ -1,0 +1,32 @@
+{
+  "gymtrackApp": {
+    "course": {
+      "home": {
+        "title": "Cursos",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Curso",
+        "createOrEditLabel": "Crear o editar Curso",
+        "notFound": "No se encontraron Cursos"
+      },
+      "created": "Un nuevo Curso ha sido creado con el identificador {{ param }}",
+      "updated": "Un Curso ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Curso ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Está seguro que quiere eliminar el Curso {{ id }}?"
+      },
+      "detail": {
+        "title": "Curso"
+      },
+      "id": "ID",
+      "courseName": "Nombre del Curso",
+      "status": "Estado",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Fin",
+      "capacity": "Capacidad",
+      "schedule": "Horario",
+      "zone": "Zona",
+      "trainer": "Entrenador",
+      "reservations": "Reservaciones"
+    }
+  }
+}

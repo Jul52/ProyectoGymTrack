@@ -1,0 +1,30 @@
+{
+  "gymtrackApp": {
+    "gymService": {
+      "home": {
+        "title": "Gym Services",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Gym Service",
+        "createOrEditLabel": "Create or edit a Gym Service",
+        "notFound": "No Gym Services found"
+      },
+      "created": "A new Gym Service is created with identifier {{ param }}",
+      "updated": "A Gym Service is updated with identifier {{ param }}",
+      "deleted": "A Gym Service is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Gym Service {{ id }}?"
+      },
+      "detail": {
+        "title": "Gym Service"
+      },
+      "id": "ID",
+      "serviceName": "Service Name",
+      "serviceDescription": "Service Description",
+      "price": "Price",
+      "status": "Status",
+      "invoiceService": "Invoice Service",
+      "category": "Category",
+      "reservations": "Reservations"
+    }
+  }
+}

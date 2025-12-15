@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20251027202008"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "serial",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Machine",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "machineIncidents",
+      "otherEntityRelationshipName": "machine",
+      "relationshipName": "machineIncidents",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "document",
+      "otherEntityName": "userData",
+      "otherEntityRelationshipName": "machine",
+      "relationshipName": "admin",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

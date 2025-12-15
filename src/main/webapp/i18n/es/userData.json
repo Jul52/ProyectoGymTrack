@@ -1,0 +1,36 @@
+{
+  "gymtrackApp": {
+    "userData": {
+      "home": {
+        "title": "Datos de usuario",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear nuevo Dato de Usuario",
+        "createOrEditLabel": "Crear o editar Dato de Usuario",
+        "notFound": "No se encontraron Datos de Usuario"
+      },
+      "created": "Un nuevo Dato de Usuario ha sido creado con el identificador {{ param }}",
+      "updated": "Un Dato de Usuario ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Dato de Usuario ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Está seguro que quiere eliminar el Dato de Usuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Dato de Usuario"
+      },
+      "id": "ID",
+      "firstName": "Primer nombre",
+      "secondName": "Segundo nombre",
+      "firstLastName": "Primer apellido",
+      "secondLastName": "Segundo apellido",
+      "document": "Documento",
+      "phoneNumber": "Número de teléfono",
+      "birthDate": "Fecha de nacimiento",
+      "user": "Usuario",
+      "reservation": "Reserva",
+      "machine": "Máquina",
+      "invoice": "Factura",
+      "course": "Curso",
+      "documentType": "Tipo de documento"
+    }
+  }
+}

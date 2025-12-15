@@ -1,0 +1,35 @@
+{
+  "annotations": {
+    "changelogDate": "20251027203008"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Zone",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "courseName",
+      "otherEntityName": "course",
+      "otherEntityRelationshipName": "zone",
+      "relationshipName": "course",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

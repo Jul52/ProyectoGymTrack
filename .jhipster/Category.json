@@ -1,0 +1,28 @@
+{
+  "annotations": {
+    "changelogDate": "20251027202308"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "categoryName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    }
+  ],
+  "name": "Category",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "gymService",
+      "otherEntityRelationshipName": "category",
+      "relationshipName": "gymService",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

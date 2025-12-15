@@ -1,0 +1,58 @@
+{
+  "annotations": {
+    "changelogDate": "20251027201908"
+  },
+  "applications": ["gymtrack"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "status",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
+      "fieldName": "reservationDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Reservation",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "courseName",
+      "otherEntityName": "course",
+      "otherEntityRelationshipName": "reservations",
+      "relationshipName": "course",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "serviceName",
+      "otherEntityName": "gymService",
+      "otherEntityRelationshipName": "reservations",
+      "relationshipName": "gymService",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "document",
+      "otherEntityName": "userData",
+      "otherEntityRelationshipName": "reservation",
+      "relationshipName": "userData",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

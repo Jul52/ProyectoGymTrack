@@ -1,0 +1,19 @@
+{
+  "home": {
+    "title": "¡Bienvenido, GymTrack!",
+    "subtitle": "Esta es su página de inicio",
+    "logged": {
+      "message": "Está conectado como \"{{username}}\"."
+    },
+    "question": "Si tiene preguntas sobre JHipster:",
+    "link": {
+      "homepage": "Página de inicio de JHipster",
+      "stackoverflow": "GymTrack en Stack Overflow",
+      "bugtracker": "Seguimiento de errores de GymTrack",
+      "chat": "Sala de chat pública de GymTrack",
+      "follow": "Siga a @GymTrack en Twitter"
+    },
+    "like": "Si te gusta @GymTrack, danos una estrella en",
+    "github": "GitHub"
+  }
+}
