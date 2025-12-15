@@ -150,12 +150,12 @@ public class MachineResource {
     @GetMapping("")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<List<MachineDTO>> getAllMachines(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
@@ -181,12 +181,12 @@ public class MachineResource {
     @GetMapping("/{id}")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<MachineDTO> getMachine(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Machine : {}", id);

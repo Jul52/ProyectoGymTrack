@@ -150,12 +150,12 @@ public class InvoiceServiceResource {
     @GetMapping("")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<List<InvoiceServiceDTO>> getAllInvoiceServices(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
@@ -175,12 +175,12 @@ public class InvoiceServiceResource {
     @GetMapping("/{id}")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<InvoiceServiceDTO> getInvoiceService(@PathVariable("id") Long id) {
         LOG.debug("REST request to get InvoiceService : {}", id);

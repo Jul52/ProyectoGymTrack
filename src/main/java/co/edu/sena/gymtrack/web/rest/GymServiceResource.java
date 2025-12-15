@@ -59,12 +59,12 @@ public class GymServiceResource {
     @PostMapping("")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<GymServiceDTO> createGymService(@Valid @RequestBody GymServiceDTO gymServiceDTO) throws URISyntaxException {
         LOG.debug("REST request to save GymService : {}", gymServiceDTO);
@@ -90,12 +90,12 @@ public class GymServiceResource {
     @PutMapping("/{id}")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<GymServiceDTO> updateGymService(
         @PathVariable(value = "id", required = false) final Long id,
@@ -133,12 +133,12 @@ public class GymServiceResource {
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<GymServiceDTO> partialUpdateGymService(
         @PathVariable(value = "id", required = false) final Long id,
@@ -174,12 +174,12 @@ public class GymServiceResource {
     @GetMapping("")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<List<GymServiceDTO>> getAllGymServices(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
@@ -205,12 +205,12 @@ public class GymServiceResource {
     @GetMapping("/{id}")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<GymServiceDTO> getGymService(@PathVariable("id") Long id) {
         LOG.debug("REST request to get GymService : {}", id);
@@ -227,12 +227,12 @@ public class GymServiceResource {
     @DeleteMapping("/{id}")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<Void> deleteGymService(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete GymService : {}", id);

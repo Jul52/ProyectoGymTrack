@@ -149,12 +149,12 @@ public class IncidentResource {
     @GetMapping("")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<List<IncidentDTO>> getAllIncidents(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Incidents");
@@ -172,12 +172,12 @@ public class IncidentResource {
     @GetMapping("/{id}")
     @PreAuthorize(
         "hasAuthority(\"" +
-            AuthoritiesConstants.ADMIN +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.TRAINER +
-            "\") or hasAuthority(\"" +
-            AuthoritiesConstants.USER +
-            "\")"
+        AuthoritiesConstants.ADMIN +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.TRAINER +
+        "\") or hasAuthority(\"" +
+        AuthoritiesConstants.USER +
+        "\")"
     )
     public ResponseEntity<IncidentDTO> getIncident(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Incident : {}", id);
