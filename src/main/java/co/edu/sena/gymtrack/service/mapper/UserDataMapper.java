@@ -13,12 +13,9 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface UserDataMapper extends EntityMapper<UserDataDTO, UserData> {
-    // Dejamos el método toDto original sin la instrucción 'reservations'
     @Mapping(target = "user", source = "user", qualifiedByName = "userLogin")
     @Mapping(target = "documentType", source = "documentType", qualifiedByName = "documentTypeName")
     UserDataDTO toDto(UserData s);
-
-    // Eliminamos toEntity y partialUpdate, confiando en EntityMapper
 
     @Named("userLogin")
     @BeanMapping(ignoreByDefault = true)

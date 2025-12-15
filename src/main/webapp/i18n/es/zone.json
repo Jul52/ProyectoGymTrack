@@ -2,25 +2,25 @@
   "gymtrackApp": {
     "zone": {
       "home": {
-        "title": "Zonas",
-        "refreshListLabel": "Actualizar lista",
-        "createLabel": "Crear nueva Zona",
-        "createOrEditLabel": "Crear o editar Zona",
-        "notFound": "No se encontraron Zonas"
+        "title": "Zones",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Zone",
+        "createOrEditLabel": "Crear o editar Zone",
+        "notFound": "Ningún Zones encontrado"
       },
-      "created": "Una nueva Zona ha sido creada con el identificador {{ param }}",
-      "updated": "Una Zona ha sido actualizada con el identificador {{ param }}",
-      "deleted": "Una Zona ha sido eliminada con el identificador {{ param }}",
+      "created": "Un nuevo Zone ha sido creado con el identificador {{ param }}",
+      "updated": "Un Zone ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Zone ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar la Zona {{ id }}?"
+        "question": "¿Seguro que quiere eliminar Zone {{ id }}?"
       },
       "detail": {
-        "title": "Zona"
+        "title": "Zone"
       },
       "id": "ID",
-      "name": "Nombre",
-      "status": "Estado",
-      "course": "Curso"
+      "name": "Name",
+      "status": "Status",
+      "course": "Course"
     }
   }
 }
