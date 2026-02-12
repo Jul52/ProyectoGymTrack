@@ -26,7 +26,7 @@ export const GymService = () => {
 
   const account = useAppSelector(state => state.authentication.account);
   const isAdmin = account?.authorities?.includes('ROLE_ADMIN');
-
+  const isUserOrAdmin = account?.authorities?.includes('ROLE_USER') || account?.authorities?.includes('ROLE_ADMIN');
   const getAllEntities = () => {
     dispatch(
       getEntities({
@@ -163,6 +163,13 @@ export const GymService = () => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
+
+                      {isUserOrAdmin && (
+                        <Button tag={Link} to={`/payments/${gymService.id}`} color="success" size="sm">
+                          <FontAwesomeIcon icon="money-bill" />
+                          <Translate contentKey="entity.action.pay">Pay</Translate>
+                        </Button>
+                      )}
 
                       {isAdmin && (
                         <>
