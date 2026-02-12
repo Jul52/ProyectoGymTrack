@@ -1,5 +1,6 @@
 package co.edu.sena.gymtrack.service.dto;
 
+import co.edu.sena.gymtrack.domain.enumeration.CourseAccessType;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -25,6 +26,12 @@ public class GymServiceDTO implements Serializable {
 
     @NotNull
     private Boolean status;
+
+    // 🔥 NUEVOS CAMPOS
+    @NotNull
+    private CourseAccessType courseAccessType;
+
+    private Integer maxReservationsPerCourse;
 
     @NotNull
     private CategoryDTO category;
@@ -69,6 +76,22 @@ public class GymServiceDTO implements Serializable {
         this.status = status;
     }
 
+    public CourseAccessType getCourseAccessType() {
+        return courseAccessType;
+    }
+
+    public void setCourseAccessType(CourseAccessType courseAccessType) {
+        this.courseAccessType = courseAccessType;
+    }
+
+    public Integer getMaxReservationsPerCourse() {
+        return maxReservationsPerCourse;
+    }
+
+    public void setMaxReservationsPerCourse(Integer maxReservationsPerCourse) {
+        this.maxReservationsPerCourse = maxReservationsPerCourse;
+    }
+
     public CategoryDTO getCategory() {
         return category;
     }
@@ -98,16 +121,29 @@ public class GymServiceDTO implements Serializable {
         return Objects.hash(this.id);
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "GymServiceDTO{" +
-            "id=" + getId() +
-            ", serviceName='" + getServiceName() + "'" +
-            ", serviceDescription='" + getServiceDescription() + "'" +
-            ", price=" + getPrice() +
-            ", status='" + getStatus() + "'" +
-            ", category=" + getCategory() +
-            "}";
+        return (
+            "GymServiceDTO{" +
+            "id=" +
+            getId() +
+            ", serviceName='" +
+            getServiceName() +
+            "'" +
+            ", serviceDescription='" +
+            getServiceDescription() +
+            "'" +
+            ", price=" +
+            getPrice() +
+            ", status=" +
+            getStatus() +
+            ", courseAccessType=" +
+            getCourseAccessType() +
+            ", maxReservationsPerCourse=" +
+            getMaxReservationsPerCourse() +
+            ", category=" +
+            getCategory() +
+            "}"
+        );
     }
 }

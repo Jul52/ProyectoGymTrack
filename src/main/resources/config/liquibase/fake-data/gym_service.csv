@@ -1,5 +1,5 @@
-id;service_name;service_description;price;status;category_id
-1;Membresía básica;Acceso a todas las instalaciones;50.00;true;1
-2;Entrenamiento personalizado;Sesiones de 1 hora con un entrenador;25.00;true;2
-3;Clases grupales;Acceso ilimitado a clases dirigidas;15.00;true;3
-4;Paquete familiar;Membresía para 4 personas;120.00;false;4
+id;service_name;service_description;price;status;course_access_type;max_reservations_per_course;category_id
+1;Membresía básica;Acceso a todas las instalaciones;50.00;true;NONE;;1
+2;Entrenamiento personalizado;Sesiones de 1 hora con un entrenador;25.00;true;NONE;;2
+3;Clases grupales;Acceso ilimitado a clases dirigidas;15.00;true;UNLIMITED;;3
+4;Paquete familiar;Membresía para 4 personas;120.00;false;LIMITED;8;4

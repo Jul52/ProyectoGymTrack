@@ -26,9 +26,13 @@
             <column name="status" type="boolean">
                 <constraints nullable="false" />
             </column>
-            <column name="category_id" type="bigint">
-                <constraints nullable="false" />
+            <column name="course_access_type" type="varchar(50)" defaultValue="NONE">
+              <constraints nullable="false"/>
             </column>
+            <column name="max_reservations_per_course" type="int"/>
+              <column name="category_id" type="bigint">
+                  <constraints nullable="false" />
+              </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
