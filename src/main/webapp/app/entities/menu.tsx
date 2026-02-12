@@ -47,26 +47,24 @@ const EntitiesMenu = () => {
         </>
       )}
 
-      <MenuItem icon="asterisk" to="/payment">
-        <Translate contentKey="global.menu.entities.payment" />
-      </MenuItem>
-      {/*
-        <MenuItem icon="asterisk" to="/reservation">
-          {translate('global.menu.entities.reservation')}
-        </MenuItem>
-       */}
       <MenuItem icon="asterisk" to="/machine-incidents">
         <Translate contentKey="global.menu.entities.machineIncidents" />
       </MenuItem>
+
       <MenuItem icon="asterisk" to="/gym-service">
         <Translate contentKey="global.menu.entities.gymService" />
       </MenuItem>
+
       <MenuItem icon="asterisk" to="/invoice">
         <Translate contentKey="global.menu.entities.invoice" />
       </MenuItem>
+
+      {/*
       <MenuItem icon="asterisk" to="/invoice-service">
         <Translate contentKey="global.menu.entities.invoiceService" />
       </MenuItem>
+      */}
+
       <MenuItem icon="asterisk" to="/schedule">
         <Translate contentKey="global.menu.entities.schedule" />
       </MenuItem>
