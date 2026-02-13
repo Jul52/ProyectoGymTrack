@@ -23,6 +23,7 @@
       "payment": "Pago",
       "invoiceService": "Servicio de Factura",
       "paymentMethod": "Método de Pago",
+      "gymService": "Servicio de Gimnasio ",
       "userData": "Datos de Usuario"
     }
   }

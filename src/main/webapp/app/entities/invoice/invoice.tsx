@@ -107,7 +107,6 @@ export const Invoice = () => {
       <div className="table-responsive">
         {invoiceList && invoiceList.length > 0 ? (
           <Table responsive>
-            f
             <thead>
               <tr>
                 <th className="hand" onClick={sort('id')}>
@@ -124,6 +123,10 @@ export const Invoice = () => {
 
                 <th>
                   <Translate contentKey="gymtrackApp.invoice.paymentMethod">Payment Method</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="gymtrackApp.invoice.gymService">Gym Service</Translate>
+                  <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
                   <Translate contentKey="gymtrackApp.invoice.userData">User Data</Translate> <FontAwesomeIcon icon="sort" />
@@ -148,6 +151,16 @@ export const Invoice = () => {
                     ) : (
                       ''
                     )}
+                  </td>
+                  <td>
+                    {invoice.invoiceServices && invoice.invoiceServices.length > 0
+                      ? invoice.invoiceServices.map((is, index) => (
+                          <span key={index}>
+                            <Link to={`/gym-service/${is.service?.id}`}>{is.service?.serviceName}</Link>
+                            {index < invoice.invoiceServices.length - 1 ? ',' : ''}
+                          </span>
+                        ))
+                      : ''}
                   </td>
                   <td>{invoice.userData ? <Link to={`/user-data/${invoice.userData.id}`}>{invoice.userData.document}</Link> : ''}</td>
 

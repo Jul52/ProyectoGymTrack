@@ -48,6 +48,12 @@
       "relationshipSide": "right",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "gymService",
+      "relationshipName": "gymService",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",
