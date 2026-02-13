@@ -29,8 +29,6 @@ export const GymService = () => {
   const loading = useAppSelector(state => state.gymService.loading);
   const totalItems = useAppSelector(state => state.gymService.totalItems);
 
-  const account = useAppSelector(state => state.authentication.account);
-  const isAdmin = account?.authorities?.includes('ROLE_ADMIN');
   const isUserOrAdmin = account?.authorities?.includes('ROLE_USER') || account?.authorities?.includes('ROLE_ADMIN');
   const getAllEntities = () => {
     dispatch(
@@ -103,7 +101,6 @@ export const GymService = () => {
             <Translate contentKey="gymtrackApp.gymService.home.refreshListLabel">Refresh List</Translate>
           </Button>
 
-          {/* Solo ADMIN puede crear */}
           {isAdmin && (
             <Link to="/gym-service/new" className="btn btn-primary">
               <FontAwesomeIcon icon="plus" />{' '}
@@ -164,7 +161,6 @@ export const GymService = () => {
                         <FontAwesomeIcon icon="eye" /> Ver
                       </Button>
 
-                      {/* Solo ADMIN */}
                       {isAdmin && (
                         <>
                           <Button tag={Link} to={`/gym-service/${gymService.id}/edit`} color="primary" size="sm">
@@ -177,7 +173,6 @@ export const GymService = () => {
                         </>
                       )}
 
-                      {/* Solo USER y solo si el servicio está activo */}
                       {isUser && gymService.status && (
                         <Button tag={Link} to={`/payment/new?serviceId=${gymService.id}`} color="success" size="sm">
                           <FontAwesomeIcon icon="credit-card" /> Pagar
