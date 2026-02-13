@@ -1,9 +1,16 @@
 import React, { FC } from 'react';
+import { Alert } from 'reactstrap';
 import './home.scss';
 
 const InicioInformativo: FC = () => {
   return (
     <div className="inicio-informativo">
+      {/* ✅ Mensaje de bienvenida (reemplaza usuarios predeterminados) */}
+      <Alert color="info" className="text-center">
+        Bienvenido a <strong>GymTrack</strong> 💪 <br />
+        Gestiona tu entrenamiento y alcanza tus objetivos.
+      </Alert>
+
       <div className="imagen-encabezado">
         <img src="../../../content/images/logotrans.png" alt="GymTrack Logo" className="logo-inicio" />
       </div>
@@ -27,10 +34,12 @@ const InicioInformativo: FC = () => {
               </p>
               <p>Gestión</p>
             </div>
+
             <div className="card-oferta">
               <p>1 a 1</p>
               <p>Con entrenadores</p>
             </div>
+
             <div className="card-oferta">
               <p>Clases</p>
               <p>Personalizadas</p>

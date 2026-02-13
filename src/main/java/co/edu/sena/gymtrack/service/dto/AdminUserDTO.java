@@ -6,6 +6,7 @@ import co.edu.sena.gymtrack.domain.User;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,10 @@ public class AdminUserDTO implements Serializable {
     @Email
     @Size(min = 5, max = 254)
     private String email;
+
+    private String tipoDocumento;
+    private String numeroDocumento;
+    private LocalDate fechaNacimiento;
 
     @Size(max = 256)
     private String imageUrl;
@@ -169,6 +174,30 @@ public class AdminUserDTO implements Serializable {
 
     public Set<String> getAuthorities() {
         return authorities;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
+
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     public void setAuthorities(Set<String> authorities) {

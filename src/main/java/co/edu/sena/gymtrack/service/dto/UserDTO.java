@@ -2,6 +2,7 @@ package co.edu.sena.gymtrack.service.dto;
 
 import co.edu.sena.gymtrack.domain.User;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -15,6 +16,10 @@ public class UserDTO implements Serializable {
 
     private String login;
 
+    private String tipoDocumento;
+    private String numeroDocumento;
+    private LocalDate fechaNacimiento;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -23,6 +28,9 @@ public class UserDTO implements Serializable {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
+        this.tipoDocumento = user.getTipoDocumento();
+        this.numeroDocumento = user.getNumeroDocumento();
+        this.fechaNacimiento = user.getFechaNacimiento();
     }
 
     public Long getId() {
@@ -39,6 +47,30 @@ public class UserDTO implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
+
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     @Override
