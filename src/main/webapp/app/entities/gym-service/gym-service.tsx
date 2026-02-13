@@ -7,6 +7,7 @@ import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { hasAnyAuthority } from 'app/shared/auth/private-route';
 
 import { getEntities } from './gym-service.reducer';
 
@@ -15,6 +16,10 @@ export const GymService = () => {
 
   const pageLocation = useLocation();
   const navigate = useNavigate();
+
+  const account = useAppSelector(state => state.authentication.account);
+  const isUser = hasAnyAuthority(account.authorities, ['ROLE_USER']);
+  const isAdmin = hasAnyAuthority(account.authorities, ['ROLE_ADMIN']);
 
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
@@ -83,122 +88,100 @@ export const GymService = () => {
   };
 
   const getSortIconByFieldName = (fieldName: string) => {
-    const sortFieldName = paginationState.sort;
-    const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    }
-    return order === ASC ? faSortUp : faSortDown;
+    if (paginationState.sort !== fieldName) return faSort;
+    return paginationState.order === ASC ? faSortUp : faSortDown;
   };
 
   return (
     <div>
-      <h2 id="gym-service-heading" data-cy="GymServiceHeading">
+      <h2 id="gym-service-heading">
         <Translate contentKey="gymtrackApp.gymService.home.title">Gym Services</Translate>
+
         <div className="d-flex justify-content-end">
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="gymtrackApp.gymService.home.refreshListLabel">Refresh List</Translate>
           </Button>
 
+          {/* Solo ADMIN puede crear */}
           {isAdmin && (
-            <Link to="/gym-service/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-              <FontAwesomeIcon icon="plus" />
-              &nbsp;
+            <Link to="/gym-service/new" className="btn btn-primary">
+              <FontAwesomeIcon icon="plus" />{' '}
               <Translate contentKey="gymtrackApp.gymService.home.createLabel">Create new Gym Service</Translate>
             </Link>
           )}
         </div>
       </h2>
+
       <div className="table-responsive">
         {gymServiceList && gymServiceList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="gymtrackApp.gymService.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                <th onClick={sort('id')}>
+                  ID <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
-                <th className="hand" onClick={sort('serviceName')}>
-                  <Translate contentKey="gymtrackApp.gymService.serviceName">Service Name</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('serviceName')} />
+                <th onClick={sort('serviceName')}>
+                  <Translate contentKey="gymtrackApp.gymService.serviceName" />
                 </th>
-                <th className="hand" onClick={sort('serviceDescription')}>
-                  <Translate contentKey="gymtrackApp.gymService.serviceDescription">Service Description</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('serviceDescription')} />
+                <th onClick={sort('serviceDescription')}>
+                  <Translate contentKey="gymtrackApp.gymService.serviceDescription" />
                 </th>
-                <th className="hand" onClick={sort('price')}>
-                  <Translate contentKey="gymtrackApp.gymService.price">Price</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
+                <th onClick={sort('price')}>
+                  <Translate contentKey="gymtrackApp.gymService.price" />
                 </th>
-                <th className="hand" onClick={sort('status')}>
-                  <Translate contentKey="gymtrackApp.gymService.status">Status</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
+                <th onClick={sort('status')}>
+                  <Translate contentKey="gymtrackApp.gymService.status" />
                 </th>
                 <th>
-                  <Translate contentKey="gymtrackApp.gymService.category">Category</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="gymtrackApp.gymService.category" />
                 </th>
                 <th />
               </tr>
             </thead>
+
             <tbody>
               {gymServiceList.map((gymService, i) => (
-                <tr key={`entity-${i}`} data-cy="entityTable">
+                <tr key={`entity-${i}`}>
                   <td>
                     <Button tag={Link} to={`/gym-service/${gymService.id}`} color="link" size="sm">
                       {gymService.id}
                     </Button>
                   </td>
+
                   <td>{gymService.serviceName}</td>
                   <td>{gymService.serviceDescription}</td>
                   <td>{gymService.price}</td>
-                  <td>{gymService.status ? 'true' : 'false'}</td>
+                  <td>{gymService.status ? 'Activo' : 'Inactivo'}</td>
                   <td>
                     {gymService.category ? <Link to={`/category/${gymService.category.id}`}>{gymService.category.categoryName}</Link> : ''}
                   </td>
+
                   <td className="text-end">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/gym-service/${gymService.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.view">View</Translate>
-                        </span>
+                    <div className="btn-group">
+                      {/* Ver - todos */}
+                      <Button tag={Link} to={`/gym-service/${gymService.id}`} color="info" size="sm">
+                        <FontAwesomeIcon icon="eye" /> Ver
                       </Button>
 
-                      {isUserOrAdmin && (
-                        <Button tag={Link} to={`/payments/${gymService.id}`} color="success" size="sm">
-                          <FontAwesomeIcon icon="money-bill" />
-                          <Translate contentKey="entity.action.pay">Pay</Translate>
-                        </Button>
-                      )}
-
+                      {/* Solo ADMIN */}
                       {isAdmin && (
                         <>
-                          <Button
-                            tag={Link}
-                            to={`/gym-service/${gymService.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                            color="primary"
-                            size="sm"
-                            data-cy="entityEditButton"
-                          >
-                            <FontAwesomeIcon icon="pencil-alt" />{' '}
-                            <span className="d-none d-md-inline">
-                              <Translate contentKey="entity.action.edit">Edit</Translate>
-                            </span>
+                          <Button tag={Link} to={`/gym-service/${gymService.id}/edit`} color="primary" size="sm">
+                            <FontAwesomeIcon icon="pencil-alt" /> Editar
                           </Button>
-                          <Button
-                            onClick={() =>
-                              (window.location.href = `/gym-service/${gymService.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                            }
-                            color="danger"
-                            size="sm"
-                            data-cy="entityDeleteButton"
-                          >
-                            <FontAwesomeIcon icon="trash" />{' '}
-                            <span className="d-none d-md-inline">
-                              <Translate contentKey="entity.action.delete">Delete</Translate>
-                            </span>
+
+                          <Button onClick={() => (window.location.href = `/gym-service/${gymService.id}/delete`)} color="danger" size="sm">
+                            <FontAwesomeIcon icon="trash" /> Eliminar
                           </Button>
                         </>
+                      )}
+
+                      {/* Solo USER y solo si el servicio está activo */}
+                      {isUser && gymService.status && (
+                        <Button tag={Link} to={`/payment/new?serviceId=${gymService.id}`} color="success" size="sm">
+                          <FontAwesomeIcon icon="credit-card" /> Pagar
+                        </Button>
                       )}
                     </div>
                   </td>
@@ -207,18 +190,16 @@ export const GymService = () => {
             </tbody>
           </Table>
         ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="gymtrackApp.gymService.home.notFound">No Gym Services found</Translate>
-            </div>
-          )
+          !loading && <div className="alert alert-warning">No Gym Services found</div>
         )}
       </div>
+
       {totalItems ? (
-        <div className={gymServiceList && gymServiceList.length > 0 ? '' : 'd-none'}>
+        <div>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
           </div>
+
           <div className="justify-content-center d-flex">
             <JhiPagination
               activePage={paginationState.activePage}

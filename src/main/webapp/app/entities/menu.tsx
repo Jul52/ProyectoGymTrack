@@ -13,6 +13,7 @@ const EntitiesMenu = () => {
 
   return (
     <>
+      {/* SOLO ADMIN */}
       {isAdmin && (
         <>
           <MenuItem icon="asterisk" to="/user-data">
@@ -39,6 +40,7 @@ const EntitiesMenu = () => {
         </>
       )}
 
+      {/* TRAINER Y ADMIN */}
       {isTrainerOrAdmin && (
         <>
           <MenuItem icon="asterisk" to="/zone">
@@ -46,6 +48,8 @@ const EntitiesMenu = () => {
           </MenuItem>
         </>
       )}
+
+      {/* ❌ PAYMENT ELIMINADO DEL MENÚ */}
 
       <MenuItem icon="asterisk" to="/machine-incidents">
         <Translate contentKey="global.menu.entities.machineIncidents" />
@@ -59,11 +63,9 @@ const EntitiesMenu = () => {
         <Translate contentKey="global.menu.entities.invoice" />
       </MenuItem>
 
-      {/*
       <MenuItem icon="asterisk" to="/invoice-service">
         <Translate contentKey="global.menu.entities.invoiceService" />
       </MenuItem>
-      */}
 
       <MenuItem icon="asterisk" to="/schedule">
         <Translate contentKey="global.menu.entities.schedule" />
