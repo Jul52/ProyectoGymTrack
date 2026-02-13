@@ -29,6 +29,9 @@ export const GymService = () => {
   const loading = useAppSelector(state => state.gymService.loading);
   const totalItems = useAppSelector(state => state.gymService.totalItems);
 
+  const account = useAppSelector(state => state.authentication.account);
+  const isAdmin = account?.authorities?.includes('ROLE_ADMIN');
+  const isUserOrAdmin = account?.authorities?.includes('ROLE_USER') || account?.authorities?.includes('ROLE_ADMIN');
   const getAllEntities = () => {
     dispatch(
       getEntities({

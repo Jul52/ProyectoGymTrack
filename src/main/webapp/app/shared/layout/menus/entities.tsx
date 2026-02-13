@@ -2,6 +2,7 @@ import React from 'react';
 import { translate } from 'react-jhipster';
 import EntitiesMenuItems from 'app/entities/menu';
 import { NavDropdown } from './menu-components';
+import MenuItem from 'app/shared/layout/menus/menu-item';
 
 export const EntitiesMenu = () => (
   <NavDropdown
