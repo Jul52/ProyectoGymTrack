@@ -10,6 +10,7 @@ const EntitiesMenu = () => {
   const account = useAppSelector(state => state.authentication.account);
   const isAdmin = hasAnyAuthority(account.authorities, [AUTHORITIES.ADMIN]);
   const isTrainerOrAdmin = hasAnyAuthority(account.authorities, [AUTHORITIES.ADMIN, 'ROLE_TRAINER']);
+  const isUserOrAdmin = account?.authorities?.includes('ROLE_USER') || account?.authorities?.includes('ROLE_ADMIN');
 
   return (
     <>
@@ -33,8 +34,13 @@ const EntitiesMenu = () => {
           <MenuItem icon="asterisk" to="/incident">
             <Translate contentKey="global.menu.entities.incident" />
           </MenuItem>
-          <MenuItem icon="asterisk" to="/course">
-            <Translate contentKey="global.menu.entities.course" />
+        </>
+      )}
+
+      {isUserOrAdmin && (
+        <>
+          <MenuItem icon="asterisk" to="/reservation">
+            <Translate contentKey="global.menu.entities.reservation" />
           </MenuItem>
         </>
       )}
@@ -66,6 +72,10 @@ const EntitiesMenu = () => {
 
       <MenuItem icon="asterisk" to="/schedule">
         <Translate contentKey="global.menu.entities.schedule" />
+      </MenuItem>
+
+      <MenuItem icon="asterisk" to="/course">
+        <Translate contentKey="global.menu.entities.course" />
       </MenuItem>
 
       {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
