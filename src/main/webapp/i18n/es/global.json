@@ -155,6 +155,7 @@
   "error": {
     "internalServerError": "Error interno del servidor",
     "server.not.reachable": "Servidor no accesible",
+    "noAccess": "Este servicio no permite reservas de cursos.",
     "url.not.found": "No existe",
     "NotNull": "¡El campo {{fieldName}} no puede estar vacío!",
     "Size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
