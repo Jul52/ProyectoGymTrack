@@ -58,6 +58,8 @@
             <column name="service_description" type="string"/>
             <column name="price" type="numeric"/>
             <column name="status" type="boolean"/>
+            <column name="course_access_type" type="string"/>
+            <column name="max_reservations_per_course" type="numeric"/>
             <column name="category_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

@@ -21,6 +21,7 @@
       "dayOfWeek": "Day Of Week",
       "startTime": "Start Time",
       "endTime": "End Time",
+      "availableSlots": "Available Slots",
       "course": "Course"
     }
   }

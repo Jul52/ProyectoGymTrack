@@ -26,6 +26,9 @@ public class ScheduleDTO implements Serializable {
     @NotNull
     private CourseDTO course;
 
+    @NotNull
+    private Integer availableSlots;
+
     public Long getId() {
         return id;
     }
@@ -66,6 +69,14 @@ public class ScheduleDTO implements Serializable {
         this.course = course;
     }
 
+    public Integer getAvailableSlots() {
+        return availableSlots;
+    }
+
+    public void setAvailableSlots(Integer availableSlots) {
+        this.availableSlots = availableSlots;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -96,6 +107,7 @@ public class ScheduleDTO implements Serializable {
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
             ", course=" + getCourse() +
+            ", availableSlots='" + getAvailableSlots() + "'" +
             "}";
     }
 }

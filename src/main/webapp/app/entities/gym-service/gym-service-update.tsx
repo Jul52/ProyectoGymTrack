@@ -144,7 +144,7 @@ export const GymServiceUpdate = () => {
                 type="checkbox"
               />
               <ValidatedField
-                label="Tipo de acceso a clases"
+                label="Tipo de acceso a cursos"
                 id="gym-service-courseAccessType"
                 name="courseAccessType"
                 data-cy="courseAccessType"

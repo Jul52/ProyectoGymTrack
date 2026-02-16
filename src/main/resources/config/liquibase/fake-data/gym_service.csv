@@ -1,5 +1,7 @@
 id;service_name;service_description;price;status;course_access_type;max_reservations_per_course;category_id
-1;Membresía básica;Acceso a todas las instalaciones;50.00;true;NONE;;1
-2;Entrenamiento personalizado;Sesiones de 1 hora con un entrenador;25.00;true;NONE;;2
-3;Clases grupales;Acceso ilimitado a clases dirigidas;15.00;true;UNLIMITED;;3
-4;Paquete familiar;Membresía para 4 personas;120.00;false;LIMITED;8;4
+1;Membresía básica mensual;Acceso ilimitado a máquinas;120000;true;NONE;;1
+2;Membresía básica anual;Acceso ilimitado a máquinas por 12 meses;1200000;true;NONE;;1
+3;Plan Yoga 8 Clases;Acceso a 8 reservas de Yoga por mes;90000;true;LIMITED;8;3
+4;Plan Boxeo 8 Clases;Acceso a 8 reservas de Boxeo por mes;110000;true;LIMITED;8;3
+5;Plan Combo 6 Clases;2 Yoga, 2 Spinning y 2 Boxeo por mes;190000;true;LIMITED;2;3
+6;Plan Total Ilimitado;Acceso ilimitado a todas las clases;260000;true;UNLIMITED;;3

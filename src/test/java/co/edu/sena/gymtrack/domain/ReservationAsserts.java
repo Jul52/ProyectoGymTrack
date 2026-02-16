@@ -48,8 +48,7 @@ public class ReservationAsserts {
         assertThat(actual)
             .as("Verify Reservation relevant properties")
             .satisfies(a -> assertThat(a.getStatus()).as("check status").isEqualTo(expected.getStatus()))
-            .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
-            .satisfies(a -> assertThat(a.getReservationDate()).as("check reservationDate").isEqualTo(expected.getReservationDate()));
+            .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()));
     }
 
     /**

@@ -15,7 +15,7 @@
     <include file="config/liquibase/changelog/20251027201608_added_entity_Payment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027201708_added_entity_UserData.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027201808_added_entity_DocumentType.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20251027201908_added_entity_Reservation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251027202808_added_entity_Course.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027202008_added_entity_Machine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027202108_added_entity_Incident.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027202208_added_entity_MachineIncidents.xml" relativeToChangelogFile="false"/>
@@ -24,9 +24,10 @@
     <include file="config/liquibase/changelog/20251027202508_added_entity_GymService.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027202608_added_entity_Invoice.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027202708_added_entity_InvoiceService.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20251027202808_added_entity_Course.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027202908_added_entity_Schedule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027203008_added_entity_Zone.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251027201908_added_entity_Reservation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260213_added_gymservice_course_relation.xml"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20251027201608_added_entity_constraints_Payment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251027201708_added_entity_constraints_UserData.xml" relativeToChangelogFile="false"/>

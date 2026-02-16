@@ -21,6 +21,7 @@
       "dayOfWeek": "Día de la semana",
       "startTime": "Hora de inicio",
       "endTime": "Hora de fin",
+      "availableSlots": "Cupos disponibles",
       "course": "Curso"
     }
   }

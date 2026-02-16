@@ -23,7 +23,8 @@
       "reservationDate": "Reservation Date",
       "course": "Course",
       "gymService": "Gym Service",
-      "userData": "User Data"
+      "registeredBy": "User data",
+      "schedule": "Schedule"
     }
   }
 }

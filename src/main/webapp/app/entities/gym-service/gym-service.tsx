@@ -112,28 +112,43 @@ export const GymService = () => {
                 <th className="hand" onClick={sort('id')}>
                   <Translate contentKey="gymtrackApp.gymService.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
                 </th>
+
                 <th className="hand" onClick={sort('serviceName')}>
                   <Translate contentKey="gymtrackApp.gymService.serviceName">Service Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('serviceName')} />
                 </th>
+
                 <th className="hand" onClick={sort('serviceDescription')}>
                   <Translate contentKey="gymtrackApp.gymService.serviceDescription">Service Description</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('serviceDescription')} />
                 </th>
+
                 <th className="hand" onClick={sort('price')}>
                   <Translate contentKey="gymtrackApp.gymService.price">Price</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('price')} />
                 </th>
+
                 <th className="hand" onClick={sort('status')}>
                   <Translate contentKey="gymtrackApp.gymService.status">Status</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
                 </th>
+
+                <th className="hand" onClick={sort('courseAccessType')}>
+                  Tipo acceso curso <FontAwesomeIcon icon={getSortIconByFieldName('courseAccessType')} />
+                </th>
+
+                <th className="hand" onClick={sort('maxReservationsPerCourse')}>
+                  Máx. reservas por curso <FontAwesomeIcon icon={getSortIconByFieldName('maxReservationsPerCourse')} />
+                </th>
+
                 <th>
                   <Translate contentKey="gymtrackApp.gymService.category">Category</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+
                 <th />
               </tr>
             </thead>
+
             <tbody>
               {gymServiceList.map((gymService, i) => (
                 <tr key={`entity-${i}`} data-cy="entityTable">
@@ -142,13 +157,18 @@ export const GymService = () => {
                       {gymService.id}
                     </Button>
                   </td>
+
                   <td>{gymService.serviceName}</td>
                   <td>{gymService.serviceDescription}</td>
                   <td>{gymService.price}</td>
                   <td>{gymService.status ? 'true' : 'false'}</td>
+                  <td>{gymService.courseAccessType}</td>
+                  <td>{gymService.maxReservationsPerCourse ?? '-'}</td>
+
                   <td>
                     {gymService.category ? <Link to={`/category/${gymService.category.id}`}>{gymService.category.categoryName}</Link> : ''}
                   </td>
+
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/gym-service/${gymService.id}`} color="info" size="sm" data-cy="entityDetailsButton">
@@ -157,6 +177,7 @@ export const GymService = () => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
+
                       <Button
                         tag={Link}
                         to={`/gym-service/${gymService.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
@@ -169,6 +190,7 @@ export const GymService = () => {
                           <Translate contentKey="entity.action.edit">Edit</Translate>
                         </span>
                       </Button>
+
                       <Button
                         onClick={() =>
                           (window.location.href = `/gym-service/${gymService.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
