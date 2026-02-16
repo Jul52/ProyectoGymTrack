@@ -58,7 +58,6 @@ export const ReservationUpdate = () => {
       registeredBy: users.find(u => u.id.toString() === values.registeredBy?.toString()),
       schedule: schedules.find(sc => sc.id.toString() === values.schedule?.toString()),
       status: values.status,
-      description: values.description,
     };
 
     if (isNew) {
@@ -77,7 +76,6 @@ export const ReservationUpdate = () => {
           gymService: reservationEntity?.gymService?.id,
           registeredBy: reservationEntity?.registeredBy?.id,
           schedule: reservationEntity?.schedule?.id,
-          description: '',
           status: reservationEntity?.status,
         };
 
@@ -126,9 +124,6 @@ export const ReservationUpdate = () => {
                 </option>
               ))}
             </ValidatedField>
-            {/* Descripción */}
-            <ValidatedField id="reservation-description" name="description" label="Descripción" type="text" maxLength={255} />
-            {/* Estado */}
             <ValidatedField id="reservation-status" name="status" label="Estado" type="checkbox" />
             <Button tag={Link} to="/reservation" replace color="info">
               <FontAwesomeIcon icon="arrow-left" /> Volver

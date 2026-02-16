@@ -81,7 +81,7 @@ class ReservationResourceIT {
     private Reservation insertedReservation;
 
     public static Reservation createEntity(EntityManager em) {
-        Reservation reservation = new Reservation().status(DEFAULT_STATUS).description(DEFAULT_DESCRIPTION);
+        Reservation reservation = new Reservation().status(DEFAULT_STATUS);
 
         GymService gymService;
         if (TestUtil.findAll(em, GymService.class).isEmpty()) {
@@ -107,7 +107,7 @@ class ReservationResourceIT {
     }
 
     public static Reservation createUpdatedEntity(EntityManager em) {
-        Reservation updatedReservation = new Reservation().status(UPDATED_STATUS).description(UPDATED_DESCRIPTION);
+        Reservation updatedReservation = new Reservation().status(UPDATED_STATUS);
 
         GymService gymService;
         if (TestUtil.findAll(em, GymService.class).isEmpty()) {

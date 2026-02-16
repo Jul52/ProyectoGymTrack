@@ -11,9 +11,6 @@ public class ReservationDTO implements Serializable {
     @NotNull
     private Boolean status;
 
-    @Size(max = 255)
-    private String description;
-
     @NotNull
     private ScheduleDTO schedule;
 
@@ -39,14 +36,6 @@ public class ReservationDTO implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public ScheduleDTO getSchedule() {
@@ -104,7 +93,6 @@ public class ReservationDTO implements Serializable {
             ", status=" +
             getStatus() +
             ", description='" +
-            getDescription() +
             "'" +
             ", schedule=" +
             getSchedule() +

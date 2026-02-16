@@ -106,9 +106,6 @@ export const Reservation = () => {
                     <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
                   </th>
                   <th>
-                    <Translate contentKey="gymtrackApp.reservation.description">Description</Translate>
-                  </th>
-                  <th>
                     <Translate contentKey="gymtrackApp.reservation.course">Course</Translate>
                   </th>
                   <th>
@@ -132,7 +129,6 @@ export const Reservation = () => {
                       </Button>
                     </td>
                     <td>{reservation.status ? 'true' : 'false'}</td>
-                    <td>{reservation.description || '-'}</td>
                     <td>{reservation.course?.courseName || '-'}</td>
                     <td>{reservation.gymService?.serviceName || '-'}</td>
                     <td>

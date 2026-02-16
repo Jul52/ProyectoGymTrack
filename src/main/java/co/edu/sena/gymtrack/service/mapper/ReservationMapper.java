@@ -11,8 +11,8 @@ public interface ReservationMapper extends EntityMapper<ReservationDTO, Reservat
     @Mapping(target = "schedule", source = "schedule", qualifiedByName = "scheduleBasic")
     ReservationDTO toDto(Reservation s);
 
-    @Mapping(target = "registeredBy", ignore = true) // Se asigna en el Service
-    @Mapping(target = "course", ignore = true) // Se toma desde el schedule en el Service
+    @Mapping(target = "registeredBy", ignore = true)
+    @Mapping(target = "course", ignore = true)
     Reservation toEntity(ReservationDTO reservationDTO);
 
     @Named("courseCourseName")

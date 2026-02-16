@@ -47,11 +47,6 @@ export const ReservationDetail = () => {
           </dd>
 
           <dt className="col-sm-3">
-            <Translate contentKey="gymtrackApp.reservation.description">Description</Translate>
-          </dt>
-          <dd className="col-sm-9">{reservationEntity.description}</dd>
-
-          <dt className="col-sm-3">
             <Translate contentKey="gymtrackApp.reservation.status">Status</Translate>
           </dt>
           <dd className="col-sm-9">{reservationEntity.status ? 'true' : 'false'}</dd>

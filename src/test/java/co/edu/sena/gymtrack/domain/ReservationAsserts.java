@@ -47,8 +47,7 @@ public class ReservationAsserts {
     public static void assertReservationUpdatableFieldsEquals(Reservation expected, Reservation actual) {
         assertThat(actual)
             .as("Verify Reservation relevant properties")
-            .satisfies(a -> assertThat(a.getStatus()).as("check status").isEqualTo(expected.getStatus()))
-            .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()));
+            .satisfies(a -> assertThat(a.getStatus()).as("check status").isEqualTo(expected.getStatus()));
     }
 
     /**

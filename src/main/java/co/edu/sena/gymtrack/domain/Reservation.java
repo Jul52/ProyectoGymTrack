@@ -25,10 +25,6 @@ public class Reservation implements Serializable {
     @Column(name = "status", nullable = false)
     private Boolean status;
 
-    @Size(max = 255)
-    @Column(name = "description", length = 255)
-    private String description;
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "course" }, allowSetters = true)
@@ -79,19 +75,6 @@ public class Reservation implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public Reservation description(String description) {
-        this.setDescription(description);
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Schedule getSchedule() {
@@ -171,7 +154,6 @@ public class Reservation implements Serializable {
         return "Reservation{" +
             "id=" + getId() +
             ", status='" + getStatus() + "'" +
-            ", description='" + getDescription() + "'" +
             ", schedule='" + getSchedule() + "'" +
             "}";
     }
