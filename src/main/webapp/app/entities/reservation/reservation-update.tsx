@@ -1,35 +1,34 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Col, FormText, Row } from 'reactstrap';
-import { Translate, ValidatedField, ValidatedForm, translate } from 'react-jhipster';
+import { Button, Row, Col } from 'reactstrap';
+import { ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
 import { getEntities as getCourses } from 'app/entities/course/course.reducer';
 import { getEntities as getGymServices } from 'app/entities/gym-service/gym-service.reducer';
 import { getEntities as getUserData } from 'app/entities/user-data/user-data.reducer';
+import { getEntities as getSchedules } from 'app/entities/schedule/schedule.reducer';
+
 import { createEntity, getEntity, reset, updateEntity } from './reservation.reducer';
 
 export const ReservationUpdate = () => {
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
-
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
   const courses = useAppSelector(state => state.course.entities);
   const gymServices = useAppSelector(state => state.gymService.entities);
-  const userData = useAppSelector(state => state.userData.entities);
+  const users = useAppSelector(state => state.userData.entities);
+  const schedules = useAppSelector(state => state.schedule.entities);
+
   const reservationEntity = useAppSelector(state => state.reservation.entity);
   const loading = useAppSelector(state => state.reservation.loading);
   const updating = useAppSelector(state => state.reservation.updating);
   const updateSuccess = useAppSelector(state => state.reservation.updateSuccess);
 
-  const handleClose = () => {
-    navigate(`/reservation${location.search}`);
-  };
+  const handleClose = () => navigate('/reservation');
 
   useEffect(() => {
     if (isNew) {
@@ -41,6 +40,7 @@ export const ReservationUpdate = () => {
     dispatch(getCourses({}));
     dispatch(getGymServices({}));
     dispatch(getUserData({}));
+    dispatch(getSchedules({}));
   }, []);
 
   useEffect(() => {
@@ -50,16 +50,15 @@ export const ReservationUpdate = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-    if (values.id !== undefined && typeof values.id !== 'number') {
-      values.id = Number(values.id);
-    }
-
     const entity = {
       ...reservationEntity,
       ...values,
-      course: courses.find(it => it.id.toString() === values.course?.toString()),
-      gymService: gymServices.find(it => it.id.toString() === values.gymService?.toString()),
-      userData: userData.find(it => it.id.toString() === values.userData?.toString()),
+      course: courses.find(c => c.id.toString() === values.course?.toString()),
+      gymService: gymServices.find(s => s.id.toString() === values.gymService?.toString()),
+      registeredBy: users.find(u => u.id.toString() === values.registeredBy?.toString()),
+      schedule: schedules.find(sc => sc.id.toString() === values.schedule?.toString()),
+      status: values.status,
+      description: values.description,
     };
 
     if (isNew) {
@@ -76,140 +75,72 @@ export const ReservationUpdate = () => {
           ...reservationEntity,
           course: reservationEntity?.course?.id,
           gymService: reservationEntity?.gymService?.id,
-          userData: reservationEntity?.userData?.id,
+          registeredBy: reservationEntity?.registeredBy?.id,
+          schedule: reservationEntity?.schedule?.id,
+          description: '',
+          status: reservationEntity?.status,
         };
 
   return (
-    <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h2 id="gymtrackApp.reservation.home.createOrEditLabel" data-cy="ReservationCreateUpdateHeading">
-            <Translate contentKey="gymtrackApp.reservation.home.createOrEditLabel">Create or edit a Reservation</Translate>
-          </h2>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col md="8">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              {!isNew ? (
-                <ValidatedField
-                  name="id"
-                  required
-                  readOnly
-                  id="reservation-id"
-                  label={translate('global.field.id')}
-                  validate={{ required: true }}
-                />
-              ) : null}
-              <ValidatedField
-                label={translate('gymtrackApp.reservation.status')}
-                id="reservation-status"
-                name="status"
-                data-cy="status"
-                check
-                type="checkbox"
-              />
-              <ValidatedField
-                label={translate('gymtrackApp.reservation.description')}
-                id="reservation-description"
-                name="description"
-                data-cy="description"
-                type="text"
-                validate={{
-                  maxLength: { value: 255, message: translate('entity.validation.maxlength', { max: 255 }) },
-                }}
-              />
-              <ValidatedField
-                label={translate('gymtrackApp.reservation.reservationDate')}
-                id="reservation-reservationDate"
-                name="reservationDate"
-                data-cy="reservationDate"
-                type="date"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                }}
-              />
-              <ValidatedField
-                id="reservation-course"
-                name="course"
-                data-cy="course"
-                label={translate('gymtrackApp.reservation.course')}
-                type="select"
-                required
-              >
-                <option value="" key="0" />
-                {courses
-                  ? courses.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.courseName}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
-              <ValidatedField
-                id="reservation-gymService"
-                name="gymService"
-                data-cy="gymService"
-                label={translate('gymtrackApp.reservation.gymService')}
-                type="select"
-                required
-              >
-                <option value="" key="0" />
-                {gymServices
-                  ? gymServices.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.serviceName}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
-              <ValidatedField
-                id="reservation-userData"
-                name="userData"
-                data-cy="userData"
-                label={translate('gymtrackApp.reservation.userData')}
-                type="select"
-                required
-              >
-                <option value="" key="0" />
-                {userData
-                  ? userData.map(otherEntity => (
-                      <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.document}
-                      </option>
-                    ))
-                  : null}
-              </ValidatedField>
-              <FormText>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </FormText>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/reservation" replace color="info">
-                <FontAwesomeIcon icon="arrow-left" />
-                &nbsp;
-                <span className="d-none d-md-inline">
-                  <Translate contentKey="entity.action.back">Back</Translate>
-                </span>
-              </Button>
-              &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-                <FontAwesomeIcon icon="save" />
-                &nbsp;
-                <Translate contentKey="entity.action.save">Save</Translate>
-              </Button>
-            </ValidatedForm>
-          )}
-        </Col>
-      </Row>
-    </div>
+    <Row>
+      <Col md="8">
+        <h2>{isNew ? 'Crear Reserva' : 'Editar Reserva'}</h2>
+        {loading ? (
+          <p>Cargando...</p>
+        ) : (
+          <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
+            {!isNew && <ValidatedField name="id" readOnly label="ID" id="reservation-id" />}
+            {/* Curso */}
+            <ValidatedField id="reservation-course" name="course" label="Curso" type="select" required>
+              <option value="" key="0" />
+              {courses.map(c => (
+                <option value={c.id} key={c.id}>
+                  {c.courseName}
+                </option>
+              ))}
+            </ValidatedField>
+            {/* Servicio */}
+            <ValidatedField id="reservation-gymService" name="gymService" label="Servicio" type="select" required>
+              <option value="" key="0" />
+              {gymServices.map(s => (
+                <option value={s.id} key={s.id}>
+                  {s.serviceName}
+                </option>
+              ))}
+            </ValidatedField>
+            {/* Datos de usuario */}
+            <ValidatedField id="reservation-registeredBy" name="registeredBy" label="Usuario" type="select" required>
+              <option value="" key="0" />
+              {users.map(u => (
+                <option value={u.id} key={u.id}>
+                  {u.fullName} ({u.document})
+                </option>
+              ))}
+            </ValidatedField>
+            {/* Horario */}
+            <ValidatedField id="reservation-schedule" name="schedule" label="Horario" type="select" required>
+              <option value="" key="0" />
+              {schedules.map(sc => (
+                <option value={sc.id} key={sc.id}>
+                  {sc.day} - {sc.startTime} a {sc.endTime}
+                </option>
+              ))}
+            </ValidatedField>
+            {/* Descripción */}
+            <ValidatedField id="reservation-description" name="description" label="Descripción" type="text" maxLength={255} />
+            {/* Estado */}
+            <ValidatedField id="reservation-status" name="status" label="Estado" type="checkbox" />
+            <Button tag={Link} to="/reservation" replace color="info">
+              <FontAwesomeIcon icon="arrow-left" /> Volver
+            </Button>
+            &nbsp;
+            <Button color="primary" type="submit" disabled={updating}>
+              <FontAwesomeIcon icon="save" /> Guardar
+            </Button>
+          </ValidatedForm>
+        )}
+      </Col>
+    </Row>
   );
 };
 

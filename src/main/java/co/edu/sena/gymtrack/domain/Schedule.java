@@ -35,6 +35,10 @@ public class Schedule implements Serializable {
     @Column(name = "end_time", nullable = false)
     private Instant endTime;
 
+    @NotNull
+    @Column(name = "available_slots", nullable = false)
+    private Integer availableSlots;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "schedules", "zones", "trainer", "reservations" }, allowSetters = true)
@@ -87,6 +91,19 @@ public class Schedule implements Serializable {
 
     public Schedule endTime(Instant endTime) {
         this.setEndTime(endTime);
+        return this;
+    }
+
+    public Integer getAvailableSlots() {
+        return this.availableSlots;
+    }
+
+    public void setAvailableSlots(Integer availableSlots) {
+        this.availableSlots = availableSlots;
+    }
+
+    public Schedule availableSlots(Integer availableSlots) {
+        this.setAvailableSlots(availableSlots);
         return this;
     }
 

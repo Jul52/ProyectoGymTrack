@@ -55,36 +55,35 @@ public class UserData implements Serializable {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "authorities" }, allowSetters = true)
     private User user;
 
     @OneToMany(mappedBy = "registeredBy")
+    @JsonIgnoreProperties(value = { "registeredBy", "gymService" }, allowSetters = true)
     private Set<Reservation> reservations = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
-    @JsonIgnoreProperties(value = { "machineIncidents", "admin" }, allowSetters = true)
+    @OneToMany(mappedBy = "admin")
+    @JsonIgnoreProperties(value = { "admin" }, allowSetters = true)
     private Set<Machine> machines = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userData")
-    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData" }, allowSetters = true)
+    @OneToMany(mappedBy = "userData")
+    @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trainer")
-    @JsonIgnoreProperties(value = { "schedules", "zones", "trainer", "reservations" }, allowSetters = true)
+    @OneToMany(mappedBy = "trainer")
+    @JsonIgnoreProperties(value = { "trainer" }, allowSetters = true)
     private Set<Course> courses = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "registeredBy")
-    @JsonIgnoreProperties(value = { "paymentMethod", "invoice", "registeredBy" }, allowSetters = true)
+    @OneToMany(mappedBy = "registeredBy")
+    @JsonIgnoreProperties(value = { "registeredBy" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
     private DocumentType documentType;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;

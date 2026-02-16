@@ -1,10 +1,10 @@
 package co.edu.sena.gymtrack.domain;
 
+import co.edu.sena.gymtrack.domain.Schedule;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * A Reservation.
@@ -29,9 +29,10 @@ public class Reservation implements Serializable {
     @Column(name = "description", length = 255)
     private String description;
 
+    @ManyToOne(optional = false)
     @NotNull
-    @Column(name = "reservation_date", nullable = false)
-    private LocalDate reservationDate;
+    @JsonIgnoreProperties(value = { "course" }, allowSetters = true)
+    private Schedule schedule;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -93,17 +94,17 @@ public class Reservation implements Serializable {
         this.description = description;
     }
 
-    public LocalDate getReservationDate() {
-        return this.reservationDate;
+    public Schedule getSchedule() {
+        return this.schedule;
     }
 
-    public Reservation reservationDate(LocalDate reservationDate) {
-        this.setReservationDate(reservationDate);
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
+
+    public Reservation schedule(Schedule schedule) {
+        this.setSchedule(schedule);
         return this;
-    }
-
-    public void setReservationDate(LocalDate reservationDate) {
-        this.reservationDate = reservationDate;
     }
 
     public Course getCourse() {
@@ -171,7 +172,7 @@ public class Reservation implements Serializable {
             "id=" + getId() +
             ", status='" + getStatus() + "'" +
             ", description='" + getDescription() + "'" +
-            ", reservationDate='" + getReservationDate() + "'" +
+            ", schedule='" + getSchedule() + "'" +
             "}";
     }
 }

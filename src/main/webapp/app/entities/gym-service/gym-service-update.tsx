@@ -22,6 +22,7 @@ export const GymServiceUpdate = () => {
   const loading = useAppSelector(state => state.gymService.loading);
   const updating = useAppSelector(state => state.gymService.updating);
   const updateSuccess = useAppSelector(state => state.gymService.updateSuccess);
+  const [accessType, setAccessType] = React.useState('NONE');
 
   const handleClose = () => {
     navigate(`/gym-service${location.search}`);
@@ -50,6 +51,9 @@ export const GymServiceUpdate = () => {
     if (values.price !== undefined && typeof values.price !== 'number') {
       values.price = Number(values.price);
     }
+    if (values.maxClassesPerMonth !== undefined && typeof values.maxClassesPerMonth !== 'number') {
+      values.maxClassesPerMonth = Number(values.maxClassesPerMonth);
+    }
 
     const entity = {
       ...gymServiceEntity,
@@ -66,7 +70,9 @@ export const GymServiceUpdate = () => {
 
   const defaultValues = () =>
     isNew
-      ? {}
+      ? {
+          courseAccessType: 'NONE',
+        }
       : {
           ...gymServiceEntity,
           category: gymServiceEntity?.category?.id,
@@ -137,6 +143,31 @@ export const GymServiceUpdate = () => {
                 check
                 type="checkbox"
               />
+              <ValidatedField
+                label="Tipo de acceso a cursos"
+                id="gym-service-courseAccessType"
+                name="courseAccessType"
+                data-cy="courseAccessType"
+                type="select"
+                onChange={e => setAccessType(e.target.value)}
+              >
+                <option value="NONE">Sin acceso a cursos</option>
+                <option value="LIMITED">Acceso limitado</option>
+                <option value="UNLIMITED">Acceso ilimitado</option>
+              </ValidatedField>
+              {accessType === 'LIMITED' && (
+                <ValidatedField
+                  label="Máximo de clases por mes"
+                  id="gym-service-maxClassesPerMonth"
+                  name="maxClassesPerMonth"
+                  data-cy="maxClassesPerMonth"
+                  type="number"
+                  validate={{
+                    required: { value: true, message: 'Este campo es obligatorio cuando el acceso es limitado' },
+                    min: { value: 1, message: 'Debe ser al menos 1 clase' },
+                  }}
+                />
+              )}
               <ValidatedField
                 id="gym-service-category"
                 name="category"

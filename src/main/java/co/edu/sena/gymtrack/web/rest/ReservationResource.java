@@ -199,7 +199,7 @@ public class ReservationResource {
     )
     public ResponseEntity<ReservationDTO> getReservation(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Reservation : {}", id);
-        Optional<ReservationDTO> reservationDTO = reservationService.findOne(id);
+        Optional<ReservationDTO> reservationDTO = reservationService.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(reservationDTO);
     }
 

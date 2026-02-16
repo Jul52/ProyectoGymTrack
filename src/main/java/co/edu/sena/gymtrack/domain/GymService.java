@@ -1,5 +1,7 @@
 package co.edu.sena.gymtrack.domain;
 
+import co.edu.sena.gymtrack.domain.Course;
+import co.edu.sena.gymtrack.domain.enumeration.CourseAccessType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -53,6 +55,22 @@ public class GymService implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gymService")
     @JsonIgnoreProperties(value = { "course", "gymService", "userData" }, allowSetters = true)
     private Set<Reservation> reservations = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "course_access_type", nullable = false)
+    private CourseAccessType courseAccessType = CourseAccessType.NONE;
+
+    @Column(name = "max_reservations_per_course")
+    private Integer maxReservationsPerCourse;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_gym_service__course",
+        joinColumns = @JoinColumn(name = "gym_service_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    @JsonIgnoreProperties(value = { "gymServices", "reservations" }, allowSetters = true)
+    private Set<Course> courses = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -196,6 +214,55 @@ public class GymService implements Serializable {
         return this;
     }
 
+    public CourseAccessType getCourseAccessType() {
+        return this.courseAccessType;
+    }
+
+    public GymService courseAccessType(CourseAccessType courseAccessType) {
+        this.setCourseAccessType(courseAccessType);
+        return this;
+    }
+
+    public void setCourseAccessType(CourseAccessType courseAccessType) {
+        this.courseAccessType = courseAccessType;
+    }
+
+    public Integer getMaxReservationsPerCourse() {
+        return this.maxReservationsPerCourse;
+    }
+
+    public GymService maxReservationsPerCourse(Integer maxReservationsPerCourse) {
+        this.setMaxReservationsPerCourse(maxReservationsPerCourse);
+        return this;
+    }
+
+    public void setMaxReservationsPerCourse(Integer maxReservationsPerCourse) {
+        this.maxReservationsPerCourse = maxReservationsPerCourse;
+    }
+
+    public Set<Course> getCourses() {
+        return this.courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
+    public GymService courses(Set<Course> courses) {
+        this.setCourses(courses);
+        return this;
+    }
+
+    public GymService addCourse(Course course) {
+        this.courses.add(course);
+        return this;
+    }
+
+    public GymService removeCourse(Course course) {
+        this.courses.remove(course);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -224,6 +291,8 @@ public class GymService implements Serializable {
             ", serviceDescription='" + getServiceDescription() + "'" +
             ", price=" + getPrice() +
             ", status='" + getStatus() + "'" +
+            ", courseAccessType='" + getCourseAccessType() + "'" +
+            ", maxReservationsPerCourse=" + getMaxReservationsPerCourse() +
             "}";
     }
 }

@@ -2,13 +2,8 @@ package co.edu.sena.gymtrack.service.dto;
 
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
 
-/**
- * A DTO for the {@link co.edu.sena.gymtrack.domain.Reservation} entity.
- */
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class ReservationDTO implements Serializable {
 
     private Long id;
@@ -20,16 +15,15 @@ public class ReservationDTO implements Serializable {
     private String description;
 
     @NotNull
-    private LocalDate reservationDate;
-
-    @NotNull
-    private CourseDTO course;
+    private ScheduleDTO schedule;
 
     @NotNull
     private GymServiceDTO gymService;
 
-    @NotNull
-    private UserDataDTO userData;
+    private CourseDTO course;
+
+    // NUEVO: usuario que registró la reserva
+    private UserDataDTO registeredBy;
 
     public Long getId() {
         return id;
@@ -55,20 +49,12 @@ public class ReservationDTO implements Serializable {
         this.description = description;
     }
 
-    public LocalDate getReservationDate() {
-        return reservationDate;
+    public ScheduleDTO getSchedule() {
+        return schedule;
     }
 
-    public void setReservationDate(LocalDate reservationDate) {
-        this.reservationDate = reservationDate;
-    }
-
-    public CourseDTO getCourse() {
-        return course;
-    }
-
-    public void setCourse(CourseDTO course) {
-        this.course = course;
+    public void setSchedule(ScheduleDTO schedule) {
+        this.schedule = schedule;
     }
 
     public GymServiceDTO getGymService() {
@@ -79,28 +65,29 @@ public class ReservationDTO implements Serializable {
         this.gymService = gymService;
     }
 
-    public UserDataDTO getUserData() {
-        return userData;
+    public CourseDTO getCourse() {
+        return course;
     }
 
-    public void setUserData(UserDataDTO userData) {
-        this.userData = userData;
+    public void setCourse(CourseDTO course) {
+        this.course = course;
+    }
+
+    public UserDataDTO getRegisteredBy() {
+        return registeredBy;
+    }
+
+    public void setRegisteredBy(UserDataDTO registeredBy) {
+        this.registeredBy = registeredBy;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ReservationDTO)) {
-            return false;
-        }
-
-        ReservationDTO reservationDTO = (ReservationDTO) o;
-        if (this.id == null) {
-            return false;
-        }
-        return Objects.equals(this.id, reservationDTO.id);
+        if (this == o) return true;
+        if (!(o instanceof ReservationDTO)) return false;
+        ReservationDTO that = (ReservationDTO) o;
+        if (this.id == null) return false;
+        return Objects.equals(this.id, that.id);
     }
 
     @Override
@@ -108,17 +95,26 @@ public class ReservationDTO implements Serializable {
         return Objects.hash(this.id);
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "ReservationDTO{" +
-            "id=" + getId() +
-            ", status='" + getStatus() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", reservationDate='" + getReservationDate() + "'" +
-            ", course=" + getCourse() +
-            ", gymService=" + getGymService() +
-            ", userData=" + getUserData() +
-            "}";
+        return (
+            "ReservationDTO{" +
+            "id=" +
+            getId() +
+            ", status=" +
+            getStatus() +
+            ", description='" +
+            getDescription() +
+            "'" +
+            ", schedule=" +
+            getSchedule() +
+            ", gymService=" +
+            getGymService() +
+            ", course=" +
+            getCourse() +
+            ", registeredBy=" +
+            getRegisteredBy() +
+            "}"
+        );
     }
 }
