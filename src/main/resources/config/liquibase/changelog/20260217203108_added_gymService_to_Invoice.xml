@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+  <changeSet id="20260217203108-1" author="gym">
+    <addColumn tableName="invoice">
+      <column name="gym_service_id" type="bigint"/>
+    </addColumn>
+
+    <addForeignKeyConstraint
+      baseTableName="invoice"
+      baseColumnNames="gym_service_id"
+      referencedTableName="gym_service"
+      referencedColumnNames="id"
+      constraintName="fk_invoice_gym_service"/>
+  </changeSet>
+</databaseChangeLog>
