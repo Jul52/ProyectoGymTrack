@@ -1,5 +1,5 @@
-id;method_name
-1;Tarjeta de crédito
-2;Tarjeta de débito
-3;Efectivo
-4;Transferencia bancaria
+id;method_name;method_code;active;uses_gateway
+1;Tarjeta de crédito;CREDIT_CARD;true;true
+2;Tarjeta de débito;DEBIT_CARD;true;true
+3;Efectivo;CASH;true;false
+4;Transferencia bancaria;BANK_TRANSFER;true;false

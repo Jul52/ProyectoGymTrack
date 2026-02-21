@@ -107,7 +107,6 @@ export const Invoice = () => {
       <div className="table-responsive">
         {invoiceList && invoiceList.length > 0 ? (
           <Table responsive>
-            f
             <thead>
               <tr>
                 <th className="hand" onClick={sort('id')}>

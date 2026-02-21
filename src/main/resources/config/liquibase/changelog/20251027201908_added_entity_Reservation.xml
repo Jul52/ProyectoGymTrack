@@ -6,7 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
   <!-- Create table -->
-  <changeSet id="20251027201908-1" author="jhipster">
+  <changeSet id="20251027201908-1" author="fix-data">
     <createTable tableName="reservation">
       <column name="id" type="bigint" autoIncrement="true">
         <constraints primaryKey="true" nullable="false"/>
@@ -34,14 +34,6 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-  </changeSet>
-
-  <!-- Load fake data -->
-  <changeSet id="20251027201908-3" author="fix-data">
-    <loadData
-      file="config/liquibase/fake-data/reservation.csv"
-      separator=";"
-      tableName="reservation"/>
   </changeSet>
 
 </databaseChangeLog>
