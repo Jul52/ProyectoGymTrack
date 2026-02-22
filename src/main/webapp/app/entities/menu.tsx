@@ -8,13 +8,28 @@ import { AUTHORITIES } from 'app/config/constants';
 
 const EntitiesMenu = () => {
   const account = useAppSelector(state => state.authentication.account);
+
+  // 1. Identificación de Roles
   const isAdmin = hasAnyAuthority(account.authorities, [AUTHORITIES.ADMIN]);
-  const isTrainerOrAdmin = hasAnyAuthority(account.authorities, [AUTHORITIES.ADMIN, 'ROLE_TRAINER']);
-  const isUserOrAdmin = account?.authorities?.includes('ROLE_USER') || account?.authorities?.includes('ROLE_ADMIN');
+  const isTrainer = hasAnyAuthority(account.authorities, ['ROLE_TRAINER']);
+  const isUser = hasAnyAuthority(account.authorities, [AUTHORITIES.USER]);
+
+  // 2. Lógica de visibilidad por secciones
+
+  // Lo que ve el Admin (Configuración técnica)
+  const showAdminOnly = isAdmin;
+
+  // Lo que ve el Trainer (Solo sus 4 áreas específicas)
+  const showTrainerEntities = isAdmin || isTrainer;
+
+  // Lo que ve el Usuario (Reservas y finanzas)
+  // IMPORTANTE: Aquí excluimos al Trainer explícitamente si no es Admin
+  const showUserEntities = isAdmin || (isUser && !isTrainer);
 
   return (
     <>
-      {isAdmin && (
+      {/* --- SECCIÓN TÉCNICA (Solo Admin) --- */}
+      {showAdminOnly && (
         <>
           <MenuItem icon="asterisk" to="/user-data">
             <Translate contentKey="global.menu.entities.userData" />
@@ -37,51 +52,59 @@ const EntitiesMenu = () => {
         </>
       )}
 
-      {isUserOrAdmin && (
+      {/* --- RESERVACIONES --- */}
+      {showUserEntities && (
+        <MenuItem icon="asterisk" to="/reservation">
+          <Translate contentKey="global.menu.entities.reservation" />
+        </MenuItem>
+      )}
+
+      {/* --- ZONAS --- */}
+      {showTrainerEntities && (
+        <MenuItem icon="asterisk" to="/zone">
+          <Translate contentKey="global.menu.entities.zone" />
+        </MenuItem>
+      )}
+
+      {/* --- INCIDENTES DE MÁQUINA (Admin, Trainer y ahora User) --- */}
+      {(isAdmin || isTrainer || isUser) && (
+        <MenuItem icon="asterisk" to="/machine-incidents">
+          <Translate contentKey="global.menu.entities.machineIncidents" />
+        </MenuItem>
+      )}
+
+      {/* --- SERVICIOS DEL GYM --- */}
+      {showUserEntities && (
+        <MenuItem icon="asterisk" to="/gym-service">
+          <Translate contentKey="global.menu.entities.gymService" />
+        </MenuItem>
+      )}
+
+      {/* --- FACTURAS --- */}
+      {showUserEntities && (
+        <MenuItem icon="asterisk" to="/invoice">
+          <Translate contentKey="global.menu.entities.invoice" />
+        </MenuItem>
+      )}
+
+      {/* --- HORARIOS Y CURSOS (Visible para todos los roles) --- */}
+      {(isAdmin || isTrainer || isUser) && (
         <>
-          <MenuItem icon="asterisk" to="/reservation">
-            <Translate contentKey="global.menu.entities.reservation" />
+          <MenuItem icon="asterisk" to="/schedule">
+            <Translate contentKey="global.menu.entities.schedule" />
+          </MenuItem>
+          <MenuItem icon="asterisk" to="/course">
+            <Translate contentKey="global.menu.entities.course" />
           </MenuItem>
         </>
       )}
 
-      {isTrainerOrAdmin && (
-        <>
-          <MenuItem icon="asterisk" to="/zone">
-            <Translate contentKey="global.menu.entities.zone" />
-          </MenuItem>
-        </>
+      {/* --- PAGOS --- */}
+      {showUserEntities && (
+        <MenuItem icon="asterisk" to="/payment">
+          <Translate contentKey="global.menu.entities.payment" />
+        </MenuItem>
       )}
-
-      <MenuItem icon="asterisk" to="/machine-incidents">
-        <Translate contentKey="global.menu.entities.machineIncidents" />
-      </MenuItem>
-
-      <MenuItem icon="asterisk" to="/gym-service">
-        <Translate contentKey="global.menu.entities.gymService" />
-      </MenuItem>
-
-      <MenuItem icon="asterisk" to="/invoice">
-        <Translate contentKey="global.menu.entities.invoice" />
-      </MenuItem>
-      {/*
-      <MenuItem icon="asterisk" to="/invoice-service">
-        <Translate contentKey="global.menu.entities.invoiceService" />
-      </MenuItem>
-      */}
-
-      <MenuItem icon="asterisk" to="/schedule">
-        <Translate contentKey="global.menu.entities.schedule" />
-      </MenuItem>
-
-      <MenuItem icon="asterisk" to="/course">
-        <Translate contentKey="global.menu.entities.course" />
-      </MenuItem>
-
-      <MenuItem icon="asterisk" to="/payment">
-        <Translate contentKey="global.menu.entities.payment" />
-      </MenuItem>
-      {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
     </>
   );
 };
