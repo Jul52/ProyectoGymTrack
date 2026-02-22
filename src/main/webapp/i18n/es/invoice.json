@@ -3,19 +3,19 @@
     "invoice": {
       "home": {
         "title": "Facturas",
-        "refreshListLabel": "Actualizar lista",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nueva Factura",
         "createOrEditLabel": "Crear o editar Factura",
-        "notFound": "No se encontraron Facturas"
+        "notFound": "No se encontraron facturas"
       },
-      "created": "Una nueva Factura ha sido creada con el identificador {{ param }}",
-      "updated": "Una Factura ha sido actualizada con el identificador {{ param }}",
-      "deleted": "Una Factura ha sido eliminada con el identificador {{ param }}",
+      "created": "Una nueva factura ha sido creada con el identificador {{ param }}",
+      "updated": "La factura ha sido actualizada con el identificador {{ param }}",
+      "deleted": "La factura ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar la Factura {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la factura {{ id }}?"
       },
       "detail": {
-        "title": "Factura"
+        "title": "Detalle de la Factura"
       },
       "id": "ID",
       "total": "Total",
@@ -23,7 +23,8 @@
       "payment": "Pago",
       "invoiceService": "Servicio de Factura",
       "paymentMethod": "Método de Pago",
-      "userData": "Datos de Usuario"
+      "userData": "Datos del Cliente",
+      "service": "Servicio"
     }
   }
 }

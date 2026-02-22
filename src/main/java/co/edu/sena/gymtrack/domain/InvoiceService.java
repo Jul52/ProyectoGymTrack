@@ -36,7 +36,7 @@ public class InvoiceService implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData", "service" }, allowSetters = true)
     private Invoice invoice;
 
     @ManyToOne(optional = false)

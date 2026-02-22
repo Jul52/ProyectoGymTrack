@@ -9,21 +9,58 @@ import org.springframework.data.domain.Pageable;
  * Service Interface for managing {@link co.edu.sena.gymtrack.domain.Reservation}.
  */
 public interface ReservationService {
+    /**
+     * Save a reservation.
+     *
+     * @param reservationDTO the entity to save.
+     * @return the persisted entity.
+     */
     ReservationDTO save(ReservationDTO reservationDTO);
+
+    /**
+     * Updates a reservation.
+     *
+     * @param reservationDTO the entity to update.
+     * @return the persisted entity.
+     */
     ReservationDTO update(ReservationDTO reservationDTO);
+
+    /**
+     * Partially updates a reservation.
+     *
+     * @param reservationDTO the entity to update partially.
+     * @return the persisted entity.
+     */
     Optional<ReservationDTO> partialUpdate(ReservationDTO reservationDTO);
+
+    /**
+     * Get all the reservations.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
     Page<ReservationDTO> findAll(Pageable pageable);
 
     /**
-     * Get all the reservations with eager load of one-to-one relationships.
+     * Get all the reservations with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
      */
     Page<ReservationDTO> findAllWithEagerRelationships(Pageable pageable);
 
     /**
-     * Get the "id" reservation with eager load of one-to-one relationships.
+     * Get the "id" reservation.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
      */
-    Optional<ReservationDTO> findOneWithEagerRelationships(Long id);
-
     Optional<ReservationDTO> findOne(Long id);
+
+    /**
+     * Delete the "id" reservation.
+     *
+     * @param id the id of the entity.
+     */
     void delete(Long id);
 }

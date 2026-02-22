@@ -25,21 +25,7 @@ public class PaymentMethod implements Serializable {
     @Column(name = "method_name", length = 50, nullable = false)
     private String methodName;
 
-    @NotNull
-    @Size(max = 30)
-    @Column(name = "method_code", length = 30, nullable = false, unique = true)
-    private String methodCode;
-
-    // Ej: STRIPE, PAYPAL, NEQUI, CASH
-
-    @NotNull
-    @Column(name = "active", nullable = false)
-    private Boolean active = true;
-
-    @Column(name = "uses_gateway")
-    private Boolean usesGateway = false;
-
-    // jhipster-needle-entity-add-field
+    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
@@ -67,44 +53,7 @@ public class PaymentMethod implements Serializable {
         this.methodName = methodName;
     }
 
-    public String getMethodCode() {
-        return this.methodCode;
-    }
-
-    public PaymentMethod methodCode(String methodCode) {
-        this.setMethodCode(methodCode);
-        return this;
-    }
-
-    public void setMethodCode(String methodCode) {
-        this.methodCode = methodCode;
-    }
-
-    public Boolean getActive() {
-        return this.active;
-    }
-
-    public PaymentMethod active(Boolean active) {
-        this.setActive(active);
-        return this;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Boolean getUsesGateway() {
-        return this.usesGateway;
-    }
-
-    public PaymentMethod usesGateway(Boolean usesGateway) {
-        this.setUsesGateway(usesGateway);
-        return this;
-    }
-
-    public void setUsesGateway(Boolean usesGateway) {
-        this.usesGateway = usesGateway;
-    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -119,28 +68,16 @@ public class PaymentMethod implements Serializable {
 
     @Override
     public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
-        return (
-            "PaymentMethod{" +
-            "id=" +
-            getId() +
-            ", methodName='" +
-            getMethodName() +
-            "'" +
-            ", methodCode='" +
-            getMethodCode() +
-            "'" +
-            ", active='" +
-            getActive() +
-            "'" +
-            ", usesGateway='" +
-            getUsesGateway() +
-            "'" +
-            "}"
-        );
+        return "PaymentMethod{" +
+            "id=" + getId() +
+            ", methodName='" + getMethodName() + "'" +
+            "}";
     }
 }

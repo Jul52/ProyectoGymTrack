@@ -8,7 +8,6 @@ export interface IUserData {
   secondName?: string | null;
   firstLastName?: string;
   secondLastName?: string | null;
-  fullName?: string;
   document?: string;
   phoneNumber?: string;
   birthDate?: dayjs.Dayjs | null;

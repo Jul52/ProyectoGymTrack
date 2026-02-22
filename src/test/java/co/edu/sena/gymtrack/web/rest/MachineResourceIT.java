@@ -388,7 +388,7 @@ class MachineResourceIT {
         Machine partialUpdatedMachine = new Machine();
         partialUpdatedMachine.setId(machine.getId());
 
-        partialUpdatedMachine.description(UPDATED_DESCRIPTION);
+        partialUpdatedMachine.description(UPDATED_DESCRIPTION).status(UPDATED_STATUS);
 
         restMachineMockMvc
             .perform(

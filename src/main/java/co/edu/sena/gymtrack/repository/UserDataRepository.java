@@ -14,13 +14,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserDataRepository extends JpaRepository<UserData, Long> {
-    // ----------------------------------------------------------------------
-    // CAMBIO CRÍTICO: AGREGA ESTA LÍNEA
-    // Usa la relación 'user' dentro de UserData y luego busca por el campo 'login'
-    Optional<UserData> findOneByUserLogin(String login);
-
-    // ----------------------------------------------------------------------
-
     default Optional<UserData> findOneWithEagerRelationships(Long id) {
         return this.findOneWithToOneRelationships(id);
     }

@@ -55,43 +55,92 @@ public class UserData implements Serializable {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "authorities" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
     private User user;
 
-    @OneToMany(mappedBy = "registeredBy")
-    @JsonIgnoreProperties(value = { "registeredBy", "gymService" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "registeredBy")
+    @JsonIgnoreProperties(value = { "course", "gymService", "registeredBy", "schedule" }, allowSetters = true)
     private Set<Reservation> reservations = new HashSet<>();
 
-    @OneToMany(mappedBy = "admin")
-    @JsonIgnoreProperties(value = { "admin" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
+    @JsonIgnoreProperties(value = { "machineIncidents", "admin" }, allowSetters = true)
     private Set<Machine> machines = new HashSet<>();
 
-    @OneToMany(mappedBy = "userData")
-    @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userData")
+    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData", "service" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
-    @OneToMany(mappedBy = "trainer")
-    @JsonIgnoreProperties(value = { "trainer" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trainer")
+    @JsonIgnoreProperties(value = { "schedules", "zones", "trainer", "reservations" }, allowSetters = true)
     private Set<Course> courses = new HashSet<>();
 
-    @OneToMany(mappedBy = "registeredBy")
-    @JsonIgnoreProperties(value = { "registeredBy" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "registeredBy")
+    @JsonIgnoreProperties(value = { "paymentMethod", "invoice", "registeredBy" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
     private DocumentType documentType;
 
-    public Long getId() {
-        return this.id;
-    }
+    // --- MÉTODOS FLUIDOS (Agregados para solucionar errores de Test) ---
 
     public UserData id(Long id) {
         this.setId(id);
         return this;
+    }
+
+    public UserData firstName(String firstName) {
+        this.setFirstName(firstName);
+        return this;
+    }
+
+    public UserData secondName(String secondName) {
+        this.setSecondName(secondName);
+        return this;
+    }
+
+    public UserData firstLastName(String firstLastName) {
+        this.setFirstLastName(firstLastName);
+        return this;
+    }
+
+    public UserData secondLastName(String secondLastName) {
+        this.setSecondLastName(secondLastName);
+        return this;
+    }
+
+    public UserData document(String document) {
+        this.setDocument(document);
+        return this;
+    }
+
+    public UserData phoneNumber(String phoneNumber) {
+        this.setPhoneNumber(phoneNumber);
+        return this;
+    }
+
+    public UserData birthDate(LocalDate birthDate) {
+        this.setBirthDate(birthDate);
+        return this;
+    }
+
+    public UserData user(User user) {
+        this.setUser(user);
+        return this;
+    }
+
+    public UserData documentType(DocumentType documentType) {
+        this.setDocumentType(documentType);
+        return this;
+    }
+
+    // --- GETTERS Y SETTERS TRADICIONALES ---
+
+    public Long getId() {
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -102,22 +151,12 @@ public class UserData implements Serializable {
         return this.firstName;
     }
 
-    public UserData firstName(String firstName) {
-        this.setFirstName(firstName);
-        return this;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     public String getSecondName() {
         return this.secondName;
-    }
-
-    public UserData secondName(String secondName) {
-        this.setSecondName(secondName);
-        return this;
     }
 
     public void setSecondName(String secondName) {
@@ -128,22 +167,12 @@ public class UserData implements Serializable {
         return this.firstLastName;
     }
 
-    public UserData firstLastName(String firstLastName) {
-        this.setFirstLastName(firstLastName);
-        return this;
-    }
-
     public void setFirstLastName(String firstLastName) {
         this.firstLastName = firstLastName;
     }
 
     public String getSecondLastName() {
         return this.secondLastName;
-    }
-
-    public UserData secondLastName(String secondLastName) {
-        this.setSecondLastName(secondLastName);
-        return this;
     }
 
     public void setSecondLastName(String secondLastName) {
@@ -154,11 +183,6 @@ public class UserData implements Serializable {
         return this.document;
     }
 
-    public UserData document(String document) {
-        this.setDocument(document);
-        return this;
-    }
-
     public void setDocument(String document) {
         this.document = document;
     }
@@ -167,22 +191,12 @@ public class UserData implements Serializable {
         return this.phoneNumber;
     }
 
-    public UserData phoneNumber(String phoneNumber) {
-        this.setPhoneNumber(phoneNumber);
-        return this;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     public LocalDate getBirthDate() {
         return this.birthDate;
-    }
-
-    public UserData birthDate(LocalDate birthDate) {
-        this.setBirthDate(birthDate);
-        return this;
     }
 
     public void setBirthDate(LocalDate birthDate) {
@@ -197,10 +211,7 @@ public class UserData implements Serializable {
         this.user = user;
     }
 
-    public UserData user(User user) {
-        this.setUser(user);
-        return this;
-    }
+    // --- GESTIÓN DE RELACIONES ---
 
     public Set<Reservation> getReservations() {
         return this.reservations;
@@ -208,11 +219,9 @@ public class UserData implements Serializable {
 
     public void setReservations(Set<Reservation> reservations) {
         if (this.reservations != null) {
-            // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
             this.reservations.forEach(i -> i.setRegisteredBy(null));
         }
         if (reservations != null) {
-            // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
             reservations.forEach(i -> i.setRegisteredBy(this));
         }
         this.reservations = reservations;
@@ -225,14 +234,12 @@ public class UserData implements Serializable {
 
     public UserData addReservation(Reservation reservation) {
         this.reservations.add(reservation);
-        // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
         reservation.setRegisteredBy(this);
         return this;
     }
 
     public UserData removeReservation(Reservation reservation) {
         this.reservations.remove(reservation);
-        // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
         reservation.setRegisteredBy(null);
         return this;
     }
@@ -369,42 +376,20 @@ public class UserData implements Serializable {
         this.documentType = documentType;
     }
 
-    public UserData documentType(DocumentType documentType) {
-        this.setDocumentType(documentType);
-        return this;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof UserData)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof UserData)) return false;
         return getId() != null && getId().equals(((UserData) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "UserData{" +
-            "id=" + getId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", secondName='" + getSecondName() + "'" +
-            ", firstLastName='" + getFirstLastName() + "'" +
-            ", secondLastName='" + getSecondLastName() + "'" +
-            ", document='" + getDocument() + "'" +
-            ", phoneNumber='" + getPhoneNumber() + "'" +
-            ", birthDate='" + getBirthDate() + "'" +
-            "}";
+        return "UserData{" + "id=" + getId() + ", document='" + getDocument() + "'" + "}";
     }
 }

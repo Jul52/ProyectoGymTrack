@@ -27,6 +27,8 @@ public class InvoiceDTO implements Serializable {
     @NotNull
     private UserDataDTO userData;
 
+    private GymServiceDTO service;
+
     public Long getId() {
         return id;
     }
@@ -75,6 +77,14 @@ public class InvoiceDTO implements Serializable {
         this.userData = userData;
     }
 
+    public GymServiceDTO getService() {
+        return service;
+    }
+
+    public void setService(GymServiceDTO service) {
+        this.service = service;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -106,6 +116,7 @@ public class InvoiceDTO implements Serializable {
             ", payment=" + getPayment() +
             ", paymentMethod=" + getPaymentMethod() +
             ", userData=" + getUserData() +
+            ", service=" + getService() +
             "}";
     }
 }

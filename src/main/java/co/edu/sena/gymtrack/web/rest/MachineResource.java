@@ -1,7 +1,6 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.MachineRepository;
-import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.service.MachineService;
 import co.edu.sena.gymtrack.service.dto.MachineDTO;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -31,7 +29,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/machines")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
 public class MachineResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(MachineResource.class);
@@ -58,7 +55,6 @@ public class MachineResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<MachineDTO> createMachine(@Valid @RequestBody MachineDTO machineDTO) throws URISyntaxException {
         LOG.debug("REST request to save Machine : {}", machineDTO);
         if (machineDTO.getId() != null) {
@@ -81,7 +77,6 @@ public class MachineResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<MachineDTO> updateMachine(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody MachineDTO machineDTO
@@ -116,7 +111,6 @@ public class MachineResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<MachineDTO> partialUpdateMachine(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody MachineDTO machineDTO
@@ -149,15 +143,6 @@ public class MachineResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of machines in body.
      */
     @GetMapping("")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<List<MachineDTO>> getAllMachines(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
@@ -180,15 +165,6 @@ public class MachineResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the machineDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<MachineDTO> getMachine(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Machine : {}", id);
         Optional<MachineDTO> machineDTO = machineService.findOne(id);
@@ -202,7 +178,6 @@ public class MachineResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<Void> deleteMachine(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Machine : {}", id);
         machineService.delete(id);

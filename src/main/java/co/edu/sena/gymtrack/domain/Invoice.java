@@ -53,6 +53,10 @@ public class Invoice implements Serializable {
     )
     private UserData userData;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "invoiceServices", "category", "reservations" }, allowSetters = true)
+    private GymService service;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -161,6 +165,19 @@ public class Invoice implements Serializable {
 
     public Invoice userData(UserData userData) {
         this.setUserData(userData);
+        return this;
+    }
+
+    public GymService getService() {
+        return this.service;
+    }
+
+    public void setService(GymService gymService) {
+        this.service = gymService;
+    }
+
+    public Invoice service(GymService gymService) {
+        this.setService(gymService);
         return this;
     }
 

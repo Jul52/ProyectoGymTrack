@@ -50,13 +50,15 @@ class ReservationTest {
     }
 
     @Test
-    void userDataTest() {
+    void registeredByTest() {
         Reservation reservation = getReservationRandomSampleGenerator();
         UserData userDataBack = getUserDataRandomSampleGenerator();
 
+        // Cambio de setUserData a setRegisteredBy
         reservation.setRegisteredBy(userDataBack);
         assertThat(reservation.getRegisteredBy()).isEqualTo(userDataBack);
 
+        // Cambio de userData(null) a registeredBy(null)
         reservation.registeredBy(null);
         assertThat(reservation.getRegisteredBy()).isNull();
     }

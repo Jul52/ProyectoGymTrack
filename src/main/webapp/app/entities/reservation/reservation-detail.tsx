@@ -1,60 +1,85 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Button, Col, Row } from 'reactstrap';
+import { TextFormat, Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+
 import { getEntity } from './reservation.reducer';
 
 export const ReservationDetail = () => {
   const dispatch = useAppDispatch();
-  const { id } = useParams<'id'>();
 
-  const reservationEntity = useAppSelector(state => state.reservation.entity);
+  const { id } = useParams<'id'>();
 
   useEffect(() => {
     dispatch(getEntity(id));
-  }, [id]);
+  }, []);
 
+  const reservationEntity = useAppSelector(state => state.reservation.entity);
   return (
     <Row>
       <Col md="8">
-        <h2>
-          <Translate contentKey="gymtrackApp.reservation.detail.title">Reservation</Translate> [<b>{reservationEntity.id}</b>]
+        <h2 data-cy="reservationDetailsHeading">
+          <Translate contentKey="gymtrackApp.reservation.detail.title">Reservation</Translate>
         </h2>
-        <dl className="row">
-          <dt className="col-sm-3">
+        <dl className="jh-entity-details">
+          <dt>
+            <span id="id">
+              <Translate contentKey="global.field.id">ID</Translate>
+            </span>
+          </dt>
+          <dd>{reservationEntity.id}</dd>
+          <dt>
+            <span id="status">
+              <Translate contentKey="gymtrackApp.reservation.status">Status</Translate>
+            </span>
+          </dt>
+          <dd>{reservationEntity.status ? 'true' : 'false'}</dd>
+          <dt>
+            <span id="description">
+              <Translate contentKey="gymtrackApp.reservation.description">Description</Translate>
+            </span>
+          </dt>
+          <dd>{reservationEntity.description}</dd>
+          <dt>
+            <span id="reservationDate">
+              <Translate contentKey="gymtrackApp.reservation.reservationDate">Reservation Date</Translate>
+            </span>
+          </dt>
+          <dd>
+            {reservationEntity.reservationDate ? (
+              <TextFormat value={reservationEntity.reservationDate} type="date" format={APP_LOCAL_DATE_FORMAT} />
+            ) : null}
+          </dd>
+          <dt>
             <Translate contentKey="gymtrackApp.reservation.course">Course</Translate>
           </dt>
-          <dd className="col-sm-9">{reservationEntity.course?.courseName}</dd>
-
-          <dt className="col-sm-3">
+          <dd>{reservationEntity.course ? reservationEntity.course.courseName : ''}</dd>
+          <dt>
             <Translate contentKey="gymtrackApp.reservation.gymService">Gym Service</Translate>
           </dt>
-          <dd className="col-sm-9">{reservationEntity.gymService?.serviceName}</dd>
-
-          <dt className="col-sm-3">
-            <Translate contentKey="gymtrackApp.reservation.registeredBy">Usuario</Translate>
+          <dd>{reservationEntity.gymService ? reservationEntity.gymService.serviceName : ''}</dd>
+          <dt>
+            <Translate contentKey="gymtrackApp.reservation.userData">User Data</Translate>
           </dt>
-          <dd className="col-sm-9">{reservationEntity.registeredBy?.fullName}</dd>
-
-          <dt className="col-sm-3">
-            <Translate contentKey="gymtrackApp.reservation.schedule">Horario</Translate>
-          </dt>
-          <dd className="col-sm-9">
-            {reservationEntity.schedule?.day} - {reservationEntity.schedule?.startTime}
-          </dd>
-
-          <dt className="col-sm-3">
-            <Translate contentKey="gymtrackApp.reservation.status">Status</Translate>
-          </dt>
-          <dd className="col-sm-9">{reservationEntity.status ? 'true' : 'false'}</dd>
+          <dd>{reservationEntity.userData ? reservationEntity.userData.document : ''}</dd>
         </dl>
-        <Button tag={Link} to="/reservation" replace color="info">
-          <FontAwesomeIcon icon="arrow-left" /> Volver
+        <Button tag={Link} to="/reservation" replace color="info" data-cy="entityDetailsBackButton">
+          <FontAwesomeIcon icon="arrow-left" />{' '}
+          <span className="d-none d-md-inline">
+            <Translate contentKey="entity.action.back">Back</Translate>
+          </span>
         </Button>
         &nbsp;
+        <Button tag={Link} to={`/reservation/${reservationEntity.id}/edit`} replace color="primary">
+          <FontAwesomeIcon icon="pencil-alt" />{' '}
+          <span className="d-none d-md-inline">
+            <Translate contentKey="entity.action.edit">Edit</Translate>
+          </span>
+        </Button>
       </Col>
     </Row>
   );

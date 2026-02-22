@@ -63,6 +63,7 @@ public class InvoiceAsserts {
             .as("Verify Invoice relationships")
             .satisfies(a -> assertThat(a.getPayment()).as("check payment").isEqualTo(expected.getPayment()))
             .satisfies(a -> assertThat(a.getPaymentMethod()).as("check paymentMethod").isEqualTo(expected.getPaymentMethod()))
-            .satisfies(a -> assertThat(a.getUserData()).as("check userData").isEqualTo(expected.getUserData()));
+            .satisfies(a -> assertThat(a.getUserData()).as("check userData").isEqualTo(expected.getUserData()))
+            .satisfies(a -> assertThat(a.getService()).as("check service").isEqualTo(expected.getService()));
     }
 }

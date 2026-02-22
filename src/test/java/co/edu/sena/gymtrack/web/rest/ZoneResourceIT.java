@@ -311,6 +311,8 @@ class ZoneResourceIT {
         Zone partialUpdatedZone = new Zone();
         partialUpdatedZone.setId(zone.getId());
 
+        partialUpdatedZone.name(UPDATED_NAME);
+
         restZoneMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedZone.getId())

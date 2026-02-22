@@ -1,9 +1,11 @@
 package co.edu.sena.gymtrack.service.mapper;
 
+import co.edu.sena.gymtrack.domain.GymService;
 import co.edu.sena.gymtrack.domain.Invoice;
 import co.edu.sena.gymtrack.domain.Payment;
 import co.edu.sena.gymtrack.domain.PaymentMethod;
 import co.edu.sena.gymtrack.domain.UserData;
+import co.edu.sena.gymtrack.service.dto.GymServiceDTO;
 import co.edu.sena.gymtrack.service.dto.InvoiceDTO;
 import co.edu.sena.gymtrack.service.dto.PaymentDTO;
 import co.edu.sena.gymtrack.service.dto.PaymentMethodDTO;
@@ -18,12 +20,12 @@ public interface InvoiceMapper extends EntityMapper<InvoiceDTO, Invoice> {
     @Mapping(target = "payment", source = "payment", qualifiedByName = "paymentId")
     @Mapping(target = "paymentMethod", source = "paymentMethod", qualifiedByName = "paymentMethodMethodName")
     @Mapping(target = "userData", source = "userData", qualifiedByName = "userDataDocument")
+    @Mapping(target = "service", source = "service", qualifiedByName = "gymServiceServiceName")
     InvoiceDTO toDto(Invoice s);
 
     @Named("paymentId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "transactionId", source = "transactionId")
     PaymentDTO toDtoPaymentId(Payment payment);
 
     @Named("paymentMethodMethodName")
@@ -37,4 +39,10 @@ public interface InvoiceMapper extends EntityMapper<InvoiceDTO, Invoice> {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "document", source = "document")
     UserDataDTO toDtoUserDataDocument(UserData userData);
+
+    @Named("gymServiceServiceName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "serviceName", source = "serviceName")
+    GymServiceDTO toDtoGymServiceServiceName(GymService gymService);
 }

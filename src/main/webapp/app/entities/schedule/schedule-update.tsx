@@ -69,14 +69,12 @@ export const ScheduleUpdate = () => {
       ? {
           startTime: displayDefaultDateTime(),
           endTime: displayDefaultDateTime(),
-          availableSlots: 0,
         }
       : {
           ...scheduleEntity,
           startTime: convertDateTimeFromServer(scheduleEntity.startTime),
           endTime: convertDateTimeFromServer(scheduleEntity.endTime),
           course: scheduleEntity?.course?.id,
-          availableSlots: scheduleEntity.availableSlots,
         };
 
   return (
@@ -135,17 +133,6 @@ export const ScheduleUpdate = () => {
                 placeholder="YYYY-MM-DD HH:mm"
                 validate={{
                   required: { value: true, message: translate('entity.validation.required') },
-                }}
-              />
-              <ValidatedField
-                label="Available Slots"
-                id="schedule-availableSlots"
-                name="availableSlots"
-                data-cy="availableSlots"
-                type="number"
-                validate={{
-                  required: { value: true, message: translate('entity.validation.required') },
-                  min: { value: 0, message: 'Cannot be negative' },
                 }}
               />
               <ValidatedField

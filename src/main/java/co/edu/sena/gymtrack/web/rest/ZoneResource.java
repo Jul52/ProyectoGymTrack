@@ -1,7 +1,6 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.ZoneRepository;
-import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.service.ZoneService;
 import co.edu.sena.gymtrack.service.dto.ZoneDTO;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -31,7 +29,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/zones")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
 public class ZoneResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZoneResource.class);
@@ -58,7 +55,6 @@ public class ZoneResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<ZoneDTO> createZone(@Valid @RequestBody ZoneDTO zoneDTO) throws URISyntaxException {
         LOG.debug("REST request to save Zone : {}", zoneDTO);
         if (zoneDTO.getId() != null) {
@@ -81,7 +77,6 @@ public class ZoneResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<ZoneDTO> updateZone(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody ZoneDTO zoneDTO
@@ -116,7 +111,6 @@ public class ZoneResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<ZoneDTO> partialUpdateZone(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody ZoneDTO zoneDTO
@@ -148,7 +142,6 @@ public class ZoneResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of zones in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<List<ZoneDTO>> getAllZones(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Zones");
         Page<ZoneDTO> page = zoneService.findAll(pageable);
@@ -163,7 +156,6 @@ public class ZoneResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the zoneDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<ZoneDTO> getZone(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Zone : {}", id);
         Optional<ZoneDTO> zoneDTO = zoneService.findOne(id);
@@ -177,7 +169,6 @@ public class ZoneResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Void> deleteZone(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Zone : {}", id);
         zoneService.delete(id);
