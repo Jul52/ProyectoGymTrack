@@ -155,7 +155,16 @@ export const Invoice = () => {
                     )}
                   </td>
                   <td>{invoice.userData ? <Link to={`/user-data/${invoice.userData.id}`}>{invoice.userData.document}</Link> : ''}</td>
-                  <td>{invoice.service ? <Link to={`/gym-service/${invoice.service.id}`}>{invoice.service.serviceName}</Link> : ''}</td>
+
+                  {/* AQUÍ ESTÁ EL CAMBIO PARA LA COLUMNA SERVICIO */}
+                  <td>
+                    {invoice.service ? (
+                      <Link to={`/gym-service/${invoice.service.id}`}>{invoice.service.serviceName || `ID: ${invoice.service.id}`}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/invoice/${invoice.id}`} color="info" size="sm" data-cy="entityDetailsButton">
