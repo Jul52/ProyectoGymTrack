@@ -2,20 +2,20 @@
   "gymtrackApp": {
     "machineIncidents": {
       "home": {
-        "title": "Incidentes de máquina",
-        "refreshListLabel": "Actualizar lista",
-        "createLabel": "Crear nuevo incidente de máquina",
-        "createOrEditLabel": "Crear o editar incidente de máquina",
-        "notFound": "No se encontraron incidentes de máquina"
+        "title": "Evidencias de Incidentes",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nueva Evidencia de Incidente",
+        "createOrEditLabel": "Crear o editar Evidencia de Incidente",
+        "notFound": "No se encontraron evidencias de incidentes"
       },
-      "created": "Un nuevo incidente de máquina ha sido creado con el identificador {{ param }}",
-      "updated": "Un incidente de máquina ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un incidente de máquina ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva evidencia de incidente ha sido creada con el identificador {{ param }}",
+      "updated": "La evidencia de incidente ha sido actualizada con el identificador {{ param }}",
+      "deleted": "La evidencia de incidente ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar el incidente de máquina {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la evidencia de incidente {{ id }}?"
       },
       "detail": {
-        "title": "Incidente de máquina"
+        "title": "Detalle de la Evidencia"
       },
       "id": "ID",
       "description": "Descripción",

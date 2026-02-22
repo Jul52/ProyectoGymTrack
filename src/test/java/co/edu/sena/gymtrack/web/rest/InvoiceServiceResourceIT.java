@@ -389,7 +389,7 @@ class InvoiceServiceResourceIT {
         InvoiceService partialUpdatedInvoiceService = new InvoiceService();
         partialUpdatedInvoiceService.setId(invoiceService.getId());
 
-        partialUpdatedInvoiceService.subtotal(UPDATED_SUBTOTAL);
+        partialUpdatedInvoiceService.quantity(UPDATED_QUANTITY).salePrice(UPDATED_SALE_PRICE);
 
         restInvoiceServiceMockMvc
             .perform(

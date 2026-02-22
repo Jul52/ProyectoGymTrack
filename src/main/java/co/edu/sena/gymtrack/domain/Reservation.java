@@ -1,10 +1,10 @@
 package co.edu.sena.gymtrack.domain;
 
-import co.edu.sena.gymtrack.domain.Schedule;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * A Reservation.
@@ -17,7 +17,8 @@ public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
     private Long id;
 
@@ -25,10 +26,13 @@ public class Reservation implements Serializable {
     @Column(name = "status", nullable = false)
     private Boolean status;
 
-    @ManyToOne(optional = false)
+    @Size(max = 255)
+    @Column(name = "description", length = 255)
+    private String description;
+
     @NotNull
-    @JsonIgnoreProperties(value = { "course" }, allowSetters = true)
-    private Schedule schedule;
+    @Column(name = "reservation_date", nullable = false)
+    private LocalDate reservationDate;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -46,8 +50,7 @@ public class Reservation implements Serializable {
         value = { "user", "reservations", "machines", "invoices", "courses", "payments", "documentType" },
         allowSetters = true
     )
-    @JoinColumn(name = "registered_by_id")
-    private UserData registeredBy;
+    private UserData userData;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -77,17 +80,30 @@ public class Reservation implements Serializable {
         this.status = status;
     }
 
-    public Schedule getSchedule() {
-        return this.schedule;
+    public String getDescription() {
+        return this.description;
     }
 
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-    }
-
-    public Reservation schedule(Schedule schedule) {
-        this.setSchedule(schedule);
+    public Reservation description(String description) {
+        this.setDescription(description);
         return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getReservationDate() {
+        return this.reservationDate;
+    }
+
+    public Reservation reservationDate(LocalDate reservationDate) {
+        this.setReservationDate(reservationDate);
+        return this;
+    }
+
+    public void setReservationDate(LocalDate reservationDate) {
+        this.reservationDate = reservationDate;
     }
 
     public Course getCourse() {
@@ -116,16 +132,16 @@ public class Reservation implements Serializable {
         return this;
     }
 
-    public UserData getRegisteredBy() { // CAMBIO: Getter para registeredBy
-        return this.registeredBy;
+    public UserData getUserData() {
+        return this.userData;
     }
 
-    public void setRegisteredBy(UserData registeredBy) { // CAMBIO: Setter para registeredBy
-        this.registeredBy = registeredBy;
+    public void setUserData(UserData userData) {
+        this.userData = userData;
     }
 
-    public Reservation registeredBy(UserData registeredBy) { // CAMBIO: Fluent setter para registeredBy
-        this.setRegisteredBy(registeredBy);
+    public Reservation userData(UserData userData) {
+        this.setUserData(userData);
         return this;
     }
 
@@ -154,7 +170,8 @@ public class Reservation implements Serializable {
         return "Reservation{" +
             "id=" + getId() +
             ", status='" + getStatus() + "'" +
-            ", schedule='" + getSchedule() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", reservationDate='" + getReservationDate() + "'" +
             "}";
     }
 }

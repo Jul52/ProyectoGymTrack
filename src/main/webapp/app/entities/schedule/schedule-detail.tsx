@@ -54,12 +54,6 @@ export const ScheduleDetail = () => {
             <Translate contentKey="gymtrackApp.schedule.course">Course</Translate>
           </dt>
           <dd>{scheduleEntity.course ? scheduleEntity.course.courseName : ''}</dd>
-          <dt>
-            <span id="availableSlots">
-              <Translate contentKey="gymtrackApp.schedule.availableSlots">Available Slots</Translate>
-            </span>
-          </dt>
-          <dd>{scheduleEntity.availableSlots}</dd>
         </dl>
         <Button tag={Link} to="/schedule" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

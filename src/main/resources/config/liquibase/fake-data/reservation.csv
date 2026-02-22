@@ -1,6 +1,4 @@
-id;status;description;schedule_id;course_id;gym_service_id;registered_by_id
-1;true;Reserva para curso 1;1;1;1;1
-2;false;Reserva para curso 2;2;2;2;2
-3;true;Reserva para curso 3;3;3;3;2
-4;true;Reserva para curso 4;4;1;2;1
-5;false;Reserva para curso 5;5;2;4;1
+id;status;description;reservation_date;course_id;gym_service_id;user_data_id;registered_by_id;schedule_id
+1;true;Reserva curso 1;2025-10-27;1;1;1;1;1
+2;false;Reserva curso 2;2025-10-27;2;2;2;2;1
+3;true;Reserva curso 3;2025-10-27;3;3;2;2;1

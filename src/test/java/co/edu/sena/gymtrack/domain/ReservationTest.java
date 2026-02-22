@@ -54,10 +54,10 @@ class ReservationTest {
         Reservation reservation = getReservationRandomSampleGenerator();
         UserData userDataBack = getUserDataRandomSampleGenerator();
 
-        reservation.setRegisteredBy(userDataBack);
-        assertThat(reservation.getRegisteredBy()).isEqualTo(userDataBack);
+        reservation.setUserData(userDataBack);
+        assertThat(reservation.getUserData()).isEqualTo(userDataBack);
 
-        reservation.registeredBy(null);
-        assertThat(reservation.getRegisteredBy()).isNull();
+        reservation.userData(null);
+        assertThat(reservation.getUserData()).isNull();
     }
 }

@@ -37,19 +37,19 @@ class UserDataTest {
 
         userData.addReservation(reservationBack);
         assertThat(userData.getReservations()).containsOnly(reservationBack);
-        assertThat(reservationBack.getRegisteredBy()).isEqualTo(userData);
+        assertThat(reservationBack.getUserData()).isEqualTo(userData);
 
         userData.removeReservation(reservationBack);
         assertThat(userData.getReservations()).doesNotContain(reservationBack);
-        assertThat(reservationBack.getRegisteredBy()).isNull();
+        assertThat(reservationBack.getUserData()).isNull();
 
         userData.reservations(new HashSet<>(Set.of(reservationBack)));
         assertThat(userData.getReservations()).containsOnly(reservationBack);
-        assertThat(reservationBack.getRegisteredBy()).isEqualTo(userData);
+        assertThat(reservationBack.getUserData()).isEqualTo(userData);
 
         userData.setReservations(new HashSet<>());
         assertThat(userData.getReservations()).doesNotContain(reservationBack);
-        assertThat(reservationBack.getRegisteredBy()).isNull();
+        assertThat(reservationBack.getUserData()).isNull();
     }
 
     @Test

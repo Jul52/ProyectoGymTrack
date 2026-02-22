@@ -1,34 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { JhiItemCount, JhiPagination, Translate, getPaginationState } from 'react-jhipster';
+import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { hasAnyAuthority } from 'app/shared/auth/private-route';
-import { AUTHORITIES } from 'app/config/constants';
+
 import { getEntities } from './reservation.reducer';
-import { IReservation } from 'app/shared/model/reservation.model';
-import dayjs from 'dayjs';
 
 export const Reservation = () => {
   const dispatch = useAppDispatch();
-  const location = useLocation();
+
+  const pageLocation = useLocation();
   const navigate = useNavigate();
 
   const [paginationState, setPaginationState] = useState(
-    overridePaginationStateWithQueryParams(getPaginationState(location, ITEMS_PER_PAGE, 'id'), location.search),
+    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
   const reservationList = useAppSelector(state => state.reservation.entities);
-  const totalItems = useAppSelector(state => state.reservation.totalItems);
   const loading = useAppSelector(state => state.reservation.loading);
-
-  const account = useAppSelector(state => state.authentication.account);
-  const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
-  const isAdmin = isAuthenticated && hasAnyAuthority(account.authorities, [AUTHORITIES.ADMIN]);
+  const totalItems = useAppSelector(state => state.reservation.totalItems);
 
   const getAllEntities = () => {
     dispatch(
@@ -43,7 +38,9 @@ export const Reservation = () => {
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
-    if (location.search !== endURL) navigate(`${location.pathname}${endURL}`);
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +48,7 @@ export const Reservation = () => {
   }, [paginationState.activePage, paginationState.order, paginationState.sort]);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(pageLocation.search);
     const page = params.get('page');
     const sort = params.get(SORT);
     if (page && sort) {
@@ -63,118 +60,148 @@ export const Reservation = () => {
         order: sortSplit[1],
       });
     }
-  }, [location.search]);
+  }, [pageLocation.search]);
 
-  const sort = (field: keyof IReservation) => () =>
+  const sort = p => () => {
     setPaginationState({
       ...paginationState,
       order: paginationState.order === ASC ? DESC : ASC,
-      sort: field,
+      sort: p,
+    });
+  };
+
+  const handlePagination = currentPage =>
+    setPaginationState({
+      ...paginationState,
+      activePage: currentPage,
     });
 
-  const handlePagination = (currentPage: number) => setPaginationState({ ...paginationState, activePage: currentPage });
+  const handleSyncList = () => {
+    sortEntities();
+  };
 
   const getSortIconByFieldName = (fieldName: string) => {
-    if (paginationState.sort !== fieldName) return faSort;
-    return paginationState.order === ASC ? faSortUp : faSortDown;
+    const sortFieldName = paginationState.sort;
+    const order = paginationState.order;
+    if (sortFieldName !== fieldName) {
+      return faSort;
+    }
+    return order === ASC ? faSortUp : faSortDown;
   };
 
   return (
     <div>
-      <h2>
+      <h2 id="reservation-heading" data-cy="ReservationHeading">
         <Translate contentKey="gymtrackApp.reservation.home.title">Reservations</Translate>
-        {isAdmin && (
-          <Link to="/reservation/new" className="btn btn-primary float-end">
-            <FontAwesomeIcon icon="plus" />{' '}
+        <div className="d-flex justify-content-end">
+          <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
+            <FontAwesomeIcon icon="sync" spin={loading} />{' '}
+            <Translate contentKey="gymtrackApp.reservation.home.refreshListLabel">Refresh List</Translate>
+          </Button>
+          <Link to="/reservation/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
             <Translate contentKey="gymtrackApp.reservation.home.createLabel">Create new Reservation</Translate>
           </Link>
-        )}
+        </div>
       </h2>
-
       <div className="table-responsive">
         {reservationList && reservationList.length > 0 ? (
-          <>
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th className="hand" onClick={sort('id')}>
-                    <Translate contentKey="gymtrackApp.reservation.id">ID</Translate>{' '}
-                    <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                  </th>
-                  <th className="hand" onClick={sort('status')}>
-                    <Translate contentKey="gymtrackApp.reservation.status">Status</Translate>{' '}
-                    <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
-                  </th>
-                  <th>
-                    <Translate contentKey="gymtrackApp.reservation.course">Course</Translate>
-                  </th>
-                  <th>
-                    <Translate contentKey="gymtrackApp.reservation.gymService">Gym Service</Translate>
-                  </th>
-                  <th>
-                    <Translate contentKey="gymtrackApp.reservation.registeredBy">User</Translate>
-                  </th>
-                  <th>
-                    <Translate contentKey="gymtrackApp.reservation.schedule">Schedule</Translate>
-                  </th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {reservationList.map((reservation: IReservation, i: number) => (
-                  <tr key={`entity-${i}`}>
-                    <td>
-                      <Button tag={Link} to={`/reservation/${reservation.id}`} color="link" size="sm">
-                        {reservation.id}
+          <Table responsive>
+            <thead>
+              <tr>
+                <th className="hand" onClick={sort('id')}>
+                  <Translate contentKey="gymtrackApp.reservation.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                </th>
+                <th className="hand" onClick={sort('status')}>
+                  <Translate contentKey="gymtrackApp.reservation.status">Status</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
+                </th>
+                <th className="hand" onClick={sort('description')}>
+                  <Translate contentKey="gymtrackApp.reservation.description">Description</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('description')} />
+                </th>
+                <th className="hand" onClick={sort('reservationDate')}>
+                  <Translate contentKey="gymtrackApp.reservation.reservationDate">Reservation Date</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('reservationDate')} />
+                </th>
+                <th>
+                  <Translate contentKey="gymtrackApp.reservation.course">Course</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="gymtrackApp.reservation.gymService">Gym Service</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th>
+                  <Translate contentKey="gymtrackApp.reservation.userData">User Data</Translate> <FontAwesomeIcon icon="sort" />
+                </th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {reservationList.map((reservation, i) => (
+                <tr key={`entity-${i}`} data-cy="entityTable">
+                  <td>
+                    <Button tag={Link} to={`/reservation/${reservation.id}`} color="link" size="sm">
+                      {reservation.id}
+                    </Button>
+                  </td>
+                  <td>{reservation.status ? 'true' : 'false'}</td>
+                  <td>{reservation.description}</td>
+                  <td>
+                    {reservation.reservationDate ? (
+                      <TextFormat type="date" value={reservation.reservationDate} format={APP_LOCAL_DATE_FORMAT} />
+                    ) : null}
+                  </td>
+                  <td>{reservation.course ? <Link to={`/course/${reservation.course.id}`}>{reservation.course.courseName}</Link> : ''}</td>
+                  <td>
+                    {reservation.gymService ? (
+                      <Link to={`/gym-service/${reservation.gymService.id}`}>{reservation.gymService.serviceName}</Link>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                  <td>
+                    {reservation.userData ? <Link to={`/user-data/${reservation.userData.id}`}>{reservation.userData.document}</Link> : ''}
+                  </td>
+                  <td className="text-end">
+                    <div className="btn-group flex-btn-group-container">
+                      <Button tag={Link} to={`/reservation/${reservation.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                        <FontAwesomeIcon icon="eye" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.view">View</Translate>
+                        </span>
                       </Button>
-                    </td>
-                    <td>{reservation.status ? 'true' : 'false'}</td>
-                    <td>{reservation.course?.courseName || '-'}</td>
-                    <td>{reservation.gymService?.serviceName || '-'}</td>
-                    <td>
-                      {reservation.registeredBy ? `${reservation.registeredBy.firstName} ${reservation.registeredBy.firstLastName}` : '-'}
-                    </td>
-                    <td>
-                      {reservation.schedule?.startTime
-                        ? `${reservation.schedule.dayOfWeek ?? '-'} - ${dayjs(reservation.schedule.startTime).format('HH:mm')}`
-                        : '-'}
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group">
-                        <Button tag={Link} to={`/reservation/${reservation.id}`} color="info" size="sm">
-                          <FontAwesomeIcon icon="eye" />
-                        </Button>
-                        {isAdmin && (
-                          <>
-                            <Button tag={Link} to={`/reservation/${reservation.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />
-                            </Button>
-                            <Button tag={Link} to={`/reservation/${reservation.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-
-            <div className="d-flex justify-content-center">
-              <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} />
-            </div>
-
-            <div className="d-flex justify-content-center">
-              <JhiPagination
-                activePage={paginationState.activePage}
-                onSelect={handlePagination}
-                maxButtons={5}
-                itemsPerPage={paginationState.itemsPerPage}
-                totalItems={totalItems}
-              />
-            </div>
-          </>
+                      <Button
+                        tag={Link}
+                        to={`/reservation/${reservation.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                        color="primary"
+                        size="sm"
+                        data-cy="entityEditButton"
+                      >
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          (window.location.href = `/reservation/${reservation.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                        }
+                        color="danger"
+                        size="sm"
+                        data-cy="entityDeleteButton"
+                      >
+                        <FontAwesomeIcon icon="trash" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.delete">Delete</Translate>
+                        </span>
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         ) : (
           !loading && (
             <div className="alert alert-warning">
@@ -183,6 +210,24 @@ export const Reservation = () => {
           )
         )}
       </div>
+      {totalItems ? (
+        <div className={reservationList && reservationList.length > 0 ? '' : 'd-none'}>
+          <div className="justify-content-center d-flex">
+            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
+          </div>
+          <div className="justify-content-center d-flex">
+            <JhiPagination
+              activePage={paginationState.activePage}
+              onSelect={handlePagination}
+              maxButtons={5}
+              itemsPerPage={paginationState.itemsPerPage}
+              totalItems={totalItems}
+            />
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

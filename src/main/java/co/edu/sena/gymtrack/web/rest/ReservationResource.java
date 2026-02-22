@@ -1,7 +1,6 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.ReservationRepository;
-import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.service.ReservationService;
 import co.edu.sena.gymtrack.service.dto.ReservationDTO;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -31,7 +29,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/reservations")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
 public class ReservationResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReservationResource.class);
@@ -58,15 +55,6 @@ public class ReservationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\")"
-    )
     public ResponseEntity<ReservationDTO> createReservation(@Valid @RequestBody ReservationDTO reservationDTO) throws URISyntaxException {
         LOG.debug("REST request to save Reservation : {}", reservationDTO);
         if (reservationDTO.getId() != null) {
@@ -89,7 +77,6 @@ public class ReservationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<ReservationDTO> updateReservation(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody ReservationDTO reservationDTO
@@ -124,7 +111,6 @@ public class ReservationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<ReservationDTO> partialUpdateReservation(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody ReservationDTO reservationDTO
@@ -157,15 +143,6 @@ public class ReservationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of reservations in body.
      */
     @GetMapping("")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\")" // Cambio aquí
-    )
     public ResponseEntity<List<ReservationDTO>> getAllReservations(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
@@ -188,18 +165,9 @@ public class ReservationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the reservationDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\")" // Cambio aquí
-    )
     public ResponseEntity<ReservationDTO> getReservation(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Reservation : {}", id);
-        Optional<ReservationDTO> reservationDTO = reservationService.findOneWithEagerRelationships(id);
+        Optional<ReservationDTO> reservationDTO = reservationService.findOne(id);
         return ResponseUtil.wrapOrNotFound(reservationDTO);
     }
 
@@ -210,15 +178,6 @@ public class ReservationResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\")" // Cambio aquí
-    )
     public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Reservation : {}", id);
         reservationService.delete(id);

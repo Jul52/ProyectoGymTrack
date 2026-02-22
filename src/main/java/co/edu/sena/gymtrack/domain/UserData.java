@@ -55,35 +55,37 @@ public class UserData implements Serializable {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "authorities" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @NotNull
+    @JoinColumn(unique = true)
     private User user;
 
-    @OneToMany(mappedBy = "registeredBy")
-    @JsonIgnoreProperties(value = { "registeredBy", "gymService" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userData")
+    @JsonIgnoreProperties(value = { "course", "gymService", "userData" }, allowSetters = true)
     private Set<Reservation> reservations = new HashSet<>();
 
-    @OneToMany(mappedBy = "admin")
-    @JsonIgnoreProperties(value = { "admin" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
+    @JsonIgnoreProperties(value = { "machineIncidents", "admin" }, allowSetters = true)
     private Set<Machine> machines = new HashSet<>();
 
-    @OneToMany(mappedBy = "userData")
-    @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userData")
+    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData", "service" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
-    @OneToMany(mappedBy = "trainer")
-    @JsonIgnoreProperties(value = { "trainer" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trainer")
+    @JsonIgnoreProperties(value = { "schedules", "zones", "trainer", "reservations" }, allowSetters = true)
     private Set<Course> courses = new HashSet<>();
 
-    @OneToMany(mappedBy = "registeredBy")
-    @JsonIgnoreProperties(value = { "registeredBy" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "registeredBy")
+    @JsonIgnoreProperties(value = { "paymentMethod", "invoice", "registeredBy" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
     private DocumentType documentType;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
@@ -208,12 +210,10 @@ public class UserData implements Serializable {
 
     public void setReservations(Set<Reservation> reservations) {
         if (this.reservations != null) {
-            // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
-            this.reservations.forEach(i -> i.setRegisteredBy(null));
+            this.reservations.forEach(i -> i.setUserData(null));
         }
         if (reservations != null) {
-            // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
-            reservations.forEach(i -> i.setRegisteredBy(this));
+            reservations.forEach(i -> i.setUserData(this));
         }
         this.reservations = reservations;
     }
@@ -225,15 +225,13 @@ public class UserData implements Serializable {
 
     public UserData addReservation(Reservation reservation) {
         this.reservations.add(reservation);
-        // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
-        reservation.setRegisteredBy(this);
+        reservation.setUserData(this);
         return this;
     }
 
     public UserData removeReservation(Reservation reservation) {
         this.reservations.remove(reservation);
-        // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
-        reservation.setRegisteredBy(null);
+        reservation.setUserData(null);
         return this;
     }
 

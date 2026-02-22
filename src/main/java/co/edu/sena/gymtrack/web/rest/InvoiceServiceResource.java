@@ -1,7 +1,6 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.InvoiceServiceRepository;
-import co.edu.sena.gymtrack.security.AuthoritiesConstants;
 import co.edu.sena.gymtrack.service.InvoiceServiceService;
 import co.edu.sena.gymtrack.service.dto.InvoiceServiceDTO;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -31,7 +29,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/invoice-services")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
 public class InvoiceServiceResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(InvoiceServiceResource.class);
@@ -58,7 +55,6 @@ public class InvoiceServiceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<InvoiceServiceDTO> createInvoiceService(@Valid @RequestBody InvoiceServiceDTO invoiceServiceDTO)
         throws URISyntaxException {
         LOG.debug("REST request to save InvoiceService : {}", invoiceServiceDTO);
@@ -82,7 +78,6 @@ public class InvoiceServiceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<InvoiceServiceDTO> updateInvoiceService(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody InvoiceServiceDTO invoiceServiceDTO
@@ -117,7 +112,6 @@ public class InvoiceServiceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<InvoiceServiceDTO> partialUpdateInvoiceService(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody InvoiceServiceDTO invoiceServiceDTO
@@ -149,15 +143,6 @@ public class InvoiceServiceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of invoiceServices in body.
      */
     @GetMapping("")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<List<InvoiceServiceDTO>> getAllInvoiceServices(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
@@ -174,15 +159,6 @@ public class InvoiceServiceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the invoiceServiceDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<InvoiceServiceDTO> getInvoiceService(@PathVariable("id") Long id) {
         LOG.debug("REST request to get InvoiceService : {}", id);
         Optional<InvoiceServiceDTO> invoiceServiceDTO = invoiceServiceService.findOne(id);
@@ -196,7 +172,6 @@ public class InvoiceServiceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<Void> deleteInvoiceService(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete InvoiceService : {}", id);
         invoiceServiceService.delete(id);

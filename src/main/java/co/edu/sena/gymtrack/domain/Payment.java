@@ -6,7 +6,6 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Payment.
@@ -19,7 +18,8 @@ public class Payment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
     private Long id;
 
@@ -44,7 +44,7 @@ public class Payment implements Serializable {
     @NotNull
     private PaymentMethod paymentMethod;
 
-    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData", "service" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "payment")
     private Invoice invoice;
 

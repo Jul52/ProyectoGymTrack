@@ -27,16 +27,18 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     }
 
     @Query(
-        value = "select invoice from Invoice invoice left join fetch invoice.paymentMethod left join fetch invoice.userData",
+        value = "select invoice from Invoice invoice left join fetch invoice.paymentMethod left join fetch invoice.userData left join fetch invoice.service",
         countQuery = "select count(invoice) from Invoice invoice"
     )
     Page<Invoice> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select invoice from Invoice invoice left join fetch invoice.paymentMethod left join fetch invoice.userData")
+    @Query(
+        "select invoice from Invoice invoice left join fetch invoice.paymentMethod left join fetch invoice.userData left join fetch invoice.service"
+    )
     List<Invoice> findAllWithToOneRelationships();
 
     @Query(
-        "select invoice from Invoice invoice left join fetch invoice.paymentMethod left join fetch invoice.userData where invoice.id =:id"
+        "select invoice from Invoice invoice left join fetch invoice.paymentMethod left join fetch invoice.userData left join fetch invoice.service where invoice.id =:id"
     )
     Optional<Invoice> findOneWithToOneRelationships(@Param("id") Long id);
 }

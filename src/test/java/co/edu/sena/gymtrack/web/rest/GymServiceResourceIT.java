@@ -411,7 +411,7 @@ class GymServiceResourceIT {
         GymService partialUpdatedGymService = new GymService();
         partialUpdatedGymService.setId(gymService.getId());
 
-        partialUpdatedGymService.serviceName(UPDATED_SERVICE_NAME).serviceDescription(UPDATED_SERVICE_DESCRIPTION);
+        partialUpdatedGymService.serviceName(UPDATED_SERVICE_NAME).price(UPDATED_PRICE);
 
         restGymServiceMockMvc
             .perform(

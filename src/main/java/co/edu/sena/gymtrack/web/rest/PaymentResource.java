@@ -1,13 +1,8 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.PaymentRepository;
-import co.edu.sena.gymtrack.repository.UserDataRepository;
-import co.edu.sena.gymtrack.security.AuthoritiesConstants;
-import co.edu.sena.gymtrack.security.AuthoritiesConstants;
-import co.edu.sena.gymtrack.security.SecurityUtils;
 import co.edu.sena.gymtrack.service.PaymentService;
 import co.edu.sena.gymtrack.service.dto.PaymentDTO;
-import co.edu.sena.gymtrack.service.mapper.UserDataMapper;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -24,85 +19,65 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+/**
+ * REST controller for managing {@link co.edu.sena.gymtrack.domain.Payment}.
+ */
 @RestController
 @RequestMapping("/api/payments")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
 public class PaymentResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentResource.class);
+
     private static final String ENTITY_NAME = "payment";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final PaymentService paymentService;
-    private final PaymentRepository paymentRepository;
-    private final UserDataRepository userDataRepository;
-    private final UserDataMapper userDataMapper;
 
-    public PaymentResource(
-        PaymentService paymentService,
-        PaymentRepository paymentRepository,
-        UserDataRepository userDataRepository,
-        UserDataMapper userDataMapper
-    ) {
+    private final PaymentRepository paymentRepository;
+
+    public PaymentResource(PaymentService paymentService, PaymentRepository paymentRepository) {
         this.paymentService = paymentService;
         this.paymentRepository = paymentRepository;
-        this.userDataRepository = userDataRepository;
-        this.userDataMapper = userDataMapper;
     }
 
+    /**
+     * {@code POST  /payments} : Create a new payment.
+     *
+     * @param paymentDTO the paymentDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new paymentDTO, or with status {@code 400 (Bad Request)} if the payment has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
     @PostMapping("")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<PaymentDTO> createPayment(@Valid @RequestBody PaymentDTO paymentDTO) throws URISyntaxException {
         LOG.debug("REST request to save Payment : {}", paymentDTO);
-
-        // --- 1. VALIDACIÓN ID (Autogeneración) ---
         if (paymentDTO.getId() != null) {
             throw new BadRequestAlertException("A new payment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
-        if (paymentDTO.getRegisteredBy() == null) {
-            SecurityUtils.getCurrentUserLogin()
-                .ifPresent(login -> {
-                    userDataRepository
-                        .findOneByUserLogin(login)
-                        .ifPresent(userData -> {
-                            // Aquí, 'userData' es sin ambigüedad la entidad UserData
-                            paymentDTO.setRegisteredBy(userDataMapper.toDto(userData));
-                        });
-                });
-        }
-
-        // Opcional: Si el campo debe ser OBLIGATORIO en la BD, se lanza error si no se encontró usuario logueado.
-        if (paymentDTO.getRegisteredBy() == null) {
-            throw new BadRequestAlertException("Payment must be registered by a valid logged-in user.", ENTITY_NAME, "registeredbynull");
-        }
-        // -----------------------------------------------------------------------------------
-
-        PaymentDTO result = paymentService.save(paymentDTO);
-        return ResponseEntity.created(new URI("/api/payments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        paymentDTO = paymentService.save(paymentDTO);
+        return ResponseEntity.created(new URI("/api/payments/" + paymentDTO.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, paymentDTO.getId().toString()))
+            .body(paymentDTO);
     }
 
+    /**
+     * {@code PUT  /payments/:id} : Updates an existing payment.
+     *
+     * @param id the id of the paymentDTO to save.
+     * @param paymentDTO the paymentDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated paymentDTO,
+     * or with status {@code 400 (Bad Request)} if the paymentDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the paymentDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<PaymentDTO> updatePayment(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody PaymentDTO paymentDTO
@@ -125,8 +100,18 @@ public class PaymentResource {
             .body(paymentDTO);
     }
 
+    /**
+     * {@code PATCH  /payments/:id} : Partial updates given fields of an existing payment, field will ignore if it is null
+     *
+     * @param id the id of the paymentDTO to save.
+     * @param paymentDTO the paymentDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated paymentDTO,
+     * or with status {@code 400 (Bad Request)} if the paymentDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the paymentDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the paymentDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<PaymentDTO> partialUpdatePayment(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody PaymentDTO paymentDTO
@@ -151,16 +136,15 @@ public class PaymentResource {
         );
     }
 
+    /**
+     * {@code GET  /payments} : get all the payments.
+     *
+     * @param pageable the pagination information.
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param filter the filter of the request.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of payments in body.
+     */
     @GetMapping("")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<List<PaymentDTO>> getAllPayments(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(name = "filter", required = false) String filter,
@@ -181,24 +165,26 @@ public class PaymentResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    /**
+     * {@code GET  /payments/:id} : get the "id" payment.
+     *
+     * @param id the id of the paymentDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the paymentDTO, or with status {@code 404 (Not Found)}.
+     */
     @GetMapping("/{id}")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<PaymentDTO> getPayment(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Payment : {}", id);
         Optional<PaymentDTO> paymentDTO = paymentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(paymentDTO);
     }
 
+    /**
+     * {@code DELETE  /payments/:id} : delete the "id" payment.
+     *
+     * @param id the id of the paymentDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") ")
     public ResponseEntity<Void> deletePayment(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Payment : {}", id);
         paymentService.delete(id);

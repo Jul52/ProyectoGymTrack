@@ -1,6 +1,5 @@
 package co.edu.sena.gymtrack.domain;
 
-import co.edu.sena.gymtrack.domain.GymService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -66,10 +65,6 @@ public class Course implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
     @JsonIgnoreProperties(value = { "course", "gymService", "userData" }, allowSetters = true)
     private Set<Reservation> reservations = new HashSet<>();
-
-    @ManyToMany(mappedBy = "courses")
-    @JsonIgnoreProperties(value = { "invoiceServices", "category", "reservations", "courses" }, allowSetters = true)
-    private Set<GymService> gymServices = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -246,29 +241,6 @@ public class Course implements Serializable {
     public Course removeReservations(Reservation reservation) {
         this.reservations.remove(reservation);
         reservation.setCourse(null);
-        return this;
-    }
-
-    public Set<GymService> getGymServices() {
-        return this.gymServices;
-    }
-
-    public void setGymServices(Set<GymService> gymServices) {
-        this.gymServices = gymServices;
-    }
-
-    public Course gymServices(Set<GymService> gymServices) {
-        this.setGymServices(gymServices);
-        return this;
-    }
-
-    public Course addGymService(GymService gymService) {
-        this.gymServices.add(gymService);
-        return this;
-    }
-
-    public Course removeGymService(GymService gymService) {
-        this.gymServices.remove(gymService);
         return this;
     }
 

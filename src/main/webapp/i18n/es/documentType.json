@@ -2,20 +2,20 @@
   "gymtrackApp": {
     "documentType": {
       "home": {
-        "title": "Tipos de documento",
-        "refreshListLabel": "Actualizar lista",
-        "createLabel": "Crear nuevo Tipo de documento",
-        "createOrEditLabel": "Crear o editar Tipo de documento",
-        "notFound": "No se encontraron Tipos de documento"
+        "title": "Tipos de Documento",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Tipo de Documento",
+        "createOrEditLabel": "Crear o editar Tipo de Documento",
+        "notFound": "No se encontraron Tipos de Documento"
       },
-      "created": "Un nuevo Tipo de documento ha sido creado con el identificador {{ param }}",
-      "updated": "Un Tipo de documento ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Tipo de documento ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Tipo de Documento ha sido creado con el identificador {{ param }}",
+      "updated": "El Tipo de Documento ha sido actualizado con el identificador {{ param }}",
+      "deleted": "El Tipo de Documento ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar el Tipo de documento {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el Tipo de Documento {{ id }}?"
       },
       "detail": {
-        "title": "Tipo de documento"
+        "title": "Detalle del Tipo de Documento"
       },
       "id": "ID",
       "name": "Nombre",
