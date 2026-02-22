@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
+import { JhiItemCount, JhiPagination, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
-import { APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -117,14 +116,7 @@ export const Reservation = () => {
                   <Translate contentKey="gymtrackApp.reservation.status">Status</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
                 </th>
-                <th className="hand" onClick={sort('description')}>
-                  <Translate contentKey="gymtrackApp.reservation.description">Description</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('description')} />
-                </th>
-                <th className="hand" onClick={sort('reservationDate')}>
-                  <Translate contentKey="gymtrackApp.reservation.reservationDate">Reservation Date</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('reservationDate')} />
-                </th>
+                {/* Columnas descripción y fecha eliminadas */}
                 <th>
                   <Translate contentKey="gymtrackApp.reservation.course">Course</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -132,7 +124,7 @@ export const Reservation = () => {
                   <Translate contentKey="gymtrackApp.reservation.gymService">Gym Service</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th>
-                  <Translate contentKey="gymtrackApp.reservation.userData">User Data</Translate> <FontAwesomeIcon icon="sort" />
+                  <Translate contentKey="gymtrackApp.reservation.registeredBy">User Data</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -146,12 +138,6 @@ export const Reservation = () => {
                     </Button>
                   </td>
                   <td>{reservation.status ? 'true' : 'false'}</td>
-                  <td>{reservation.description}</td>
-                  <td>
-                    {reservation.reservationDate ? (
-                      <TextFormat type="date" value={reservation.reservationDate} format={APP_LOCAL_DATE_FORMAT} />
-                    ) : null}
-                  </td>
                   <td>{reservation.course ? <Link to={`/course/${reservation.course.id}`}>{reservation.course.courseName}</Link> : ''}</td>
                   <td>
                     {reservation.gymService ? (
@@ -161,7 +147,11 @@ export const Reservation = () => {
                     )}
                   </td>
                   <td>
-                    {reservation.userData ? <Link to={`/user-data/${reservation.userData.id}`}>{reservation.userData.document}</Link> : ''}
+                    {reservation.registeredBy ? (
+                      <Link to={`/user-data/${reservation.registeredBy.id}`}>{reservation.registeredBy.document}</Link>
+                    ) : (
+                      ''
+                    )}
                   </td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">

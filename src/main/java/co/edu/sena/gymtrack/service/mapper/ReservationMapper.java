@@ -3,10 +3,12 @@ package co.edu.sena.gymtrack.service.mapper;
 import co.edu.sena.gymtrack.domain.Course;
 import co.edu.sena.gymtrack.domain.GymService;
 import co.edu.sena.gymtrack.domain.Reservation;
+import co.edu.sena.gymtrack.domain.Schedule;
 import co.edu.sena.gymtrack.domain.UserData;
 import co.edu.sena.gymtrack.service.dto.CourseDTO;
 import co.edu.sena.gymtrack.service.dto.GymServiceDTO;
 import co.edu.sena.gymtrack.service.dto.ReservationDTO;
+import co.edu.sena.gymtrack.service.dto.ScheduleDTO;
 import co.edu.sena.gymtrack.service.dto.UserDataDTO;
 import org.mapstruct.*;
 
@@ -17,7 +19,8 @@ import org.mapstruct.*;
 public interface ReservationMapper extends EntityMapper<ReservationDTO, Reservation> {
     @Mapping(target = "course", source = "course", qualifiedByName = "courseCourseName")
     @Mapping(target = "gymService", source = "gymService", qualifiedByName = "gymServiceServiceName")
-    @Mapping(target = "userData", source = "userData", qualifiedByName = "userDataDocument")
+    @Mapping(target = "schedule", source = "schedule", qualifiedByName = "scheduleId")
+    @Mapping(target = "registeredBy", source = "registeredBy", qualifiedByName = "userDataDocument")
     ReservationDTO toDto(Reservation s);
 
     @Named("courseCourseName")
@@ -31,6 +34,11 @@ public interface ReservationMapper extends EntityMapper<ReservationDTO, Reservat
     @Mapping(target = "id", source = "id")
     @Mapping(target = "serviceName", source = "serviceName")
     GymServiceDTO toDtoGymServiceServiceName(GymService gymService);
+
+    @Named("scheduleId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    ScheduleDTO toDtoScheduleId(Schedule schedule);
 
     @Named("userDataDocument")
     @BeanMapping(ignoreByDefault = true)

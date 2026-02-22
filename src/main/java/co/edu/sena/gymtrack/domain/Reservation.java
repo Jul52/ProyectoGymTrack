@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * A Reservation.
@@ -26,13 +25,10 @@ public class Reservation implements Serializable {
     @Column(name = "status", nullable = false)
     private Boolean status;
 
-    @Size(max = 255)
-    @Column(name = "description", length = 255)
-    private String description;
-
+    @ManyToOne(optional = false)
     @NotNull
-    @Column(name = "reservation_date", nullable = false)
-    private LocalDate reservationDate;
+    @JsonIgnoreProperties(value = { "reservations" }, allowSetters = true)
+    private Schedule schedule;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -46,21 +42,46 @@ public class Reservation implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(
-        value = { "user", "reservations", "machines", "invoices", "courses", "payments", "documentType" },
-        allowSetters = true
-    )
-    private UserData userData;
+    @JsonIgnoreProperties(value = { "user", "reservations", "machines", "invoices", "courses", "payments" }, allowSetters = true)
+    @JoinColumn(name = "registered_by_id")
+    private UserData registeredBy;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public Long getId() {
-        return this.id;
-    }
+    // Métodos Fluidos (Necesarios para Tests y Samples)
 
     public Reservation id(Long id) {
         this.setId(id);
         return this;
+    }
+
+    public Reservation status(Boolean status) {
+        this.setStatus(status);
+        return this;
+    }
+
+    public Reservation schedule(Schedule schedule) {
+        this.setSchedule(schedule);
+        return this;
+    }
+
+    public Reservation course(Course course) {
+        this.setCourse(course);
+        return this;
+    }
+
+    public Reservation gymService(GymService gymService) {
+        this.setGymService(gymService);
+        return this;
+    }
+
+    public Reservation registeredBy(UserData userData) {
+        this.setRegisteredBy(userData);
+        return this;
+    }
+
+    // Getters and Setters tradicionales
+
+    public Long getId() {
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -71,39 +92,16 @@ public class Reservation implements Serializable {
         return this.status;
     }
 
-    public Reservation status(Boolean status) {
-        this.setStatus(status);
-        return this;
-    }
-
     public void setStatus(Boolean status) {
         this.status = status;
     }
 
-    public String getDescription() {
-        return this.description;
+    public Schedule getSchedule() {
+        return this.schedule;
     }
 
-    public Reservation description(String description) {
-        this.setDescription(description);
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getReservationDate() {
-        return this.reservationDate;
-    }
-
-    public Reservation reservationDate(LocalDate reservationDate) {
-        this.setReservationDate(reservationDate);
-        return this;
-    }
-
-    public void setReservationDate(LocalDate reservationDate) {
-        this.reservationDate = reservationDate;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
     public Course getCourse() {
@@ -114,11 +112,6 @@ public class Reservation implements Serializable {
         this.course = course;
     }
 
-    public Reservation course(Course course) {
-        this.setCourse(course);
-        return this;
-    }
-
     public GymService getGymService() {
         return this.gymService;
     }
@@ -127,51 +120,28 @@ public class Reservation implements Serializable {
         this.gymService = gymService;
     }
 
-    public Reservation gymService(GymService gymService) {
-        this.setGymService(gymService);
-        return this;
+    public UserData getRegisteredBy() {
+        return this.registeredBy;
     }
 
-    public UserData getUserData() {
-        return this.userData;
+    public void setRegisteredBy(UserData userData) {
+        this.registeredBy = userData;
     }
-
-    public void setUserData(UserData userData) {
-        this.userData = userData;
-    }
-
-    public Reservation userData(UserData userData) {
-        this.setUserData(userData);
-        return this;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Reservation)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof Reservation)) return false;
         return getId() != null && getId().equals(((Reservation) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "Reservation{" +
-            "id=" + getId() +
-            ", status='" + getStatus() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", reservationDate='" + getReservationDate() + "'" +
-            "}";
+        return "Reservation{" + "id=" + getId() + ", status='" + getStatus() + "'" + "}";
     }
 }

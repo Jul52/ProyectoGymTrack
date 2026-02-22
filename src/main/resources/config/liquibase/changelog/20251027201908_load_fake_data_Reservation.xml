@@ -12,13 +12,10 @@
       tableName="reservation">
       <column name="id" type="numeric"/>
       <column name="status" type="boolean"/>
-      <column name="description" type="string"/>
-      <column name="reservation_date" type="date"/>
+      <column name="schedule_id" type="numeric"/>
       <column name="course_id" type="numeric"/>
       <column name="gym_service_id" type="numeric"/>
-      <column name="user_data_id" type="numeric"/>
       <column name="registered_by_id" type="numeric"/>
-      <column name="schedule_id" type="numeric"/>
     </loadData>
   </changeSet>
 </databaseChangeLog>

@@ -23,7 +23,7 @@
       "reservationDate": "Fecha de Reservación",
       "course": "Curso",
       "gymService": "Servicio del Gym",
-      "userData": "Datos de Usuario"
+      "registeredBy": "Datos de Usuario"
     }
   }
 }

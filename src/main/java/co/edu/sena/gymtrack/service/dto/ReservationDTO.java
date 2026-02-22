@@ -2,7 +2,6 @@ package co.edu.sena.gymtrack.service.dto;
 
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -16,11 +15,8 @@ public class ReservationDTO implements Serializable {
     @NotNull
     private Boolean status;
 
-    @Size(max = 255)
-    private String description;
-
     @NotNull
-    private LocalDate reservationDate;
+    private ScheduleDTO schedule;
 
     @NotNull
     private CourseDTO course;
@@ -29,7 +25,7 @@ public class ReservationDTO implements Serializable {
     private GymServiceDTO gymService;
 
     @NotNull
-    private UserDataDTO userData;
+    private UserDataDTO registeredBy;
 
     public Long getId() {
         return id;
@@ -47,20 +43,12 @@ public class ReservationDTO implements Serializable {
         this.status = status;
     }
 
-    public String getDescription() {
-        return description;
+    public ScheduleDTO getSchedule() {
+        return schedule;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getReservationDate() {
-        return reservationDate;
-    }
-
-    public void setReservationDate(LocalDate reservationDate) {
-        this.reservationDate = reservationDate;
+    public void setSchedule(ScheduleDTO schedule) {
+        this.schedule = schedule;
     }
 
     public CourseDTO getCourse() {
@@ -79,12 +67,12 @@ public class ReservationDTO implements Serializable {
         this.gymService = gymService;
     }
 
-    public UserDataDTO getUserData() {
-        return userData;
+    public UserDataDTO getRegisteredBy() {
+        return registeredBy;
     }
 
-    public void setUserData(UserDataDTO userData) {
-        this.userData = userData;
+    public void setRegisteredBy(UserDataDTO registeredBy) {
+        this.registeredBy = registeredBy;
     }
 
     @Override
@@ -114,11 +102,10 @@ public class ReservationDTO implements Serializable {
         return "ReservationDTO{" +
             "id=" + getId() +
             ", status='" + getStatus() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", reservationDate='" + getReservationDate() + "'" +
+            ", schedule=" + getSchedule() +
             ", course=" + getCourse() +
             ", gymService=" + getGymService() +
-            ", userData=" + getUserData() +
+            ", registeredBy=" + getRegisteredBy() +
             "}";
     }
 }

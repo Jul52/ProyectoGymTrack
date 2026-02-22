@@ -47,9 +47,8 @@ public class ReservationAsserts {
     public static void assertReservationUpdatableFieldsEquals(Reservation expected, Reservation actual) {
         assertThat(actual)
             .as("Verify Reservation relevant properties")
-            .satisfies(a -> assertThat(a.getStatus()).as("check status").isEqualTo(expected.getStatus()))
-            .satisfies(a -> assertThat(a.getDescription()).as("check description").isEqualTo(expected.getDescription()))
-            .satisfies(a -> assertThat(a.getReservationDate()).as("check reservationDate").isEqualTo(expected.getReservationDate()));
+            .satisfies(a -> assertThat(a.getStatus()).as("check status").isEqualTo(expected.getStatus()));
+        // Se eliminaron description y reservationDate ya que no existen en la entidad
     }
 
     /**
@@ -63,6 +62,7 @@ public class ReservationAsserts {
             .as("Verify Reservation relationships")
             .satisfies(a -> assertThat(a.getCourse()).as("check course").isEqualTo(expected.getCourse()))
             .satisfies(a -> assertThat(a.getGymService()).as("check gymService").isEqualTo(expected.getGymService()))
-            .satisfies(a -> assertThat(a.getUserData()).as("check userData").isEqualTo(expected.getUserData()));
+            .satisfies(a -> assertThat(a.getSchedule()).as("check schedule").isEqualTo(expected.getSchedule()))
+            .satisfies(a -> assertThat(a.getRegisteredBy()).as("check registeredBy").isEqualTo(expected.getRegisteredBy()));
     }
 }

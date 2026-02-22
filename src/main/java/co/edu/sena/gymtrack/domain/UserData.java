@@ -60,8 +60,8 @@ public class UserData implements Serializable {
     @JoinColumn(unique = true)
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userData")
-    @JsonIgnoreProperties(value = { "course", "gymService", "userData" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "registeredBy")
+    @JsonIgnoreProperties(value = { "course", "gymService", "registeredBy", "schedule" }, allowSetters = true)
     private Set<Reservation> reservations = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
@@ -85,15 +85,62 @@ public class UserData implements Serializable {
     @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
     private DocumentType documentType;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public Long getId() {
-        return this.id;
-    }
+    // --- MÉTODOS FLUIDOS (Agregados para solucionar errores de Test) ---
 
     public UserData id(Long id) {
         this.setId(id);
         return this;
+    }
+
+    public UserData firstName(String firstName) {
+        this.setFirstName(firstName);
+        return this;
+    }
+
+    public UserData secondName(String secondName) {
+        this.setSecondName(secondName);
+        return this;
+    }
+
+    public UserData firstLastName(String firstLastName) {
+        this.setFirstLastName(firstLastName);
+        return this;
+    }
+
+    public UserData secondLastName(String secondLastName) {
+        this.setSecondLastName(secondLastName);
+        return this;
+    }
+
+    public UserData document(String document) {
+        this.setDocument(document);
+        return this;
+    }
+
+    public UserData phoneNumber(String phoneNumber) {
+        this.setPhoneNumber(phoneNumber);
+        return this;
+    }
+
+    public UserData birthDate(LocalDate birthDate) {
+        this.setBirthDate(birthDate);
+        return this;
+    }
+
+    public UserData user(User user) {
+        this.setUser(user);
+        return this;
+    }
+
+    public UserData documentType(DocumentType documentType) {
+        this.setDocumentType(documentType);
+        return this;
+    }
+
+    // --- GETTERS Y SETTERS TRADICIONALES ---
+
+    public Long getId() {
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -104,22 +151,12 @@ public class UserData implements Serializable {
         return this.firstName;
     }
 
-    public UserData firstName(String firstName) {
-        this.setFirstName(firstName);
-        return this;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     public String getSecondName() {
         return this.secondName;
-    }
-
-    public UserData secondName(String secondName) {
-        this.setSecondName(secondName);
-        return this;
     }
 
     public void setSecondName(String secondName) {
@@ -130,22 +167,12 @@ public class UserData implements Serializable {
         return this.firstLastName;
     }
 
-    public UserData firstLastName(String firstLastName) {
-        this.setFirstLastName(firstLastName);
-        return this;
-    }
-
     public void setFirstLastName(String firstLastName) {
         this.firstLastName = firstLastName;
     }
 
     public String getSecondLastName() {
         return this.secondLastName;
-    }
-
-    public UserData secondLastName(String secondLastName) {
-        this.setSecondLastName(secondLastName);
-        return this;
     }
 
     public void setSecondLastName(String secondLastName) {
@@ -156,11 +183,6 @@ public class UserData implements Serializable {
         return this.document;
     }
 
-    public UserData document(String document) {
-        this.setDocument(document);
-        return this;
-    }
-
     public void setDocument(String document) {
         this.document = document;
     }
@@ -169,22 +191,12 @@ public class UserData implements Serializable {
         return this.phoneNumber;
     }
 
-    public UserData phoneNumber(String phoneNumber) {
-        this.setPhoneNumber(phoneNumber);
-        return this;
-    }
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     public LocalDate getBirthDate() {
         return this.birthDate;
-    }
-
-    public UserData birthDate(LocalDate birthDate) {
-        this.setBirthDate(birthDate);
-        return this;
     }
 
     public void setBirthDate(LocalDate birthDate) {
@@ -199,10 +211,7 @@ public class UserData implements Serializable {
         this.user = user;
     }
 
-    public UserData user(User user) {
-        this.setUser(user);
-        return this;
-    }
+    // --- GESTIÓN DE RELACIONES ---
 
     public Set<Reservation> getReservations() {
         return this.reservations;
@@ -210,10 +219,10 @@ public class UserData implements Serializable {
 
     public void setReservations(Set<Reservation> reservations) {
         if (this.reservations != null) {
-            this.reservations.forEach(i -> i.setUserData(null));
+            this.reservations.forEach(i -> i.setRegisteredBy(null));
         }
         if (reservations != null) {
-            reservations.forEach(i -> i.setUserData(this));
+            reservations.forEach(i -> i.setRegisteredBy(this));
         }
         this.reservations = reservations;
     }
@@ -225,13 +234,13 @@ public class UserData implements Serializable {
 
     public UserData addReservation(Reservation reservation) {
         this.reservations.add(reservation);
-        reservation.setUserData(this);
+        reservation.setRegisteredBy(this);
         return this;
     }
 
     public UserData removeReservation(Reservation reservation) {
         this.reservations.remove(reservation);
-        reservation.setUserData(null);
+        reservation.setRegisteredBy(null);
         return this;
     }
 
@@ -367,42 +376,20 @@ public class UserData implements Serializable {
         this.documentType = documentType;
     }
 
-    public UserData documentType(DocumentType documentType) {
-        this.setDocumentType(documentType);
-        return this;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof UserData)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof UserData)) return false;
         return getId() != null && getId().equals(((UserData) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "UserData{" +
-            "id=" + getId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", secondName='" + getSecondName() + "'" +
-            ", firstLastName='" + getFirstLastName() + "'" +
-            ", secondLastName='" + getSecondLastName() + "'" +
-            ", document='" + getDocument() + "'" +
-            ", phoneNumber='" + getPhoneNumber() + "'" +
-            ", birthDate='" + getBirthDate() + "'" +
-            "}";
+        return "UserData{" + "id=" + getId() + ", document='" + getDocument() + "'" + "}";
     }
 }
