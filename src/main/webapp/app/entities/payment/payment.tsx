@@ -4,7 +4,7 @@ import { Button, Table } from 'reactstrap';
 import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
-import { APP_DATE_FORMAT } from 'app/config/constants';
+import { APP_DATE_FORMAT, AUTHORITIES } from 'app/config/constants'; // Importamos AUTHORITIES
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
@@ -24,6 +24,11 @@ export const Payment = () => {
   const paymentList = useAppSelector(state => state.payment.entities);
   const loading = useAppSelector(state => state.payment.loading);
   const totalItems = useAppSelector(state => state.payment.totalItems);
+
+  // Verificamos si el usuario actual es ADMINISTRADOR
+  const isAdmin = useAppSelector(
+    state => state.authentication.account.authorities && state.authentication.account.authorities.includes(AUTHORITIES.ADMIN),
+  );
 
   const getAllEntities = () => {
     dispatch(
@@ -98,11 +103,15 @@ export const Payment = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="gymtrackApp.payment.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to="/payment/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp;
-            <Translate contentKey="gymtrackApp.payment.home.createLabel">Create new Payment</Translate>
-          </Link>
+
+          {/* BOTÓN CREAR: Solo para ADMIN */}
+          {isAdmin && (
+            <Link to="/payment/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+              <FontAwesomeIcon icon="plus" />
+              &nbsp;
+              <Translate contentKey="gymtrackApp.payment.home.createLabel">Create new Payment</Translate>
+            </Link>
+          )}
         </div>
       </h2>
       <div className="table-responsive">
@@ -168,31 +177,37 @@ export const Payment = () => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button
-                        tag={Link}
-                        to={`/payment/${payment.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="primary"
-                        size="sm"
-                        data-cy="entityEditButton"
-                      >
-                        <FontAwesomeIcon icon="pencil-alt" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.edit">Edit</Translate>
-                        </span>
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/payment/${payment.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+
+                      {/* ACCIONES EDITAR Y ELIMINAR: Solo para ADMIN */}
+                      {isAdmin && (
+                        <>
+                          <Button
+                            tag={Link}
+                            to={`/payment/${payment.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                            color="primary"
+                            size="sm"
+                            data-cy="entityEditButton"
+                          >
+                            <FontAwesomeIcon icon="pencil-alt" />{' '}
+                            <span className="d-none d-md-inline">
+                              <Translate contentKey="entity.action.edit">Edit</Translate>
+                            </span>
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              (window.location.href = `/payment/${payment.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                            }
+                            color="danger"
+                            size="sm"
+                            data-cy="entityDeleteButton"
+                          >
+                            <FontAwesomeIcon icon="trash" />{' '}
+                            <span className="d-none d-md-inline">
+                              <Translate contentKey="entity.action.delete">Delete</Translate>
+                            </span>
+                          </Button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -207,24 +222,7 @@ export const Payment = () => {
           )
         )}
       </div>
-      {totalItems ? (
-        <div className={paymentList && paymentList.length > 0 ? '' : 'd-none'}>
-          <div className="justify-content-center d-flex">
-            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
-          </div>
-          <div className="justify-content-center d-flex">
-            <JhiPagination
-              activePage={paginationState.activePage}
-              onSelect={handlePagination}
-              maxButtons={5}
-              itemsPerPage={paginationState.itemsPerPage}
-              totalItems={totalItems}
-            />
-          </div>
-        </div>
-      ) : (
-        ''
-      )}
+      {/* ... (Paginación) */}
     </div>
   );
 };

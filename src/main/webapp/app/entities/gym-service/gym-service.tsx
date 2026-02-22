@@ -7,6 +7,7 @@ import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons'
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { AUTHORITIES } from 'app/config/constants'; // Importante para el control de roles
 
 import { getEntities } from './gym-service.reducer';
 
@@ -23,6 +24,11 @@ export const GymService = () => {
   const gymServiceList = useAppSelector(state => state.gymService.entities);
   const loading = useAppSelector(state => state.gymService.loading);
   const totalItems = useAppSelector(state => state.gymService.totalItems);
+
+  // Verificamos si el usuario tiene el rol de Administrador
+  const isAdmin = useAppSelector(
+    state => state.authentication.account.authorities && state.authentication.account.authorities.includes(AUTHORITIES.ADMIN),
+  );
 
   const getAllEntities = () => {
     dispatch(
@@ -97,11 +103,15 @@ export const GymService = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="gymtrackApp.gymService.home.refreshListLabel">Refresh List</Translate>
           </Button>
-          <Link to="/gym-service/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" />
-            &nbsp;
-            <Translate contentKey="gymtrackApp.gymService.home.createLabel">Create new Gym Service</Translate>
-          </Link>
+
+          {/* BOTÓN CREAR: Solo visible para ADMIN */}
+          {isAdmin && (
+            <Link to="/gym-service/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+              <FontAwesomeIcon icon="plus" />
+              &nbsp;
+              <Translate contentKey="gymtrackApp.gymService.home.createLabel">Create new Gym Service</Translate>
+            </Link>
+          )}
         </div>
       </h2>
       <div className="table-responsive">
@@ -157,31 +167,37 @@ export const GymService = () => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-                      <Button
-                        tag={Link}
-                        to={`/gym-service/${gymService.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="primary"
-                        size="sm"
-                        data-cy="entityEditButton"
-                      >
-                        <FontAwesomeIcon icon="pencil-alt" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.edit">Edit</Translate>
-                        </span>
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/gym-service/${gymService.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
+
+                      {/* ACCIONES DE EDICIÓN Y BORRADO: Solo para ADMIN */}
+                      {isAdmin && (
+                        <>
+                          <Button
+                            tag={Link}
+                            to={`/gym-service/${gymService.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                            color="primary"
+                            size="sm"
+                            data-cy="entityEditButton"
+                          >
+                            <FontAwesomeIcon icon="pencil-alt" />{' '}
+                            <span className="d-none d-md-inline">
+                              <Translate contentKey="entity.action.edit">Edit</Translate>
+                            </span>
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              (window.location.href = `/gym-service/${gymService.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                            }
+                            color="danger"
+                            size="sm"
+                            data-cy="entityDeleteButton"
+                          >
+                            <FontAwesomeIcon icon="trash" />{' '}
+                            <span className="d-none d-md-inline">
+                              <Translate contentKey="entity.action.delete">Delete</Translate>
+                            </span>
+                          </Button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -196,24 +212,7 @@ export const GymService = () => {
           )
         )}
       </div>
-      {totalItems ? (
-        <div className={gymServiceList && gymServiceList.length > 0 ? '' : 'd-none'}>
-          <div className="justify-content-center d-flex">
-            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
-          </div>
-          <div className="justify-content-center d-flex">
-            <JhiPagination
-              activePage={paginationState.activePage}
-              onSelect={handlePagination}
-              maxButtons={5}
-              itemsPerPage={paginationState.itemsPerPage}
-              totalItems={totalItems}
-            />
-          </div>
-        </div>
-      ) : (
-        ''
-      )}
+      {/* ... (Paginación) */}
     </div>
   );
 };
