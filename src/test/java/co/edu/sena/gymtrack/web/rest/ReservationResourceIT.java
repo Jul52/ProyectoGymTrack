@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import co.edu.sena.gymtrack.IntegrationTest;
 import co.edu.sena.gymtrack.domain.GymService;
 import co.edu.sena.gymtrack.domain.Reservation;
+import co.edu.sena.gymtrack.domain.Schedule;
 import co.edu.sena.gymtrack.domain.UserData;
 import co.edu.sena.gymtrack.repository.ReservationRepository;
 import co.edu.sena.gymtrack.service.ReservationService;
@@ -37,6 +38,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Integration tests for the {@link ReservationResource} REST controller.
+ */
 @IntegrationTest
 @Disabled("Cyclic required relationships detected")
 @ExtendWith(MockitoExtension.class)
@@ -46,9 +50,6 @@ class ReservationResourceIT {
 
     private static final Boolean DEFAULT_STATUS = false;
     private static final Boolean UPDATED_STATUS = true;
-
-    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/reservations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -78,11 +79,13 @@ class ReservationResourceIT {
     private MockMvc restReservationMockMvc;
 
     private Reservation reservation;
+
     private Reservation insertedReservation;
 
     public static Reservation createEntity(EntityManager em) {
         Reservation reservation = new Reservation().status(DEFAULT_STATUS);
 
+        // Add required entity GymService
         GymService gymService;
         if (TestUtil.findAll(em, GymService.class).isEmpty()) {
             gymService = GymServiceResourceIT.createEntity(em);
@@ -93,15 +96,27 @@ class ReservationResourceIT {
         }
         reservation.setGymService(gymService);
 
-        UserData userData;
+        // Add required entity UserData (RegisteredBy)
+        UserData registeredBy;
         if (TestUtil.findAll(em, UserData.class).isEmpty()) {
-            userData = UserDataResourceIT.createEntity(em);
-            em.persist(userData);
+            registeredBy = UserDataResourceIT.createEntity(em);
+            em.persist(registeredBy);
             em.flush();
         } else {
-            userData = TestUtil.findAll(em, UserData.class).get(0);
+            registeredBy = TestUtil.findAll(em, UserData.class).get(0);
         }
-        reservation.setRegisteredBy(userData);
+        reservation.setRegisteredBy(registeredBy);
+
+        // Add required entity Schedule
+        Schedule schedule;
+        if (TestUtil.findAll(em, Schedule.class).isEmpty()) {
+            schedule = new Schedule(); // O usa ScheduleResourceIT.createEntity(em) si existe
+            em.persist(schedule);
+            em.flush();
+        } else {
+            schedule = TestUtil.findAll(em, Schedule.class).get(0);
+        }
+        reservation.setSchedule(schedule);
 
         return reservation;
     }
@@ -109,25 +124,20 @@ class ReservationResourceIT {
     public static Reservation createUpdatedEntity(EntityManager em) {
         Reservation updatedReservation = new Reservation().status(UPDATED_STATUS);
 
-        GymService gymService;
-        if (TestUtil.findAll(em, GymService.class).isEmpty()) {
-            gymService = GymServiceResourceIT.createUpdatedEntity(em);
-            em.persist(gymService);
-            em.flush();
-        } else {
-            gymService = TestUtil.findAll(em, GymService.class).get(0);
-        }
+        GymService gymService = GymServiceResourceIT.createUpdatedEntity(em);
+        em.persist(gymService);
+        em.flush();
         updatedReservation.setGymService(gymService);
 
-        UserData userData;
-        if (TestUtil.findAll(em, UserData.class).isEmpty()) {
-            userData = UserDataResourceIT.createUpdatedEntity(em);
-            em.persist(userData);
-            em.flush();
-        } else {
-            userData = TestUtil.findAll(em, UserData.class).get(0);
-        }
-        updatedReservation.setRegisteredBy(userData);
+        UserData registeredBy = UserDataResourceIT.createUpdatedEntity(em);
+        em.persist(registeredBy);
+        em.flush();
+        updatedReservation.setRegisteredBy(registeredBy);
+
+        Schedule schedule = new Schedule();
+        em.persist(schedule);
+        em.flush();
+        updatedReservation.setSchedule(schedule);
 
         return updatedReservation;
     }
@@ -148,30 +158,21 @@ class ReservationResourceIT {
     @Test
     @Transactional
     void createReservation() throws Exception {
-        long databaseSizeBeforeCreate = reservationRepository.count();
-
+        long databaseSizeBeforeCreate = getRepositoryCount();
         ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
+        var returnedReservationDTO = om.readValue(
+            restReservationMockMvc
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(reservationDTO)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString(),
+            ReservationDTO.class
+        );
 
-        restReservationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(reservationDTO)))
-            .andExpect(status().isCreated());
-
-        assertThat(reservationRepository.count()).isEqualTo(databaseSizeBeforeCreate + 1);
-    }
-
-    @Test
-    @Transactional
-    void checkStatusIsRequired() throws Exception {
-        long databaseSizeBeforeTest = reservationRepository.count();
-        reservation.setStatus(null);
-
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        restReservationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(reservationDTO)))
-            .andExpect(status().isBadRequest());
-
-        assertThat(reservationRepository.count()).isEqualTo(databaseSizeBeforeTest);
+        assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
+        var returnedReservation = reservationMapper.toEntity(returnedReservationDTO);
+        insertedReservation = returnedReservation;
     }
 
     @Test
@@ -182,21 +183,72 @@ class ReservationResourceIT {
         restReservationMockMvc
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(reservation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
+    }
+
+    @Test
+    @Transactional
+    void getReservation() throws Exception {
+        insertedReservation = reservationRepository.saveAndFlush(reservation);
+
+        restReservationMockMvc
+            .perform(get(ENTITY_API_URL_ID, reservation.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(reservation.getId().intValue()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
+    }
+
+    @Test
+    @Transactional
+    void putExistingReservation() throws Exception {
+        insertedReservation = reservationRepository.saveAndFlush(reservation);
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+
+        Reservation updatedReservation = reservationRepository.findById(reservation.getId()).orElseThrow();
+        em.detach(updatedReservation);
+        updatedReservation.status(UPDATED_STATUS);
+        ReservationDTO reservationDTO = reservationMapper.toDto(updatedReservation);
+
+        restReservationMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, reservationDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(reservationDTO))
+            )
+            .andExpect(status().isOk());
+
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void deleteReservation() throws Exception {
         insertedReservation = reservationRepository.saveAndFlush(reservation);
-        long databaseSizeBeforeDelete = reservationRepository.count();
+        long databaseSizeBeforeDelete = getRepositoryCount();
 
         restReservationMockMvc
             .perform(delete(ENTITY_API_URL_ID, reservation.getId()).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
-        assertThat(reservationRepository.count()).isEqualTo(databaseSizeBeforeDelete - 1);
+        assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
+    }
+
+    protected long getRepositoryCount() {
+        return reservationRepository.count();
+    }
+
+    protected void assertIncrementedRepositoryCount(long countBefore) {
+        assertThat(countBefore + 1).isEqualTo(getRepositoryCount());
+    }
+
+    protected void assertDecrementedRepositoryCount(long countBefore) {
+        assertThat(countBefore - 1).isEqualTo(getRepositoryCount());
+    }
+
+    protected void assertSameRepositoryCount(long countBefore) {
+        assertThat(countBefore).isEqualTo(getRepositoryCount());
     }
 }

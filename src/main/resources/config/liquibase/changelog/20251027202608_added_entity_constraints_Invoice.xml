@@ -30,5 +30,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="user_data"
                                  />
+
+        <addForeignKeyConstraint baseColumnNames="service_id"
+                                 baseTableName="invoice"
+                                 constraintName="fk_invoice__service_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="gym_service"
+                                 />
     </changeSet>
 </databaseChangeLog>

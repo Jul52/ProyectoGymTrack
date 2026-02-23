@@ -14,9 +14,6 @@ public interface GymServiceMapper extends EntityMapper<GymServiceDTO, GymService
     @Mapping(target = "category", source = "category", qualifiedByName = "categoryCategoryName")
     GymServiceDTO toDto(GymService s);
 
-    @Mapping(target = "category", source = "category")
-    GymService toEntity(GymServiceDTO dto);
-
     @Named("categoryCategoryName")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

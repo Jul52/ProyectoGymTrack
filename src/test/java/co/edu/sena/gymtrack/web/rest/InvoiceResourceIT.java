@@ -374,6 +374,8 @@ class InvoiceResourceIT {
         Invoice partialUpdatedInvoice = new Invoice();
         partialUpdatedInvoice.setId(invoice.getId());
 
+        partialUpdatedInvoice.createdDate(UPDATED_CREATED_DATE);
+
         restInvoiceMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedInvoice.getId())

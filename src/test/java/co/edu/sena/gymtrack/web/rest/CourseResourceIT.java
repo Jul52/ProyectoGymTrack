@@ -434,7 +434,7 @@ class CourseResourceIT {
         Course partialUpdatedCourse = new Course();
         partialUpdatedCourse.setId(course.getId());
 
-        partialUpdatedCourse.capacity(UPDATED_CAPACITY);
+        partialUpdatedCourse.startDate(UPDATED_START_DATE).endDate(UPDATED_END_DATE).capacity(UPDATED_CAPACITY);
 
         restCourseMockMvc
             .perform(

@@ -23,7 +23,8 @@
       "payment": "Payment",
       "invoiceService": "Invoice Service",
       "paymentMethod": "Payment Method",
-      "userData": "User Data"
+      "userData": "User Data",
+      "service": "Service"
     }
   }
 }

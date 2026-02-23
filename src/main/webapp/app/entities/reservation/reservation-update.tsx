@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
@@ -18,7 +18,6 @@ export const ReservationUpdate = () => {
 
   const gymServices = useAppSelector(state => state.gymService.entities);
   const schedules = useAppSelector(state => state.schedule.entities);
-
   const reservationEntity = useAppSelector(state => state.reservation.entity);
   const loading = useAppSelector(state => state.reservation.loading);
   const updating = useAppSelector(state => state.reservation.updating);

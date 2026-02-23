@@ -3,19 +3,19 @@
     "zone": {
       "home": {
         "title": "Zonas",
-        "refreshListLabel": "Actualizar lista",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nueva Zona",
         "createOrEditLabel": "Crear o editar Zona",
         "notFound": "No se encontraron Zonas"
       },
       "created": "Una nueva Zona ha sido creada con el identificador {{ param }}",
-      "updated": "Una Zona ha sido actualizada con el identificador {{ param }}",
-      "deleted": "Una Zona ha sido eliminada con el identificador {{ param }}",
+      "updated": "La Zona ha sido actualizada con el identificador {{ param }}",
+      "deleted": "La Zona ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar la Zona {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la Zona {{ id }}?"
       },
       "detail": {
-        "title": "Zona"
+        "title": "Detalle de la Zona"
       },
       "id": "ID",
       "name": "Nombre",

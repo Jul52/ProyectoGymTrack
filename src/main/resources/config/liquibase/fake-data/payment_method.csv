@@ -1,5 +1,7 @@
 id;method_name;method_code;active;uses_gateway
-1;Tarjeta de crédito;CREDIT_CARD;true;true
-2;Tarjeta de débito;DEBIT_CARD;true;true
+1;Tarjeta de Crédito;CREDIT_CARD;true;true
+2;Tarjeta de Débito;DEBIT_CARD;true;true
 3;Efectivo;CASH;true;false
-4;Transferencia bancaria;BANK_TRANSFER;true;false
+4;Transferencia Bancaria;BANK_TRANSFER;true;false
+5;Nequi;NEQUI;true;false
+6;Daviplata;DAVIPLATA;true;false

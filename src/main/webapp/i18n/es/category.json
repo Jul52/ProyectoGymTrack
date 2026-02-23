@@ -3,23 +3,23 @@
     "category": {
       "home": {
         "title": "Categorías",
-        "refreshListLabel": "Actualizar lista",
-        "createLabel": "Crear nueva categoría",
-        "createOrEditLabel": "Crear o editar categoría",
-        "notFound": "No se encontraron categorías"
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nueva Categoría",
+        "createOrEditLabel": "Crear o editar Categoría",
+        "notFound": "No se encontraron Categorías"
       },
-      "created": "Una nueva categoría ha sido creada con el identificador {{ param }}",
-      "updated": "Una categoría ha sido actualizada con el identificador {{ param }}",
-      "deleted": "Una categoría ha sido eliminada con el identificador {{ param }}",
+      "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
+      "updated": "La Categoría ha sido actualizada con el identificador {{ param }}",
+      "deleted": "La Categoría ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar la categoría {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la Categoría {{ id }}?"
       },
       "detail": {
-        "title": "Categoría"
+        "title": "Detalle de la Categoría"
       },
       "id": "ID",
-      "categoryName": "Nombre de la categoría",
-      "gymService": "Servicio de Gimnasio"
+      "categoryName": "Nombre de la Categoría",
+      "gymService": "Servicio del Gym"
     }
   }
 }

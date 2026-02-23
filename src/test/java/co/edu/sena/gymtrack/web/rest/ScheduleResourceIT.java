@@ -375,7 +375,7 @@ class ScheduleResourceIT {
         Schedule partialUpdatedSchedule = new Schedule();
         partialUpdatedSchedule.setId(schedule.getId());
 
-        partialUpdatedSchedule.dayOfWeek(UPDATED_DAY_OF_WEEK).startTime(UPDATED_START_TIME).endTime(UPDATED_END_TIME);
+        partialUpdatedSchedule.startTime(UPDATED_START_TIME);
 
         restScheduleMockMvc
             .perform(

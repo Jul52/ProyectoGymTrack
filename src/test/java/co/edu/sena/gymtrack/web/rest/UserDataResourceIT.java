@@ -467,7 +467,11 @@ class UserDataResourceIT {
         UserData partialUpdatedUserData = new UserData();
         partialUpdatedUserData.setId(userData.getId());
 
-        partialUpdatedUserData.firstLastName(UPDATED_FIRST_LAST_NAME).secondLastName(UPDATED_SECOND_LAST_NAME).document(UPDATED_DOCUMENT);
+        partialUpdatedUserData
+            .firstName(UPDATED_FIRST_NAME)
+            .firstLastName(UPDATED_FIRST_LAST_NAME)
+            .document(UPDATED_DOCUMENT)
+            .phoneNumber(UPDATED_PHONE_NUMBER);
 
         restUserDataMockMvc
             .perform(

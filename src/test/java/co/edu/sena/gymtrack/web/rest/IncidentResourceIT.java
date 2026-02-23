@@ -305,8 +305,6 @@ class IncidentResourceIT {
         Incident partialUpdatedIncident = new Incident();
         partialUpdatedIncident.setId(incident.getId());
 
-        partialUpdatedIncident.description(UPDATED_DESCRIPTION);
-
         restIncidentMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedIncident.getId())

@@ -4,6 +4,10 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * A DTO for the {@link co.edu.sena.gymtrack.domain.Reservation} entity.
+ */
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class ReservationDTO implements Serializable {
 
     private Long id;
@@ -15,11 +19,12 @@ public class ReservationDTO implements Serializable {
     private ScheduleDTO schedule;
 
     @NotNull
-    private GymServiceDTO gymService;
-
     private CourseDTO course;
 
-    // NUEVO: usuario que registró la reserva
+    @NotNull
+    private GymServiceDTO gymService;
+
+    @NotNull
     private UserDataDTO registeredBy;
 
     public Long getId() {
@@ -46,20 +51,20 @@ public class ReservationDTO implements Serializable {
         this.schedule = schedule;
     }
 
-    public GymServiceDTO getGymService() {
-        return gymService;
-    }
-
-    public void setGymService(GymServiceDTO gymService) {
-        this.gymService = gymService;
-    }
-
     public CourseDTO getCourse() {
         return course;
     }
 
     public void setCourse(CourseDTO course) {
         this.course = course;
+    }
+
+    public GymServiceDTO getGymService() {
+        return gymService;
+    }
+
+    public void setGymService(GymServiceDTO gymService) {
+        this.gymService = gymService;
     }
 
     public UserDataDTO getRegisteredBy() {
@@ -72,11 +77,18 @@ public class ReservationDTO implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ReservationDTO)) return false;
-        ReservationDTO that = (ReservationDTO) o;
-        if (this.id == null) return false;
-        return Objects.equals(this.id, that.id);
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ReservationDTO)) {
+            return false;
+        }
+
+        ReservationDTO reservationDTO = (ReservationDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, reservationDTO.id);
     }
 
     @Override
@@ -84,25 +96,16 @@ public class ReservationDTO implements Serializable {
         return Objects.hash(this.id);
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
-        return (
-            "ReservationDTO{" +
-            "id=" +
-            getId() +
-            ", status=" +
-            getStatus() +
-            ", description='" +
-            "'" +
-            ", schedule=" +
-            getSchedule() +
-            ", gymService=" +
-            getGymService() +
-            ", course=" +
-            getCourse() +
-            ", registeredBy=" +
-            getRegisteredBy() +
-            "}"
-        );
+        return "ReservationDTO{" +
+            "id=" + getId() +
+            ", status='" + getStatus() + "'" +
+            ", schedule=" + getSchedule() +
+            ", course=" + getCourse() +
+            ", gymService=" + getGymService() +
+            ", registeredBy=" + getRegisteredBy() +
+            "}";
     }
 }
