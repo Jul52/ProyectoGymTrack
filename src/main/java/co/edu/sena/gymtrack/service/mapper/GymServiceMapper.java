@@ -12,6 +12,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface GymServiceMapper extends EntityMapper<GymServiceDTO, GymService> {
     @Mapping(target = "category", source = "category", qualifiedByName = "categoryCategoryName")
+    @Mapping(target = "courseAccessType", source = "courseAccessType")
+    @Mapping(target = "maxReservationsPerCourse", source = "maxReservationsPerCourse")
     GymServiceDTO toDto(GymService s);
 
     @Named("categoryCategoryName")

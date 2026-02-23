@@ -1,31 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Table } from 'reactstrap';
+import { Badge, Button, Table } from 'reactstrap';
 import { JhiItemCount, JhiPagination, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { AUTHORITIES } from 'app/config/constants'; // Importante para el control de roles
+import { AUTHORITIES } from 'app/config/constants';
+import axios from 'axios';
 
 import { getEntities } from './gym-service.reducer';
 
+interface ServiceStatus {
+  serviceId: number;
+  serviceName: string;
+  status: 'ACTIVE' | 'EXPIRED' | 'NOT_PURCHASED';
+  purchaseDate?: string;
+  expirationDate?: string;
+}
+
 export const GymService = () => {
   const dispatch = useAppDispatch();
-
   const pageLocation = useLocation();
   const navigate = useNavigate();
 
   const [paginationState, setPaginationState] = useState(
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
+  const [serviceStatuses, setServiceStatuses] = useState<Record<number, ServiceStatus>>({});
 
   const gymServiceList = useAppSelector(state => state.gymService.entities);
   const loading = useAppSelector(state => state.gymService.loading);
   const totalItems = useAppSelector(state => state.gymService.totalItems);
-
-  // Verificamos si el usuario tiene el rol de Administrador
   const isAdmin = useAppSelector(
     state => state.authentication.account.authorities && state.authentication.account.authorities.includes(AUTHORITIES.ADMIN),
   );
@@ -40,6 +47,19 @@ export const GymService = () => {
     );
   };
 
+  const loadServiceStatuses = async () => {
+    try {
+      const response = await axios.get<ServiceStatus[]>('/api/gym-services/my-status');
+      const statusMap: Record<number, ServiceStatus> = {};
+      response.data.forEach(s => {
+        statusMap[s.serviceId] = s;
+      });
+      setServiceStatuses(statusMap);
+    } catch (e) {
+      console.error('Error cargando estados de servicios', e);
+    }
+  };
+
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
@@ -50,6 +70,9 @@ export const GymService = () => {
 
   useEffect(() => {
     sortEntities();
+    if (!isAdmin) {
+      loadServiceStatuses();
+    }
   }, [paginationState.activePage, paginationState.order, paginationState.sort]);
 
   useEffect(() => {
@@ -83,15 +106,41 @@ export const GymService = () => {
 
   const handleSyncList = () => {
     sortEntities();
+    if (!isAdmin) loadServiceStatuses();
   };
 
   const getSortIconByFieldName = (fieldName: string) => {
     const sortFieldName = paginationState.sort;
     const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    }
+    if (sortFieldName !== fieldName) return faSort;
     return order === ASC ? faSortUp : faSortDown;
+  };
+
+  const getStatusBadge = (serviceId: number) => {
+    const s = serviceStatuses[serviceId];
+    if (!s) return <Badge color="secondary">Sin contratar</Badge>;
+    const colorMap = { ACTIVE: 'success', EXPIRED: 'danger', NOT_PURCHASED: 'secondary' };
+    const labelMap = { ACTIVE: 'Activo', EXPIRED: 'Vencido', NOT_PURCHASED: 'Sin contratar' };
+    return <Badge color={colorMap[s.status]}>{labelMap[s.status]}</Badge>;
+  };
+
+  // ← CAMBIO: ahora recibe serviceName y redirige a /payment/new
+  const getActionButton = (serviceId: number, servicePrice: number, serviceName: string) => {
+    const s = serviceStatuses[serviceId];
+    const status = s?.status ?? 'NOT_PURCHASED';
+    if (status === 'ACTIVE') return null;
+    const label = status === 'EXPIRED' ? 'Renovar' : 'Contratar';
+    const color = status === 'EXPIRED' ? 'warning' : 'success';
+    return (
+      <Button
+        tag={Link}
+        to={`/payment/new?serviceId=${serviceId}&price=${servicePrice}&serviceName=${encodeURIComponent(serviceName)}`}
+        color={color}
+        size="sm"
+      >
+        <FontAwesomeIcon icon="shopping-cart" /> {label}
+      </Button>
+    );
   };
 
   return (
@@ -103,8 +152,6 @@ export const GymService = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="gymtrackApp.gymService.home.refreshListLabel">Refresh List</Translate>
           </Button>
-
-          {/* BOTÓN CREAR: Solo visible para ADMIN */}
           {isAdmin && (
             <Link to="/gym-service/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
               <FontAwesomeIcon icon="plus" />
@@ -141,6 +188,7 @@ export const GymService = () => {
                 <th>
                   <Translate contentKey="gymtrackApp.gymService.category">Category</Translate> <FontAwesomeIcon icon="sort" />
                 </th>
+                {!isAdmin && <th>Mi Estado</th>}
                 <th />
               </tr>
             </thead>
@@ -155,10 +203,11 @@ export const GymService = () => {
                   <td>{gymService.serviceName}</td>
                   <td>{gymService.serviceDescription}</td>
                   <td>{gymService.price}</td>
-                  <td>{gymService.status ? 'true' : 'false'}</td>
+                  <td>{gymService.status ? 'Activo' : 'Inactivo'}</td>
                   <td>
                     {gymService.category ? <Link to={`/category/${gymService.category.id}`}>{gymService.category.categoryName}</Link> : ''}
                   </td>
+                  {!isAdmin && <td>{getStatusBadge(gymService.id)}</td>}
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/gym-service/${gymService.id}`} color="info" size="sm" data-cy="entityDetailsButton">
@@ -168,7 +217,9 @@ export const GymService = () => {
                         </span>
                       </Button>
 
-                      {/* ACCIONES DE EDICIÓN Y BORRADO: Solo para ADMIN */}
+                      {/* ← CAMBIO: se pasa gymService.serviceName como tercer argumento */}
+                      {!isAdmin && getActionButton(gymService.id, gymService.price, gymService.serviceName)}
+
                       {isAdmin && (
                         <>
                           <Button
@@ -212,7 +263,24 @@ export const GymService = () => {
           )
         )}
       </div>
-      {/* ... (Paginación) */}
+      {totalItems ? (
+        <div className={gymServiceList && gymServiceList.length > 0 ? '' : 'd-none'}>
+          <div className="justify-content-center d-flex">
+            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
+          </div>
+          <div className="justify-content-center d-flex">
+            <JhiPagination
+              activePage={paginationState.activePage}
+              onSelect={handlePagination}
+              maxButtons={5}
+              itemsPerPage={paginationState.itemsPerPage}
+              totalItems={totalItems}
+            />
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

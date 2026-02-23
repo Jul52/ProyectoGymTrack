@@ -27,19 +27,21 @@ spring:
   # --- SECCIÓN AÑADIDA PARA REPARAR LA BASE DE DATOS ---
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate.format_sql: true
   # -----------------------------------------------------
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mariadb://localhost:3306/gymtrack?useLegacyDatetimeCode=false
+    url: jdbc:mariadb://localhost:3306/gymtrack?useLegacyDatetimeCode=false&connectTimeout=60000&socketTimeout=60000&useInformationSchema=false
     username: root
     password:
     hikari:
       poolName: Hikari
       auto-commit: false
+      connection-timeout: 60000
+      initialization-fail-timeout: 60000
       data-source-properties:
         cachePrepStmts: true
         prepStmtCacheSize: 250
@@ -47,7 +49,7 @@ spring:
         useServerPrepStmts: true
   liquibase:
     contexts: dev, faker
-    drop-first: true
+    drop-first: false
     parameters:
       datetimeType: datetime(6)
       blobType: LONGBLOB

@@ -104,14 +104,11 @@ export const Reservation = () => {
             <Translate contentKey="gymtrackApp.reservation.home.refreshListLabel">Refresh List</Translate>
           </Button>
 
-          {/* BOTÓN CREAR: Solo para ADMIN */}
-          {isAdmin && (
-            <Link to="/reservation/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
-              <FontAwesomeIcon icon="plus" />
-              &nbsp;
-              <Translate contentKey="gymtrackApp.reservation.home.createLabel">Create new Reservation</Translate>
-            </Link>
-          )}
+          <Link to="/reservation/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
+            <FontAwesomeIcon icon="plus" />
+            &nbsp;
+            <Translate contentKey="gymtrackApp.reservation.home.createLabel">Create new Reservation</Translate>
+          </Link>
         </div>
       </h2>
 

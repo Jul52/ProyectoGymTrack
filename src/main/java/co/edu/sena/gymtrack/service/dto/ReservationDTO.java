@@ -4,9 +4,6 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * A DTO for the {@link co.edu.sena.gymtrack.domain.Reservation} entity.
- */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class ReservationDTO implements Serializable {
 
@@ -18,13 +15,11 @@ public class ReservationDTO implements Serializable {
     @NotNull
     private ScheduleDTO schedule;
 
-    @NotNull
     private CourseDTO course;
 
     @NotNull
     private GymServiceDTO gymService;
 
-    @NotNull
     private UserDataDTO registeredBy;
 
     public Long getId() {
@@ -77,18 +72,11 @@ public class ReservationDTO implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ReservationDTO)) {
-            return false;
-        }
-
-        ReservationDTO reservationDTO = (ReservationDTO) o;
-        if (this.id == null) {
-            return false;
-        }
-        return Objects.equals(this.id, reservationDTO.id);
+        if (this == o) return true;
+        if (!(o instanceof ReservationDTO)) return false;
+        ReservationDTO that = (ReservationDTO) o;
+        if (this.id == null) return false;
+        return Objects.equals(this.id, that.id);
     }
 
     @Override
@@ -96,16 +84,24 @@ public class ReservationDTO implements Serializable {
         return Objects.hash(this.id);
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "ReservationDTO{" +
-            "id=" + getId() +
-            ", status='" + getStatus() + "'" +
-            ", schedule=" + getSchedule() +
-            ", course=" + getCourse() +
-            ", gymService=" + getGymService() +
-            ", registeredBy=" + getRegisteredBy() +
-            "}";
+        return (
+            "ReservationDTO{" +
+            "id=" +
+            getId() +
+            ", status='" +
+            getStatus() +
+            "'" +
+            ", schedule=" +
+            getSchedule() +
+            ", course=" +
+            getCourse() +
+            ", gymService=" +
+            getGymService() +
+            ", registeredBy=" +
+            getRegisteredBy() +
+            "}"
+        );
     }
 }

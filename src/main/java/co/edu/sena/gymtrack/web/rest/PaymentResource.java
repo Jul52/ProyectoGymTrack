@@ -1,16 +1,28 @@
 package co.edu.sena.gymtrack.web.rest;
 
+import co.edu.sena.gymtrack.domain.Invoice;
+import co.edu.sena.gymtrack.domain.Payment;
+import co.edu.sena.gymtrack.repository.GymServiceRepository;
+import co.edu.sena.gymtrack.repository.InvoiceRepository;
+import co.edu.sena.gymtrack.repository.PaymentMethodRepository;
 import co.edu.sena.gymtrack.repository.PaymentRepository;
+import co.edu.sena.gymtrack.repository.UserDataRepository;
+import co.edu.sena.gymtrack.security.SecurityUtils;
 import co.edu.sena.gymtrack.service.PaymentService;
 import co.edu.sena.gymtrack.service.dto.PaymentDTO;
+import co.edu.sena.gymtrack.service.mapper.PaymentMapper;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,36 +37,106 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
-/**
- * REST controller for managing {@link co.edu.sena.gymtrack.domain.Payment}.
- */
 @RestController
 @RequestMapping("/api/payments")
 public class PaymentResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(PaymentResource.class);
-
     private static final String ENTITY_NAME = "payment";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final PaymentService paymentService;
-
     private final PaymentRepository paymentRepository;
+    private final UserDataRepository userDataRepository;
+    private final GymServiceRepository gymServiceRepository;
+    private final PaymentMethodRepository paymentMethodRepository;
+    private final InvoiceRepository invoiceRepository;
+    private final PaymentMapper paymentMapper;
 
-    public PaymentResource(PaymentService paymentService, PaymentRepository paymentRepository) {
+    public PaymentResource(
+        PaymentService paymentService,
+        PaymentRepository paymentRepository,
+        UserDataRepository userDataRepository,
+        GymServiceRepository gymServiceRepository,
+        PaymentMethodRepository paymentMethodRepository,
+        InvoiceRepository invoiceRepository,
+        PaymentMapper paymentMapper
+    ) {
         this.paymentService = paymentService;
         this.paymentRepository = paymentRepository;
+        this.userDataRepository = userDataRepository;
+        this.gymServiceRepository = gymServiceRepository;
+        this.paymentMethodRepository = paymentMethodRepository;
+        this.invoiceRepository = invoiceRepository;
+        this.paymentMapper = paymentMapper;
     }
 
     /**
-     * {@code POST  /payments} : Create a new payment.
-     *
-     * @param paymentDTO the paymentDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new paymentDTO, or with status {@code 400 (Bad Request)} if the payment has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * POST /api/payments/checkout
+     * Crea un pago y genera la factura automáticamente para el usuario autenticado.
+     * Body: { "serviceId": 1, "paymentMethodId": 2 }
      */
+    @PostMapping("/checkout")
+    public ResponseEntity<Map<String, Object>> checkout(@RequestBody Map<String, Long> body) throws URISyntaxException {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow();
+
+        Long serviceId = body.get("serviceId");
+        Long paymentMethodId = body.get("paymentMethodId");
+
+        if (serviceId == null || paymentMethodId == null) {
+            throw new BadRequestAlertException("serviceId y paymentMethodId son requeridos", ENTITY_NAME, "missingfields");
+        }
+
+        var userData = userDataRepository
+            .findOneByUserLogin(login)
+            .orElseThrow(() -> new BadRequestAlertException("Usuario no encontrado", ENTITY_NAME, "usernotfound"));
+
+        var gymService = gymServiceRepository
+            .findById(serviceId)
+            .orElseThrow(() -> new BadRequestAlertException("Servicio no encontrado", ENTITY_NAME, "servicenotfound"));
+
+        var paymentMethod = paymentMethodRepository
+            .findById(paymentMethodId)
+            .orElseThrow(() -> new BadRequestAlertException("Método de pago no encontrado", ENTITY_NAME, "methodnotfound"));
+
+        // Crear el pago
+        Payment payment = new Payment();
+        payment.setAmountPaid(gymService.getPrice());
+        payment.setPaymentDate(Instant.now());
+        payment.setTransactionId(UUID.randomUUID().toString().substring(0, 20));
+        payment.setStatus("COMPLETED");
+        payment.setPaymentMethod(paymentMethod);
+        payment.setRegisteredBy(userData);
+        payment = paymentRepository.save(payment);
+
+        // Crear la factura vinculada al pago
+        Invoice invoice = new Invoice();
+        invoice.setTotal(gymService.getPrice());
+        invoice.setCreatedDate(Instant.now());
+        invoice.setPaymentMethod(paymentMethod);
+        invoice.setUserData(userData);
+        invoice.setService(gymService);
+        invoice.setPayment(payment);
+        invoiceRepository.save(invoice);
+
+        return ResponseEntity.created(new URI("/api/payments/" + payment.getId())).body(
+            Map.of("paymentId", payment.getId(), "status", "COMPLETED", "message", "Pago realizado exitosamente")
+        );
+    }
+
+    /**
+     * GET /api/payments/my — pagos del usuario autenticado
+     */
+    @GetMapping("/my")
+    public ResponseEntity<List<PaymentDTO>> getMyPayments(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow();
+        Page<PaymentDTO> page = paymentRepository.findAllByUserLogin(login, pageable).map(paymentMapper::toDto);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
     @PostMapping("")
     public ResponseEntity<PaymentDTO> createPayment(@Valid @RequestBody PaymentDTO paymentDTO) throws URISyntaxException {
         LOG.debug("REST request to save Payment : {}", paymentDTO);
@@ -67,83 +149,36 @@ public class PaymentResource {
             .body(paymentDTO);
     }
 
-    /**
-     * {@code PUT  /payments/:id} : Updates an existing payment.
-     *
-     * @param id the id of the paymentDTO to save.
-     * @param paymentDTO the paymentDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated paymentDTO,
-     * or with status {@code 400 (Bad Request)} if the paymentDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the paymentDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/{id}")
     public ResponseEntity<PaymentDTO> updatePayment(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody PaymentDTO paymentDTO
     ) throws URISyntaxException {
         LOG.debug("REST request to update Payment : {}, {}", id, paymentDTO);
-        if (paymentDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, paymentDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!paymentRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
+        if (paymentDTO.getId() == null) throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        if (!Objects.equals(id, paymentDTO.getId())) throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        if (!paymentRepository.existsById(id)) throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         paymentDTO = paymentService.update(paymentDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, paymentDTO.getId().toString()))
             .body(paymentDTO);
     }
 
-    /**
-     * {@code PATCH  /payments/:id} : Partial updates given fields of an existing payment, field will ignore if it is null
-     *
-     * @param id the id of the paymentDTO to save.
-     * @param paymentDTO the paymentDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated paymentDTO,
-     * or with status {@code 400 (Bad Request)} if the paymentDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the paymentDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the paymentDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<PaymentDTO> partialUpdatePayment(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody PaymentDTO paymentDTO
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update Payment partially : {}, {}", id, paymentDTO);
-        if (paymentDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, paymentDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!paymentRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
+        if (paymentDTO.getId() == null) throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        if (!Objects.equals(id, paymentDTO.getId())) throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        if (!paymentRepository.existsById(id)) throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         Optional<PaymentDTO> result = paymentService.partialUpdate(paymentDTO);
-
         return ResponseUtil.wrapOrNotFound(
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, paymentDTO.getId().toString())
         );
     }
 
-    /**
-     * {@code GET  /payments} : get all the payments.
-     *
-     * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @param filter the filter of the request.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of payments in body.
-     */
     @GetMapping("")
     public ResponseEntity<List<PaymentDTO>> getAllPayments(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
@@ -151,42 +186,21 @@ public class PaymentResource {
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
         if ("invoice-is-null".equals(filter)) {
-            LOG.debug("REST request to get all Payments where invoice is null");
             return new ResponseEntity<>(paymentService.findAllWhereInvoiceIsNull(), HttpStatus.OK);
         }
-        LOG.debug("REST request to get a page of Payments");
-        Page<PaymentDTO> page;
-        if (eagerload) {
-            page = paymentService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = paymentService.findAll(pageable);
-        }
+        Page<PaymentDTO> page = eagerload ? paymentService.findAllWithEagerRelationships(pageable) : paymentService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    /**
-     * {@code GET  /payments/:id} : get the "id" payment.
-     *
-     * @param id the id of the paymentDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the paymentDTO, or with status {@code 404 (Not Found)}.
-     */
     @GetMapping("/{id}")
     public ResponseEntity<PaymentDTO> getPayment(@PathVariable("id") Long id) {
-        LOG.debug("REST request to get Payment : {}", id);
         Optional<PaymentDTO> paymentDTO = paymentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(paymentDTO);
     }
 
-    /**
-     * {@code DELETE  /payments/:id} : delete the "id" payment.
-     *
-     * @param id the id of the paymentDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable("id") Long id) {
-        LOG.debug("REST request to delete Payment : {}", id);
         paymentService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

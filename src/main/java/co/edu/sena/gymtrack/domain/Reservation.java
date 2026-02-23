@@ -31,7 +31,6 @@ public class Reservation implements Serializable {
     private Schedule schedule;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties(value = { "schedules", "zones", "trainer", "reservations" }, allowSetters = true)
     private Course course;
 
@@ -41,7 +40,6 @@ public class Reservation implements Serializable {
     private GymService gymService;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties(value = { "user", "reservations", "machines", "invoices", "courses", "payments" }, allowSetters = true)
     @JoinColumn(name = "registered_by_id")
     private UserData registeredBy;

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button, Col, FormText, Row } from 'reactstrap';
 import { Translate, ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,11 +15,14 @@ import { createEntity, getEntity, reset, updateEntity } from './invoice.reducer'
 
 export const InvoiceUpdate = () => {
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
-
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
+  const [searchParams] = useSearchParams();
+
+  // Leemos serviceId y price de la URL si vienen desde gym-service
+  const preselectedServiceId = searchParams.get('serviceId');
+  const preselectedPrice = searchParams.get('price');
 
   const payments = useAppSelector(state => state.payment.entities);
   const paymentMethods = useAppSelector(state => state.paymentMethod.entities);
@@ -40,7 +43,6 @@ export const InvoiceUpdate = () => {
     } else {
       dispatch(getEntity(id));
     }
-
     dispatch(getPayments({}));
     dispatch(getPaymentMethods({}));
     dispatch(getUserData({}));
@@ -78,19 +80,24 @@ export const InvoiceUpdate = () => {
     }
   };
 
-  const defaultValues = () =>
-    isNew
-      ? {
-          createdDate: displayDefaultDateTime(),
-        }
-      : {
-          ...invoiceEntity,
-          createdDate: convertDateTimeFromServer(invoiceEntity.createdDate),
-          payment: invoiceEntity?.payment?.id,
-          paymentMethod: invoiceEntity?.paymentMethod?.id,
-          userData: invoiceEntity?.userData?.id,
-          service: invoiceEntity?.service?.id,
-        };
+  const defaultValues = () => {
+    if (isNew) {
+      return {
+        createdDate: displayDefaultDateTime(),
+        // Prellenamos con los query params si vienen de gym-service
+        total: preselectedPrice ?? '',
+        service: preselectedServiceId ?? '',
+      };
+    }
+    return {
+      ...invoiceEntity,
+      createdDate: convertDateTimeFromServer(invoiceEntity.createdDate),
+      payment: invoiceEntity?.payment?.id,
+      paymentMethod: invoiceEntity?.paymentMethod?.id,
+      userData: invoiceEntity?.userData?.id,
+      service: invoiceEntity?.service?.id,
+    };
+  };
 
   return (
     <div>

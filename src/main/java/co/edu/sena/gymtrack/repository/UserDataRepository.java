@@ -9,11 +9,10 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data JPA repository for the UserData entity.
- */
 @Repository
 public interface UserDataRepository extends JpaRepository<UserData, Long> {
+    Optional<UserData> findOneByUserLogin(String login);
+
     default Optional<UserData> findOneWithEagerRelationships(Long id) {
         return this.findOneWithToOneRelationships(id);
     }
