@@ -5,3 +5,5 @@ id;service_name;service_description;price;status;course_access_type;max_reservat
 4;Plan Boxeo 8 Clases;Acceso a 8 reservas de Boxeo por mes;110000;true;LIMITED;8;3
 5;Plan Combo 6 Clases;2 Yoga, 2 Spinning y 2 Boxeo por mes;190000;true;LIMITED;2;3
 6;Plan Total Ilimitado;Acceso ilimitado a todas las clases;260000;true;UNLIMITED;;3
+7;Plan Pilates 8 Clases;Acceso a 8 reservas de Pilates por mes;95000;true;LIMITED;8;3
+8;Plan Zumba 8 Clases;Acceso a 8 reservas de Zumba por mes;85000;true;LIMITED;8;3

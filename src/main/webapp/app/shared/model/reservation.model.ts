@@ -6,10 +6,9 @@ import { ISchedule } from 'app/shared/model/schedule.model';
 export interface IReservation {
   id?: number;
   status?: boolean;
-  description?: string;
   course?: ICourse;
   gymService?: IGymService;
-  registeredBy?: IUserData; // si no está, agregar
+  registeredBy?: IUserData;
   schedule?: ISchedule;
 }
 

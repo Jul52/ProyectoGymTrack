@@ -9,7 +9,15 @@
     <loadData
       file="config/liquibase/fake-data/reservation.csv"
       separator=";"
-      tableName="reservation"/>
+      tableName="reservation"
+      usePreparedStatements="true">
+      <column name="id" type="numeric"/>
+      <column name="status" type="boolean"/>
+      <column name="schedule_id" type="numeric"/>
+      <column name="course_id" type="numeric"/>
+      <column name="gym_service_id" type="numeric"/>
+      <column name="registered_by_id" type="numeric"/>
+    </loadData>
   </changeSet>
 
 </databaseChangeLog>
