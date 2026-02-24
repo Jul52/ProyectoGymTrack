@@ -7,11 +7,13 @@ import Payment from './payment';
 import PaymentDetail from './payment-detail';
 import PaymentUpdate from './payment-update';
 import PaymentDeleteDialog from './payment-delete-dialog';
+import PaymentSuccess from './payment-success';
 
 const PaymentRoutes = () => (
   <ErrorBoundaryRoutes>
     <Route index element={<Payment />} />
     <Route path="new" element={<PaymentUpdate />} />
+    <Route path="success" element={<PaymentSuccess />} />
     <Route path=":id">
       <Route index element={<PaymentDetail />} />
       <Route path="edit" element={<PaymentUpdate />} />

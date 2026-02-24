@@ -18,7 +18,7 @@ import InvoiceService from './invoice-service';
 import Course from './course';
 import Schedule from './schedule';
 import Zone from './zone';
-import PaymentRoutes from './payment';
+import PaymentSuccess from './payment/payment-success';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -26,9 +26,9 @@ export default () => {
     <div>
       <ErrorBoundaryRoutes>
         {/* prettier-ignore */}
+        {/* Ruta de éxito PRIMERO para que no sea interceptada como ID */}
+        <Route path="payment/success" element={<PaymentSuccess />} />
         <Route path="payment/*" element={<Payment />} />
-        {/* jhipster-needle-add-route-path - JHipster will add routes here */}
-        <Route path="payment/*" element={<PaymentRoutes />} />
         <Route path="user-data/*" element={<UserData />} />
         <Route path="document-type/*" element={<DocumentType />} />
         <Route path="reservation/*" element={<Reservation />} />
@@ -43,6 +43,7 @@ export default () => {
         <Route path="course/*" element={<Course />} />
         <Route path="schedule/*" element={<Schedule />} />
         <Route path="zone/*" element={<Zone />} />
+        {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>
   );
