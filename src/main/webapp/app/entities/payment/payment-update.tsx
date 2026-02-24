@@ -15,15 +15,18 @@ import { createEntity, getEntity, reset, updateEntity } from './payment.reducer'
 const METHOD_ICONS: Record<string, string> = {
   nequi: '📱',
   daviplata: '💜',
-  efectivo: '💵',
   'tarjeta de crédito': '💳',
   'tarjeta de debito': '💳',
   'tarjeta de débito': '💳',
   pse: '🏦',
   transferencia: '🔄',
+  'transferencia bancaria': '🔄',
 };
 
 const getMethodIcon = (name: string) => METHOD_ICONS[name?.toLowerCase()] ?? '💳';
+
+const isCardMethod = (name: string) => ['tarjeta de crédito', 'tarjeta de débito', 'tarjeta de debito'].includes(name?.toLowerCase());
+const isPhoneMethod = (name: string) => ['nequi', 'daviplata'].includes(name?.toLowerCase());
 
 const styles = {
   overlay: {
@@ -32,10 +35,12 @@ const styles = {
     background: 'rgba(0,0,0,0.6)',
     backdropFilter: 'blur(4px)',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
     zIndex: 1000,
-    animation: 'fadeIn 0.3s ease',
+    overflowY: 'auto' as const,
+    paddingTop: '40px',
+    paddingBottom: '40px',
   },
   modal: {
     background: '#fff',
@@ -95,6 +100,19 @@ const styles = {
   }),
   methodIcon: { fontSize: '22px', lineHeight: 1 },
   methodName: (selected: boolean) => ({ fontSize: '13px', fontWeight: selected ? 700 : 500, color: selected ? '#1a73e8' : '#374151' }),
+  input: {
+    width: '100%',
+    padding: '12px 14px',
+    border: '2px solid #e5e7eb',
+    borderRadius: '10px',
+    fontSize: '14px',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+    marginBottom: '14px',
+    fontFamily: 'inherit',
+  },
+  inputLabel: { fontSize: '13px', fontWeight: 600, color: '#374151', marginBottom: '6px', display: 'block' },
+  inputRow: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' },
   errorBox: {
     background: '#fef2f2',
     border: '1px solid #fecaca',
@@ -116,7 +134,6 @@ const styles = {
     fontWeight: 600,
     cursor: 'pointer',
     fontSize: '14px',
-    transition: 'all 0.2s',
   },
   btnPay: (disabled: boolean) => ({
     flex: 1,
@@ -128,12 +145,21 @@ const styles = {
     fontWeight: 700,
     cursor: disabled ? 'not-allowed' : 'pointer',
     fontSize: '15px',
-    transition: 'all 0.2s',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
   }),
+  btnBack: {
+    border: '2px solid #e5e7eb',
+    borderRadius: '12px',
+    padding: '12px 20px',
+    background: '#fff',
+    color: '#6b7280',
+    fontWeight: 600,
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
   security: {
     display: 'flex',
     alignItems: 'center',
@@ -167,22 +193,58 @@ const UserCheckoutForm = () => {
   const price = searchParams.get('price');
   const serviceName = searchParams.get('serviceName') ?? 'Servicio';
 
+  const [step, setStep] = useState<1 | 2>(1);
   const [selectedMethod, setSelectedMethod] = useState<string>('');
   const [submitting, setSubmitting] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
 
+  // Campos de tarjeta
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardName, setCardName] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCvv, setCardCvv] = useState('');
+
+  // Campos de billetera
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  // Transferencia
+  const [bankRef, setBankRef] = useState('');
+
   const paymentMethods = useAppSelector(state => state.paymentMethod.entities);
+  const activePaymentMethods = paymentMethods.filter((m: any) => m.active !== false && m.methodCode !== 'CASH');
 
   useEffect(() => {
     dispatch(getPaymentMethods({}));
   }, []);
 
-  const handleCheckout = async () => {
+  const selectedMethodObj = paymentMethods.find(m => m.id?.toString() === selectedMethod);
+  const methodName = selectedMethodObj?.methodName ?? '';
+
+  const formatCardNumber = (val: string) => {
+    return val
+      .replace(/\D/g, '')
+      .substring(0, 16)
+      .replace(/(.{4})/g, '$1 ')
+      .trim();
+  };
+
+  const formatExpiry = (val: string) => {
+    const clean = val.replace(/\D/g, '').substring(0, 4);
+    if (clean.length >= 3) return clean.substring(0, 2) + '/' + clean.substring(2);
+    return clean;
+  };
+
+  const goToStep2 = () => {
     if (!selectedMethod) {
       setError('Por favor selecciona un método de pago para continuar.');
       return;
     }
+    setError('');
+    setStep(2);
+  };
+
+  const handleCheckout = async () => {
     setSubmitting(true);
     setError('');
     setProcessing(true);
@@ -200,12 +262,10 @@ const UserCheckoutForm = () => {
         `/payment/success?serviceName=${encodeURIComponent(data.serviceName)}&hasCourses=${data.hasCourses}&transactionId=${data.transactionId}&amount=${data.amount}&serviceId=${data.serviceId}`,
       );
     } catch {
-      setError('Error al procesar el pago. Verifica tu método de pago e intenta de nuevo.');
+      setError('Error al procesar el pago. Verifica tus datos e intenta de nuevo.');
       setSubmitting(false);
     }
   };
-
-  const selectedMethodObj = paymentMethods.find(m => m.id?.toString() === selectedMethod);
 
   return (
     <>
@@ -236,29 +296,34 @@ const UserCheckoutForm = () => {
         @keyframes slideUp { from { opacity:0; transform:translateY(40px) scale(0.95) } to { opacity:1; transform:translateY(0) scale(1) } }
         @keyframes spin { to { transform: rotate(360deg) } }
         @keyframes bounce { 0%,80%,100% { transform:scale(0) } 40% { transform:scale(1) } }
+        .pay-input:focus { border-color: #1a73e8 !important; box-shadow: 0 0 0 3px rgba(26,115,232,0.15); }
       `}</style>
 
       <div style={styles.overlay}>
         <div style={styles.modal}>
+          {/* Header */}
           <div style={styles.header}>
             <div style={styles.logo}>🏋️</div>
             <div>
               <div style={styles.title}>GymTrack Pay</div>
-              <div style={styles.subtitle}>Pago seguro y encriptado</div>
+              <div style={styles.subtitle}>{step === 1 ? 'Pago seguro y encriptado' : `Paso 2 de 2 — ${methodName}`}</div>
             </div>
           </div>
 
+          {/* Resumen */}
           <div style={styles.summaryBox}>
             <div style={styles.summaryRow}>
               <span style={styles.summaryLabel}>Servicio</span>
               <span style={styles.summaryValue}>{serviceName}</span>
             </div>
-            <div style={styles.summaryRow}>
-              <span style={styles.summaryLabel}>Método seleccionado</span>
-              <span style={styles.summaryValue}>
-                {selectedMethodObj ? `${getMethodIcon(selectedMethodObj.methodName)} ${selectedMethodObj.methodName}` : '—'}
-              </span>
-            </div>
+            {step === 2 && (
+              <div style={styles.summaryRow}>
+                <span style={styles.summaryLabel}>Método</span>
+                <span style={styles.summaryValue}>
+                  {getMethodIcon(methodName)} {methodName}
+                </span>
+              </div>
+            )}
             <hr style={styles.divider} />
             <div style={styles.summaryRow}>
               <span style={styles.totalLabel}>Total a pagar</span>
@@ -266,45 +331,160 @@ const UserCheckoutForm = () => {
             </div>
           </div>
 
-          <div style={styles.sectionTitle}>Selecciona método de pago</div>
-          <div style={styles.methodGrid}>
-            {paymentMethods.map(m => (
-              <div
-                key={m.id}
-                style={styles.methodCard(selectedMethod === m.id?.toString())}
-                onClick={() => {
-                  setSelectedMethod(m.id?.toString());
-                  setError('');
-                }}
-              >
-                <span style={styles.methodIcon}>{getMethodIcon(m.methodName)}</span>
-                <span style={styles.methodName(selectedMethod === m.id?.toString())}>{m.methodName}</span>
+          {/* PASO 1 — Selección de método */}
+          {step === 1 && (
+            <>
+              <div style={styles.sectionTitle}>Selecciona método de pago</div>
+              <div style={styles.methodGrid}>
+                {activePaymentMethods.map((m: any) => (
+                  <div
+                    key={m.id}
+                    style={styles.methodCard(selectedMethod === m.id?.toString())}
+                    onClick={() => {
+                      setSelectedMethod(m.id?.toString());
+                      setError('');
+                    }}
+                  >
+                    <span style={styles.methodIcon}>{getMethodIcon(m.methodName)}</span>
+                    <span style={styles.methodName(selectedMethod === m.id?.toString())}>{m.methodName}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {error && (
-            <div style={styles.errorBox}>
-              <span>⚠️</span> {error}
-            </div>
+              {error && (
+                <div style={styles.errorBox}>
+                  <span>⚠️</span> {error}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button style={styles.btnCancel} onClick={() => navigate('/gym-service')}>
+                  ← Cancelar
+                </button>
+                <button style={styles.btnPay(!selectedMethod)} onClick={goToStep2} disabled={!selectedMethod}>
+                  Continuar →
+                </button>
+              </div>
+            </>
           )}
 
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button style={styles.btnCancel} onClick={() => navigate('/gym-service')} disabled={submitting}>
-              ← Cancelar
-            </button>
-            <button style={styles.btnPay(submitting)} onClick={handleCheckout} disabled={submitting}>
-              {submitting ? (
-                <>
-                  <span>⏳</span> Procesando…
-                </>
-              ) : (
-                <>
-                  <span>🔒</span> Pagar ${Number(price).toLocaleString('es-CO')}
-                </>
+          {/* PASO 2 — Datos del método seleccionado */}
+          {step === 2 && (
+            <>
+              {isCardMethod(methodName) && (
+                <div>
+                  <div style={styles.sectionTitle}>Datos de la tarjeta</div>
+                  <label style={styles.inputLabel}>Número de tarjeta</label>
+                  <input
+                    className="pay-input"
+                    style={styles.input}
+                    placeholder="1234 5678 9012 3456"
+                    value={cardNumber}
+                    onChange={e => setCardNumber(formatCardNumber(e.target.value))}
+                    maxLength={19}
+                  />
+                  <label style={styles.inputLabel}>Nombre en la tarjeta</label>
+                  <input
+                    className="pay-input"
+                    style={styles.input}
+                    placeholder="JUAN PEREZ"
+                    value={cardName}
+                    onChange={e => setCardName(e.target.value.toUpperCase())}
+                  />
+                  <div style={styles.inputRow}>
+                    <div>
+                      <label style={styles.inputLabel}>Fecha de vencimiento</label>
+                      <input
+                        className="pay-input"
+                        style={styles.input}
+                        placeholder="MM/AA"
+                        value={cardExpiry}
+                        onChange={e => setCardExpiry(formatExpiry(e.target.value))}
+                        maxLength={5}
+                      />
+                    </div>
+                    <div>
+                      <label style={styles.inputLabel}>CVV</label>
+                      <input
+                        className="pay-input"
+                        style={{ ...styles.input, letterSpacing: '4px' }}
+                        placeholder="•••"
+                        type="password"
+                        value={cardCvv}
+                        onChange={e => setCardCvv(e.target.value.replace(/\D/g, '').substring(0, 4))}
+                        maxLength={4}
+                      />
+                    </div>
+                  </div>
+                </div>
               )}
-            </button>
-          </div>
+
+              {isPhoneMethod(methodName) && (
+                <div>
+                  <div style={styles.sectionTitle}>Datos de {methodName}</div>
+                  <label style={styles.inputLabel}>Número de celular registrado</label>
+                  <input
+                    className="pay-input"
+                    style={styles.input}
+                    placeholder="300 000 0000"
+                    value={phoneNumber}
+                    onChange={e => setPhoneNumber(e.target.value.replace(/\D/g, '').substring(0, 10))}
+                    maxLength={10}
+                  />
+                  <p style={{ fontSize: '13px', color: '#6b7280', marginTop: '-8px' }}>
+                    Se enviará una notificación push a tu app de {methodName} para confirmar el pago.
+                  </p>
+                </div>
+              )}
+
+              {!isCardMethod(methodName) && !isPhoneMethod(methodName) && (
+                <div>
+                  <div style={styles.sectionTitle}>Datos de transferencia</div>
+                  <label style={styles.inputLabel}>Número de referencia o comprobante</label>
+                  <input
+                    className="pay-input"
+                    style={styles.input}
+                    placeholder="Ej: 202502230001"
+                    value={bankRef}
+                    onChange={e => setBankRef(e.target.value)}
+                  />
+                  <p style={{ fontSize: '13px', color: '#6b7280', marginTop: '-8px' }}>
+                    Ingresa el número de referencia de tu transferencia para validar el pago.
+                  </p>
+                </div>
+              )}
+
+              {error && (
+                <div style={styles.errorBox}>
+                  <span>⚠️</span> {error}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button
+                  style={styles.btnBack}
+                  onClick={() => {
+                    setStep(1);
+                    setError('');
+                  }}
+                  disabled={submitting}
+                >
+                  ← Volver
+                </button>
+                <button style={styles.btnPay(submitting)} onClick={handleCheckout} disabled={submitting}>
+                  {submitting ? (
+                    <>
+                      <span>⏳</span> Procesando…
+                    </>
+                  ) : (
+                    <>
+                      <span>🔒</span> Pagar ${Number(price).toLocaleString('es-CO')}
+                    </>
+                  )}
+                </button>
+              </div>
+            </>
+          )}
 
           <div style={styles.security}>
             <span>🔒</span>

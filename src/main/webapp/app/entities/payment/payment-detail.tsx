@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntity } from './payment.reducer';
+import { AUTHORITIES } from 'app/config/constants';
 
 // ─── Utilidades ───────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: string }> = {
@@ -51,6 +52,7 @@ export const PaymentDetail = () => {
   const p = useAppSelector(state => state.payment.entity);
   const status = STATUS_CONFIG[p.status ?? ''] ?? { label: p.status, color: '#6b7280', bg: '#f3f4f6', icon: '💳' };
   const methodName = p.paymentMethod?.methodName ?? '';
+  const isAdmin = useAppSelector(state => state.authentication.account.authorities?.includes(AUTHORITIES.ADMIN));
 
   return (
     <>
@@ -307,20 +309,22 @@ export const PaymentDetail = () => {
               >
                 🖨️
               </Button>
-              <Button
-                tag={Link}
-                to={`/payment/${p.id}/edit`}
-                color="primary"
-                style={{
-                  flex: 1,
-                  borderRadius: '12px',
-                  fontWeight: 600,
-                  background: 'linear-gradient(135deg, #1a73e8, #0d47a1)',
-                  border: 'none',
-                }}
-              >
-                <FontAwesomeIcon icon="pencil-alt" /> Editar
-              </Button>
+              {isAdmin && (
+                <Button
+                  tag={Link}
+                  to={`/payment/${p.id}/edit`}
+                  color="primary"
+                  style={{
+                    flex: 1,
+                    borderRadius: '12px',
+                    fontWeight: 600,
+                    background: 'linear-gradient(135deg, #1a73e8, #0d47a1)',
+                    border: 'none',
+                  }}
+                >
+                  <FontAwesomeIcon icon="pencil-alt" /> Editar
+                </Button>
+              )}
             </div>
           </div>
         </Col>

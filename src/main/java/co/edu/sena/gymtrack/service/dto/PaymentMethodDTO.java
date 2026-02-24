@@ -4,9 +4,6 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * A DTO for the {@link co.edu.sena.gymtrack.domain.PaymentMethod} entity.
- */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class PaymentMethodDTO implements Serializable {
 
@@ -15,6 +12,12 @@ public class PaymentMethodDTO implements Serializable {
     @NotNull
     @Size(max = 50)
     private String methodName;
+
+    @NotNull
+    @Size(max = 30)
+    private String methodCode;
+
+    private Boolean active;
 
     public Long getId() {
         return id;
@@ -32,20 +35,29 @@ public class PaymentMethodDTO implements Serializable {
         this.methodName = methodName;
     }
 
+    public String getMethodCode() {
+        return methodCode;
+    }
+
+    public void setMethodCode(String methodCode) {
+        this.methodCode = methodCode;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof PaymentMethodDTO)) {
-            return false;
-        }
-
-        PaymentMethodDTO paymentMethodDTO = (PaymentMethodDTO) o;
-        if (this.id == null) {
-            return false;
-        }
-        return Objects.equals(this.id, paymentMethodDTO.id);
+        if (this == o) return true;
+        if (!(o instanceof PaymentMethodDTO)) return false;
+        PaymentMethodDTO that = (PaymentMethodDTO) o;
+        if (this.id == null) return false;
+        return Objects.equals(this.id, that.id);
     }
 
     @Override
@@ -53,12 +65,21 @@ public class PaymentMethodDTO implements Serializable {
         return Objects.hash(this.id);
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "PaymentMethodDTO{" +
-            "id=" + getId() +
-            ", methodName='" + getMethodName() + "'" +
-            "}";
+        return (
+            "PaymentMethodDTO{" +
+            "id=" +
+            getId() +
+            ", methodName='" +
+            getMethodName() +
+            "'" +
+            ", methodCode='" +
+            getMethodCode() +
+            "'" +
+            ", active=" +
+            getActive() +
+            "}"
+        );
     }
 }
