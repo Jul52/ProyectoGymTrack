@@ -144,7 +144,20 @@ export const Reservation = () => {
                       {reservation.id}
                     </Button>
                   </td>
-                  <td>{reservation.status ? 'true' : 'false'}</td>
+                  <td>
+                    <span
+                      style={{
+                        background: reservation.status ? '#dcfce7' : '#fee2e2',
+                        color: reservation.status ? '#15803d' : '#dc2626',
+                        padding: '3px 10px',
+                        borderRadius: '999px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {reservation.status ? '✅ Activa' : '❌ Cancelada'}
+                    </span>
+                  </td>
                   <td>{reservation.course ? <Link to={`/course/${reservation.course.id}`}>{reservation.course.courseName}</Link> : ''}</td>
                   <td>
                     {reservation.gymService ? (

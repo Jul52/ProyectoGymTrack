@@ -38,6 +38,9 @@ public interface ReservationMapper extends EntityMapper<ReservationDTO, Reservat
     @Named("scheduleId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "dayOfWeek", source = "dayOfWeek") // FIX: campo faltante
+    @Mapping(target = "startTime", source = "startTime") // FIX: campo faltante
+    @Mapping(target = "endTime", source = "endTime") // FIX: campo faltante
     ScheduleDTO toDtoScheduleId(Schedule schedule);
 
     @Named("userDataDocument")

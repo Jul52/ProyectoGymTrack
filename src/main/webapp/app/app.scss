@@ -339,6 +339,16 @@ a.anchor-btn:hover {
   text-decoration: none;
 }
 
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-fluid.view-container {
+  flex: 1;
+}
+
 /* ==========================================================================
 Metrics and Health styles
 ========================================================================== */

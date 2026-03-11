@@ -121,6 +121,7 @@ export const ZoneUpdate = () => {
                 type="select"
                 multiple
                 name="courses"
+                style={{ height: '120px', borderRadius: '8px' }}
               >
                 <option value="" key="0" />
                 {courses
@@ -131,19 +132,20 @@ export const ZoneUpdate = () => {
                     ))
                   : null}
               </ValidatedField>
-              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/zone" replace color="info">
-                <FontAwesomeIcon icon="arrow-left" />
-                &nbsp;
-                <span className="d-none d-md-inline">
-                  <Translate contentKey="entity.action.back">Back</Translate>
-                </span>
-              </Button>
-              &nbsp;
-              <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
-                <FontAwesomeIcon icon="save" />
-                &nbsp;
-                <Translate contentKey="entity.action.save">Save</Translate>
-              </Button>
+              <div style={{ marginTop: '24px', display: 'flex', gap: '8px' }}>
+                <Button tag={Link} id="cancel-save" to="/zone" replace color="info">
+                  <FontAwesomeIcon icon="arrow-left" />
+                  &nbsp;
+                  <span className="d-none d-md-inline">
+                    <Translate contentKey="entity.action.back" />
+                  </span>
+                </Button>
+                <Button color="primary" id="save-entity" type="submit" disabled={updating}>
+                  <FontAwesomeIcon icon="save" />
+                  &nbsp;
+                  <Translate contentKey="entity.action.save" />
+                </Button>
+              </div>
             </ValidatedForm>
           )}
         </Col>

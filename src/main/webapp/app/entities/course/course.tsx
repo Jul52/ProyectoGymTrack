@@ -4,16 +4,14 @@ import { Button, Table } from 'reactstrap';
 import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
-import { APP_LOCAL_DATE_FORMAT, AUTHORITIES } from 'app/config/constants'; // Añadido AUTHORITIES
+import { APP_LOCAL_DATE_FORMAT, AUTHORITIES } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-
 import { getEntities } from './course.reducer';
 
 export const Course = () => {
   const dispatch = useAppDispatch();
-
   const pageLocation = useLocation();
   const navigate = useNavigate();
 
@@ -24,8 +22,6 @@ export const Course = () => {
   const courseList = useAppSelector(state => state.course.entities);
   const loading = useAppSelector(state => state.course.loading);
   const totalItems = useAppSelector(state => state.course.totalItems);
-
-  // Verificamos si el usuario es Administrador
   const isAdmin = useAppSelector(
     state => state.authentication.account.authorities && state.authentication.account.authorities.includes(AUTHORITIES.ADMIN),
   );
@@ -75,22 +71,14 @@ export const Course = () => {
     });
   };
 
-  const handlePagination = currentPage =>
-    setPaginationState({
-      ...paginationState,
-      activePage: currentPage,
-    });
+  const handlePagination = currentPage => setPaginationState({ ...paginationState, activePage: currentPage });
 
-  const handleSyncList = () => {
-    sortEntities();
-  };
+  const handleSyncList = () => sortEntities();
 
   const getSortIconByFieldName = (fieldName: string) => {
     const sortFieldName = paginationState.sort;
     const order = paginationState.order;
-    if (sortFieldName !== fieldName) {
-      return faSort;
-    }
+    if (sortFieldName !== fieldName) return faSort;
     return order === ASC ? faSortUp : faSortDown;
   };
 
@@ -103,8 +91,6 @@ export const Course = () => {
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="gymtrackApp.course.home.refreshListLabel">Refresh List</Translate>
           </Button>
-
-          {/* BOTÓN CREAR: Solo visible para ADMIN */}
           {isAdmin && (
             <Link to="/course/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
               <FontAwesomeIcon icon="plus" />
@@ -157,7 +143,22 @@ export const Course = () => {
                     </Button>
                   </td>
                   <td>{course.courseName}</td>
-                  <td>{course.status ? 'true' : 'false'}</td>
+                  {/* FIX: mostrar Activo/Inactivo en lugar de true/false */}
+                  <td>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        padding: '2px 10px',
+                        borderRadius: '999px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        background: course.status ? '#dcfce7' : '#fee2e2',
+                        color: course.status ? '#15803d' : '#dc2626',
+                      }}
+                    >
+                      {course.status ? '✅ Activo' : '❌ Inactivo'}
+                    </span>
+                  </td>
                   <td>{course.startDate ? <TextFormat type="date" value={course.startDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
                   <td>{course.endDate ? <TextFormat type="date" value={course.endDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
                   <td>{course.capacity}</td>
@@ -170,8 +171,6 @@ export const Course = () => {
                           <Translate contentKey="entity.action.view">View</Translate>
                         </span>
                       </Button>
-
-                      {/* BOTONES EDITAR Y ELIMINAR: Solo para ADMIN */}
                       {isAdmin && (
                         <>
                           <Button
@@ -215,7 +214,6 @@ export const Course = () => {
           )
         )}
       </div>
-      {/* ... (Paginación) */}
     </div>
   );
 };
