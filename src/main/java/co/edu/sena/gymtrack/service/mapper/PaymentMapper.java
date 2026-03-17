@@ -14,7 +14,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
     @Mapping(target = "paymentMethod", source = "paymentMethod", qualifiedByName = "paymentMethodMethodName")
-    @Mapping(target = "registeredBy", source = "registeredBy", qualifiedByName = "userDataDocument")
+    @Mapping(target = "registeredBy", source = "registeredBy", qualifiedByName = "userDataDocumentType")
     PaymentDTO toDto(Payment s);
 
     @Named("paymentMethodMethodName")
@@ -23,9 +23,10 @@ public interface PaymentMapper extends EntityMapper<PaymentDTO, Payment> {
     @Mapping(target = "methodName", source = "methodName")
     PaymentMethodDTO toDtoPaymentMethodMethodName(PaymentMethod paymentMethod);
 
-    @Named("userDataDocument")
+    @Named("userDataDocumentType")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "document", source = "document")
-    UserDataDTO toDtoUserDataDocument(UserData userData);
+    @Mapping(target = "documentType", source = "documentType") // ✅ OK si UserDataDTO tiene este campo
+    @Mapping(target = "documentNumber", source = "documentNumber") // ✅ Agrega este si también lo necesitas en Payment
+    UserDataDTO toDtoUserDataDocumentType(UserData userData);
 }

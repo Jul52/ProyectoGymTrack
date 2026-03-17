@@ -26,33 +26,32 @@ public class UserData implements Serializable {
 
     @NotNull
     @Size(max = 100)
-    @Column(name = "first_name", length = 100, nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Size(max = 100)
-    @Column(name = "second_name", length = 100)
+    @Column(name = "second_name")
     private String secondName;
 
     @NotNull
     @Size(max = 100)
-    @Column(name = "first_last_name", length = 100, nullable = false)
+    @Column(name = "first_lastname", nullable = false)
     private String firstLastName;
 
-    @Size(max = 100)
-    @Column(name = "second_last_name", length = 100)
+    @Column(name = "second_lastname")
     private String secondLastName;
 
     @NotNull
     @Size(max = 20)
-    @Column(name = "document", length = 20, nullable = false)
-    private String document;
+    @Column(name = "document_number", nullable = false, unique = true)
+    private String documentNumber;
 
     @NotNull
     @Size(max = 20)
-    @Column(name = "phone_number", length = 20, nullable = false)
-    private String phoneNumber;
+    @Column(name = "phone", nullable = false)
+    private String phone;
 
-    @Column(name = "birth_date")
+    @NotNull
+    @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
@@ -80,12 +79,11 @@ public class UserData implements Serializable {
     @JsonIgnoreProperties(value = { "paymentMethod", "invoice", "registeredBy" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
+    @ManyToOne
+    @JoinColumn(name = "document_type_id", nullable = false)
     private DocumentType documentType;
 
-    // --- MÉTODOS FLUIDOS (Agregados para solucionar errores de Test) ---
+    // -------- METODOS FLUIDOS SIMPLES --------
 
     public UserData id(Long id) {
         this.setId(id);
@@ -112,13 +110,13 @@ public class UserData implements Serializable {
         return this;
     }
 
-    public UserData document(String document) {
-        this.setDocument(document);
+    public UserData documentNumber(String documentNumber) {
+        this.setDocumentNumber(documentNumber);
         return this;
     }
 
-    public UserData phoneNumber(String phoneNumber) {
-        this.setPhoneNumber(phoneNumber);
+    public UserData phone(String phone) {
+        this.setPhone(phone);
         return this;
     }
 
@@ -137,7 +135,7 @@ public class UserData implements Serializable {
         return this;
     }
 
-    // --- GETTERS Y SETTERS TRADICIONALES ---
+    // -------- GETTERS Y SETTERS --------
 
     public Long getId() {
         return this.id;
@@ -179,20 +177,20 @@ public class UserData implements Serializable {
         this.secondLastName = secondLastName;
     }
 
-    public String getDocument() {
-        return this.document;
+    public String getDocumentNumber() {
+        return this.documentNumber;
     }
 
-    public void setDocument(String document) {
-        this.document = document;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
-    public String getPhoneNumber() {
-        return this.phoneNumber;
+    public String getPhone() {
+        return this.phone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public LocalDate getBirthDate() {
@@ -211,7 +209,15 @@ public class UserData implements Serializable {
         this.user = user;
     }
 
-    // --- GESTIÓN DE RELACIONES ---
+    public DocumentType getDocumentType() {
+        return this.documentType;
+    }
+
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
+    }
+
+    // -------- RELACIONES: GETTERS, SETTERS, FLUENTES, ADD, REMOVE --------
 
     public Set<Reservation> getReservations() {
         return this.reservations;
@@ -227,17 +233,20 @@ public class UserData implements Serializable {
         this.reservations = reservations;
     }
 
+    // ✅ NUEVO - fluente de colección
     public UserData reservations(Set<Reservation> reservations) {
         this.setReservations(reservations);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData addReservation(Reservation reservation) {
         this.reservations.add(reservation);
         reservation.setRegisteredBy(this);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData removeReservation(Reservation reservation) {
         this.reservations.remove(reservation);
         reservation.setRegisteredBy(null);
@@ -258,17 +267,20 @@ public class UserData implements Serializable {
         this.machines = machines;
     }
 
+    // ✅ NUEVO
     public UserData machines(Set<Machine> machines) {
         this.setMachines(machines);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData addMachine(Machine machine) {
         this.machines.add(machine);
         machine.setAdmin(this);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData removeMachine(Machine machine) {
         this.machines.remove(machine);
         machine.setAdmin(null);
@@ -289,17 +301,20 @@ public class UserData implements Serializable {
         this.invoices = invoices;
     }
 
+    // ✅ NUEVO
     public UserData invoices(Set<Invoice> invoices) {
         this.setInvoices(invoices);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData addInvoice(Invoice invoice) {
         this.invoices.add(invoice);
         invoice.setUserData(this);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData removeInvoice(Invoice invoice) {
         this.invoices.remove(invoice);
         invoice.setUserData(null);
@@ -320,17 +335,20 @@ public class UserData implements Serializable {
         this.courses = courses;
     }
 
+    // ✅ NUEVO
     public UserData courses(Set<Course> courses) {
         this.setCourses(courses);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData addCourse(Course course) {
         this.courses.add(course);
         course.setTrainer(this);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData removeCourse(Course course) {
         this.courses.remove(course);
         course.setTrainer(null);
@@ -351,30 +369,27 @@ public class UserData implements Serializable {
         this.payments = payments;
     }
 
+    // ✅ NUEVO
     public UserData payments(Set<Payment> payments) {
         this.setPayments(payments);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData addPayment(Payment payment) {
         this.payments.add(payment);
         payment.setRegisteredBy(this);
         return this;
     }
 
+    // ✅ NUEVO
     public UserData removePayment(Payment payment) {
         this.payments.remove(payment);
         payment.setRegisteredBy(null);
         return this;
     }
 
-    public DocumentType getDocumentType() {
-        return this.documentType;
-    }
-
-    public void setDocumentType(DocumentType documentType) {
-        this.documentType = documentType;
-    }
+    // -------- EQUALS / HASHCODE --------
 
     @Override
     public boolean equals(Object o) {
@@ -390,6 +405,6 @@ public class UserData implements Serializable {
 
     @Override
     public String toString() {
-        return "UserData{" + "id=" + getId() + ", document='" + getDocument() + "'" + "}";
+        return "UserData{" + "id=" + getId() + ", documentNumber='" + getDocumentNumber() + "'" + "}";
     }
 }

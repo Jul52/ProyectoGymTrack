@@ -29,11 +29,14 @@ export const RegisterPage = () => {
         email: formValues.email,
         password: formValues.firstPassword,
         langKey: currentLocale,
-
-        // ✅ campos personalizados
-        tipoDocumento: formValues.tipoDocumento,
-        numeroDocumento: formValues.numeroDocumento,
-        fechaNacimiento: formValues.fechaNacimiento,
+        firstName: formValues.firstName,
+        secondName: formValues.secondName,
+        firstLastName: formValues.firstLastName,
+        secondLastName: formValues.secondLastName,
+        documentType: Number(formValues.documentType), // ✅ CORREGIDO: se convierte a number (Long en backend)
+        documentNumber: formValues.documentNumber,
+        phone: formValues.phone,
+        birthDate: formValues.birthDate,
       }),
     );
   };
@@ -55,7 +58,6 @@ export const RegisterPage = () => {
               <Translate contentKey="register.title">Registro</Translate>
             </h1>
 
-            {/* USUARIO */}
             <ValidatedField
               name="username"
               label={translate('global.form.username.label')}
@@ -71,7 +73,6 @@ export const RegisterPage = () => {
               }}
             />
 
-            {/* EMAIL */}
             <ValidatedField
               name="email"
               label={translate('global.form.email.label')}
@@ -85,7 +86,6 @@ export const RegisterPage = () => {
               }}
             />
 
-            {/* CONTRASEÑA */}
             <ValidatedField
               name="firstPassword"
               label={translate('global.form.newpassword.label')}
@@ -99,28 +99,64 @@ export const RegisterPage = () => {
               }}
             />
 
-            {/* 🔹 CAMPOS NUEVOS 🔹 */}
+            <ValidatedField
+              name="firstName"
+              label="Primer nombre"
+              placeholder="Primer nombre"
+              validate={{
+                required: { value: true, message: 'Este campo es obligatorio' },
+              }}
+            />
+
+            <ValidatedField name="secondName" label="Segundo nombre" placeholder="Segundo nombre" />
 
             <ValidatedField
-              name="tipoDocumento"
+              name="firstLastName"
+              label="Primer apellido"
+              placeholder="Primer apellido"
+              validate={{
+                required: { value: true, message: 'Este campo es obligatorio' },
+              }}
+            />
+
+            <ValidatedField name="secondLastName" label="Segundo apellido" placeholder="Segundo apellido" />
+
+            <ValidatedField
+              name="documentType"
               label="Tipo de documento"
-              placeholder="CC, TI, CE..."
+              type="select"
               validate={{
-                required: { value: true, message: 'Este campo es obligatorio' },
+                required: { value: true, message: 'Seleccione un tipo de documento' },
+                validate: v => Number(v) > 0 || 'Seleccione un tipo de documento válido',
               }}
-            />
+            >
+              {/* ✅ CORREGIDO: values son IDs numéricos que corresponden a la tabla document_type */}
+              <option value={0}>Seleccione tipo de documento</option>
+              <option value={1}>Cédula de ciudadanía</option>
+              <option value={2}>Tarjeta de identidad</option>
+              <option value={3}>Cédula de extranjería</option>
+            </ValidatedField>
 
             <ValidatedField
-              name="numeroDocumento"
+              name="documentNumber"
               label="Número de documento"
-              placeholder="Ingrese su documento"
+              placeholder="Número de documento"
               validate={{
                 required: { value: true, message: 'Este campo es obligatorio' },
               }}
             />
 
             <ValidatedField
-              name="fechaNacimiento"
+              name="phone"
+              label="Teléfono"
+              placeholder="Teléfono"
+              validate={{
+                required: { value: true, message: 'Este campo es obligatorio' },
+              }}
+            />
+
+            <ValidatedField
+              name="birthDate"
               label="Fecha de nacimiento"
               type="date"
               validate={{
@@ -130,7 +166,6 @@ export const RegisterPage = () => {
 
             <PasswordStrengthBar password={password} />
 
-            {/* CONFIRMAR CONTRASEÑA */}
             <ValidatedField
               name="secondPassword"
               label={translate('global.form.confirmpassword.label')}

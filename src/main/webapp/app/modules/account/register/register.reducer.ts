@@ -12,8 +12,6 @@ const initialState = {
 
 export type RegisterState = Readonly<typeof initialState>;
 
-// ✅ ACTION
-
 export const handleRegister = createAsyncThunk(
   'register/create_account',
   async (data: {
@@ -21,9 +19,14 @@ export const handleRegister = createAsyncThunk(
     email: string;
     password: string;
     langKey?: string;
-    tipoDocumento?: string;
-    numeroDocumento?: string;
-    fechaNacimiento?: string;
+    firstName?: string;
+    secondName?: string;
+    firstLastName?: string;
+    secondLastName?: string;
+    documentType?: number; // ✅ CORREGIDO: Long en backend, debe ser number aquí
+    documentNumber?: string;
+    phone?: string;
+    birthDate?: string;
   }) => axios.post<any>('api/register', data),
   { serializeError: serializeAxiosError },
 );
