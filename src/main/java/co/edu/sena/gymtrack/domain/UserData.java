@@ -34,10 +34,10 @@ public class UserData implements Serializable {
 
     @NotNull
     @Size(max = 100)
-    @Column(name = "first_lastname", nullable = false)
+    @Column(name = "first_last_name", nullable = false)
     private String firstLastName;
 
-    @Column(name = "second_lastname")
+    @Column(name = "second_last_name")
     private String secondLastName;
 
     @NotNull
@@ -47,7 +47,7 @@ public class UserData implements Serializable {
 
     @NotNull
     @Size(max = 20)
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone_number", nullable = false)
     private String phone;
 
     @NotNull
@@ -56,7 +56,7 @@ public class UserData implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @NotNull
-    @JoinColumn(unique = true)
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "registeredBy")
@@ -83,7 +83,7 @@ public class UserData implements Serializable {
     @JoinColumn(name = "document_type_id", nullable = false)
     private DocumentType documentType;
 
-    // -------- METODOS FLUIDOS SIMPLES --------
+    // -------- METODOS FLUIDOS --------
 
     public UserData id(Long id) {
         this.setId(id);
@@ -217,7 +217,7 @@ public class UserData implements Serializable {
         this.documentType = documentType;
     }
 
-    // -------- RELACIONES: GETTERS, SETTERS, FLUENTES, ADD, REMOVE --------
+    // -------- RELACIONES --------
 
     public Set<Reservation> getReservations() {
         return this.reservations;
@@ -233,20 +233,17 @@ public class UserData implements Serializable {
         this.reservations = reservations;
     }
 
-    // ✅ NUEVO - fluente de colección
     public UserData reservations(Set<Reservation> reservations) {
         this.setReservations(reservations);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData addReservation(Reservation reservation) {
         this.reservations.add(reservation);
         reservation.setRegisteredBy(this);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData removeReservation(Reservation reservation) {
         this.reservations.remove(reservation);
         reservation.setRegisteredBy(null);
@@ -267,20 +264,17 @@ public class UserData implements Serializable {
         this.machines = machines;
     }
 
-    // ✅ NUEVO
     public UserData machines(Set<Machine> machines) {
         this.setMachines(machines);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData addMachine(Machine machine) {
         this.machines.add(machine);
         machine.setAdmin(this);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData removeMachine(Machine machine) {
         this.machines.remove(machine);
         machine.setAdmin(null);
@@ -301,20 +295,17 @@ public class UserData implements Serializable {
         this.invoices = invoices;
     }
 
-    // ✅ NUEVO
     public UserData invoices(Set<Invoice> invoices) {
         this.setInvoices(invoices);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData addInvoice(Invoice invoice) {
         this.invoices.add(invoice);
         invoice.setUserData(this);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData removeInvoice(Invoice invoice) {
         this.invoices.remove(invoice);
         invoice.setUserData(null);
@@ -335,20 +326,17 @@ public class UserData implements Serializable {
         this.courses = courses;
     }
 
-    // ✅ NUEVO
     public UserData courses(Set<Course> courses) {
         this.setCourses(courses);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData addCourse(Course course) {
         this.courses.add(course);
         course.setTrainer(this);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData removeCourse(Course course) {
         this.courses.remove(course);
         course.setTrainer(null);
@@ -369,20 +357,17 @@ public class UserData implements Serializable {
         this.payments = payments;
     }
 
-    // ✅ NUEVO
     public UserData payments(Set<Payment> payments) {
         this.setPayments(payments);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData addPayment(Payment payment) {
         this.payments.add(payment);
         payment.setRegisteredBy(this);
         return this;
     }
 
-    // ✅ NUEVO
     public UserData removePayment(Payment payment) {
         this.payments.remove(payment);
         payment.setRegisteredBy(null);
