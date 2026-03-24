@@ -168,7 +168,7 @@ export const Reservation = () => {
                   </td>
                   <td>
                     {reservation.registeredBy ? (
-                      <Link to={`/user-data/${reservation.registeredBy.id}`}>{reservation.registeredBy.document}</Link>
+                      <Link to={`/user-data/${reservation.registeredBy.id}`}>{reservation.registeredBy.documentNumber}</Link>
                     ) : (
                       ''
                     )}
