@@ -98,6 +98,11 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
 
+        boolean alreadyReserved = reservationRepository.existsByRegisteredByIdAndScheduleId(registeredBy.getId(), managedSchedule.getId());
+        if (alreadyReserved) {
+            throw new BadRequestAlertException("Ya tienes una reserva para este horario.", "reservation", "alreadyReserved");
+        }
+
         if (managedSchedule.getAvailableSlots() <= 0) {
             throw new BadRequestAlertException("No hay cupos disponibles para este horario.", "reservation", "noCapacity");
         }

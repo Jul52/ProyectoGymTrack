@@ -77,4 +77,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
         @Param("serviceId") Long serviceId,
         @Param("courseId") Long courseId
     );
+
+    boolean existsByRegisteredByIdAndScheduleId(Long registeredById, Long scheduleId);
 }
