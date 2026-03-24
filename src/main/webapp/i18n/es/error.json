@@ -10,6 +10,7 @@
     },
     "concurrencyFailure": "Otro usuario ha modificado estos datos al mismo tiempo que tú. Tus cambios fueron rechazados.",
     "validation": "Error de validación en el servidor.",
-    "alreadyReserved": "Ya tienes una reserva para este horario."
+    "alreadyReserved": "Ya tienes una reserva para este horario.",
+    "noBasicMembership": "Debes adquirir una membresía básica antes de reservar un curso."
   }
 }

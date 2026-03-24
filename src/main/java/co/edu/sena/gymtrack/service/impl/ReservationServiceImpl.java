@@ -5,6 +5,7 @@ import co.edu.sena.gymtrack.domain.Reservation;
 import co.edu.sena.gymtrack.domain.Schedule;
 import co.edu.sena.gymtrack.domain.UserData;
 import co.edu.sena.gymtrack.domain.enumeration.CourseAccessType;
+import co.edu.sena.gymtrack.repository.GymServiceRepository;
 import co.edu.sena.gymtrack.repository.ReservationRepository;
 import co.edu.sena.gymtrack.repository.ScheduleRepository;
 import co.edu.sena.gymtrack.repository.UserDataRepository;
@@ -31,17 +32,20 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationMapper reservationMapper;
     private final UserDataRepository userDataRepository;
     private final ScheduleRepository scheduleRepository;
+    private final GymServiceRepository gymServiceRepository;
 
     public ReservationServiceImpl(
         ReservationRepository reservationRepository,
         ReservationMapper reservationMapper,
         UserDataRepository userDataRepository,
-        ScheduleRepository scheduleRepository
+        ScheduleRepository scheduleRepository,
+        GymServiceRepository gymServiceRepository
     ) {
         this.reservationRepository = reservationRepository;
         this.reservationMapper = reservationMapper;
         this.userDataRepository = userDataRepository;
         this.scheduleRepository = scheduleRepository;
+        this.gymServiceRepository = gymServiceRepository;
     }
 
     @Override
@@ -74,6 +78,20 @@ public class ReservationServiceImpl implements ReservationService {
 
         if (gymService == null) {
             throw new BadRequestAlertException("Debe seleccionar un servicio.", "reservation", "serviceRequired");
+        }
+
+        // Verificar que el usuario tenga una membresía básica (category_id = 1)
+        boolean hasBasicMembership = gymServiceRepository
+            .findServicesByUserLogin(userLogin)
+            .stream()
+            .anyMatch(s -> s.getCategory() != null && s.getCategory().getId() == 1L);
+
+        if (!hasBasicMembership) {
+            throw new BadRequestAlertException(
+                "Debes adquirir una membresía básica antes de reservar un curso.",
+                "reservation",
+                "noBasicMembership"
+            );
         }
 
         if (gymService.getCourseAccessType() == CourseAccessType.NONE) {

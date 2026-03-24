@@ -93,7 +93,7 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail:
-    base-url: http://127.0.0.1:8080
+    base-url: http://localhost:9000
   logging:
     use-json-format: false
     logstash:
