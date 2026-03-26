@@ -54,8 +54,8 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="description" type="string"/>
-            <column name="image" type="blob"/>
-            <column name="image_content_type" type="string"/>
+            <column name="image" type="skip"/>
+            <column name="image_content_type" type="skip"/>
             <column name="video" type="string"/>
             <column name="incident_id" type="numeric"/>
             <column name="machine_id" type="numeric"/>
