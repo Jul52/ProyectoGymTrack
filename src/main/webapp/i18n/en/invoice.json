@@ -23,8 +23,8 @@
       "payment": "Payment",
       "invoiceService": "Invoice Service",
       "paymentMethod": "Payment Method",
-      "gymService": "Gym Service ",
-      "userData": "User Data"
+      "userData": "User Data",
+      "service": "Service"
     }
   }
 }

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
@@ -13,11 +12,22 @@ const initialState = {
 
 export type RegisterState = Readonly<typeof initialState>;
 
-// Actions
-
 export const handleRegister = createAsyncThunk(
   'register/create_account',
-  async (data: { login: string; email: string; password: string; langKey?: string }) => axios.post<any>('api/register', data),
+  async (data: {
+    login: string;
+    email: string;
+    password: string;
+    langKey?: string;
+    firstName?: string;
+    secondName?: string;
+    firstLastName?: string;
+    secondLastName?: string;
+    documentType?: number; // ✅ CORREGIDO: Long en backend, debe ser number aquí
+    documentNumber?: string;
+    phone?: string;
+    birthDate?: string;
+  }) => axios.post<any>('api/register', data),
   { serializeError: serializeAxiosError },
 );
 
@@ -49,5 +59,4 @@ export const RegisterSlice = createSlice({
 
 export const { reset } = RegisterSlice.actions;
 
-// Reducer
 export default RegisterSlice.reducer;

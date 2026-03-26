@@ -6,6 +6,7 @@ export interface ISchedule {
   dayOfWeek?: string;
   startTime?: dayjs.Dayjs;
   endTime?: dayjs.Dayjs;
+  availableSlots?: number;
   course?: ICourse;
 }
 

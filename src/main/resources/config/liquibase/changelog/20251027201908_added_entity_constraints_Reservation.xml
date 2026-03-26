@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <!--
-        Added the constraints for entity Reservation.
-    -->
-    <changeSet id="20251027201908-2" author="jhipster">
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-        <addForeignKeyConstraint baseColumnNames="course_id"
-                                 baseTableName="reservation"
-                                 constraintName="fk_reservation__course_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="course"
-                                 />
+  <changeSet id="20251027201908-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="gym_service_id"
-                                 baseTableName="reservation"
-                                 constraintName="fk_reservation__gym_service_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="gym_service"
-                                 />
+    <addForeignKeyConstraint
+      baseTableName="reservation"
+      baseColumnNames="course_id"
+      referencedTableName="course"
+      referencedColumnNames="id"
+      constraintName="fk_reservation_course"/>
 
-        <addForeignKeyConstraint baseColumnNames="registered_by_id"
-                                 baseTableName="reservation"
-                                 constraintName="fk_reservation__user_data_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="user_data"
-                                 />
-    </changeSet>
+    <addForeignKeyConstraint
+      baseTableName="reservation"
+      baseColumnNames="gym_service_id"
+      referencedTableName="gym_service"
+      referencedColumnNames="id"
+      constraintName="fk_reservation_gym_service"/>
+
+    <addForeignKeyConstraint
+      baseTableName="reservation"
+      baseColumnNames="registered_by_id"
+      referencedTableName="user_data"
+      referencedColumnNames="id"
+      constraintName="fk_reservation_user_data"/>
+
+    <addForeignKeyConstraint
+      baseTableName="reservation"
+      baseColumnNames="schedule_id"
+      referencedTableName="schedule"
+      referencedColumnNames="id"
+      constraintName="fk_reservation_schedule"/>
+
+  </changeSet>
 </databaseChangeLog>

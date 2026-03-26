@@ -26,6 +26,8 @@ public class ScheduleDTO implements Serializable {
     @NotNull
     private CourseDTO course;
 
+    private Integer availableSlots;
+
     public Long getId() {
         return id;
     }
@@ -64,6 +66,14 @@ public class ScheduleDTO implements Serializable {
 
     public void setCourse(CourseDTO course) {
         this.course = course;
+    }
+
+    public Integer getAvailableSlots() {
+        return availableSlots;
+    }
+
+    public void setAvailableSlots(Integer availableSlots) {
+        this.availableSlots = availableSlots;
     }
 
     @Override

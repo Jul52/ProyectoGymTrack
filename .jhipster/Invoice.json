@@ -50,10 +50,12 @@
       "relationshipValidateRules": "required"
     },
     {
+      "otherEntityField": "serviceName",
       "otherEntityName": "gymService",
-      "relationshipName": "gymService",
+      "relationshipName": "service",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": []
     }
   ],
   "searchEngine": "no",

@@ -39,4 +39,14 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
         "select payment from Payment payment left join fetch payment.paymentMethod left join fetch payment.registeredBy where payment.id =:id"
     )
     Optional<Payment> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query(
+        """
+        SELECT p FROM Payment p
+        LEFT JOIN FETCH p.paymentMethod
+        LEFT JOIN FETCH p.registeredBy rd
+        WHERE rd.user.login = :login
+        """
+    )
+    Page<Payment> findAllByUserLogin(@Param("login") String login, Pageable pageable);
 }

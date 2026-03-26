@@ -37,4 +37,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
     @Query("select schedule from Schedule schedule left join fetch schedule.course where schedule.id =:id")
     Optional<Schedule> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query(
+        "select s from Schedule s left join fetch s.course c " +
+        "join c.gymServices gs " +
+        "where gs.id = :serviceId and s.availableSlots > 0"
+    )
+    List<Schedule> findAvailableSchedulesByService(@Param("serviceId") Long serviceId);
 }

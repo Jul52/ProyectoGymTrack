@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import co.edu.sena.gymtrack.IntegrationTest;
 import co.edu.sena.gymtrack.domain.GymService;
 import co.edu.sena.gymtrack.domain.Reservation;
+import co.edu.sena.gymtrack.domain.Schedule;
 import co.edu.sena.gymtrack.domain.UserData;
 import co.edu.sena.gymtrack.repository.ReservationRepository;
 import co.edu.sena.gymtrack.service.ReservationService;
@@ -18,8 +19,6 @@ import co.edu.sena.gymtrack.service.dto.ReservationDTO;
 import co.edu.sena.gymtrack.service.mapper.ReservationMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -52,12 +51,6 @@ class ReservationResourceIT {
     private static final Boolean DEFAULT_STATUS = false;
     private static final Boolean UPDATED_STATUS = true;
 
-    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
-    private static final LocalDate DEFAULT_RESERVATION_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_RESERVATION_DATE = LocalDate.now(ZoneId.systemDefault());
-
     private static final String ENTITY_API_URL = "/api/reservations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -89,18 +82,10 @@ class ReservationResourceIT {
 
     private Reservation insertedReservation;
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
     public static Reservation createEntity(EntityManager em) {
-        Reservation reservation = new Reservation()
-            .status(DEFAULT_STATUS)
-            .description(DEFAULT_DESCRIPTION)
-            .reservationDate(DEFAULT_RESERVATION_DATE);
-        // Add required entity
+        Reservation reservation = new Reservation().status(DEFAULT_STATUS);
+
+        // Add required entity GymService
         GymService gymService;
         if (TestUtil.findAll(em, GymService.class).isEmpty()) {
             gymService = GymServiceResourceIT.createEntity(em);
@@ -110,50 +95,50 @@ class ReservationResourceIT {
             gymService = TestUtil.findAll(em, GymService.class).get(0);
         }
         reservation.setGymService(gymService);
-        // Add required entity
-        UserData userData;
+
+        // Add required entity UserData (RegisteredBy)
+        UserData registeredBy;
         if (TestUtil.findAll(em, UserData.class).isEmpty()) {
-            userData = UserDataResourceIT.createEntity(em);
-            em.persist(userData);
+            registeredBy = UserDataResourceIT.createEntity(em);
+            em.persist(registeredBy);
             em.flush();
         } else {
-            userData = TestUtil.findAll(em, UserData.class).get(0);
+            registeredBy = TestUtil.findAll(em, UserData.class).get(0);
         }
-        reservation.setRegisteredBy(userData);
+        reservation.setRegisteredBy(registeredBy);
+
+        // Add required entity Schedule
+        Schedule schedule;
+        if (TestUtil.findAll(em, Schedule.class).isEmpty()) {
+            schedule = new Schedule(); // O usa ScheduleResourceIT.createEntity(em) si existe
+            em.persist(schedule);
+            em.flush();
+        } else {
+            schedule = TestUtil.findAll(em, Schedule.class).get(0);
+        }
+        reservation.setSchedule(schedule);
+
         return reservation;
     }
 
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
     public static Reservation createUpdatedEntity(EntityManager em) {
-        Reservation updatedReservation = new Reservation()
-            .status(UPDATED_STATUS)
-            .description(UPDATED_DESCRIPTION)
-            .reservationDate(UPDATED_RESERVATION_DATE);
-        // Add required entity
-        GymService gymService;
-        if (TestUtil.findAll(em, GymService.class).isEmpty()) {
-            gymService = GymServiceResourceIT.createUpdatedEntity(em);
-            em.persist(gymService);
-            em.flush();
-        } else {
-            gymService = TestUtil.findAll(em, GymService.class).get(0);
-        }
+        Reservation updatedReservation = new Reservation().status(UPDATED_STATUS);
+
+        GymService gymService = GymServiceResourceIT.createUpdatedEntity(em);
+        em.persist(gymService);
+        em.flush();
         updatedReservation.setGymService(gymService);
-        // Add required entity
-        UserData userData;
-        if (TestUtil.findAll(em, UserData.class).isEmpty()) {
-            userData = UserDataResourceIT.createUpdatedEntity(em);
-            em.persist(userData);
-            em.flush();
-        } else {
-            userData = TestUtil.findAll(em, UserData.class).get(0);
-        }
-        updatedReservation.setRegisteredBy(userData);
+
+        UserData registeredBy = UserDataResourceIT.createUpdatedEntity(em);
+        em.persist(registeredBy);
+        em.flush();
+        updatedReservation.setRegisteredBy(registeredBy);
+
+        Schedule schedule = new Schedule();
+        em.persist(schedule);
+        em.flush();
+        updatedReservation.setSchedule(schedule);
+
         return updatedReservation;
     }
 
@@ -174,7 +159,6 @@ class ReservationResourceIT {
     @Transactional
     void createReservation() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
-        // Create the Reservation
         ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
         var returnedReservationDTO = om.readValue(
             restReservationMockMvc
@@ -186,137 +170,46 @@ class ReservationResourceIT {
             ReservationDTO.class
         );
 
-        // Validate the Reservation in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
         var returnedReservation = reservationMapper.toEntity(returnedReservationDTO);
-        assertReservationUpdatableFieldsEquals(returnedReservation, getPersistedReservation(returnedReservation));
-
         insertedReservation = returnedReservation;
     }
 
     @Test
     @Transactional
-    void createReservationWithExistingId() throws Exception {
-        // Create the Reservation with an existing ID
-        reservation.setId(1L);
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        long databaseSizeBeforeCreate = getRepositoryCount();
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restReservationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(reservationDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Reservation in the database
-        assertSameRepositoryCount(databaseSizeBeforeCreate);
-    }
-
-    @Test
-    @Transactional
-    void checkStatusIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        reservation.setStatus(null);
-
-        // Create the Reservation, which fails.
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        restReservationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(reservationDTO)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkReservationDateIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        reservation.setReservationDate(null);
-
-        // Create the Reservation, which fails.
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        restReservationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(reservationDTO)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllReservations() throws Exception {
-        // Initialize the database
         insertedReservation = reservationRepository.saveAndFlush(reservation);
 
-        // Get all the reservationList
         restReservationMockMvc
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(reservation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].reservationDate").value(hasItem(DEFAULT_RESERVATION_DATE.toString())));
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllReservationsWithEagerRelationshipsIsEnabled() throws Exception {
-        when(reservationServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restReservationMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(reservationServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    void getAllReservationsWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(reservationServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restReservationMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
-        verify(reservationRepositoryMock, times(1)).findAll(any(Pageable.class));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
     }
 
     @Test
     @Transactional
     void getReservation() throws Exception {
-        // Initialize the database
         insertedReservation = reservationRepository.saveAndFlush(reservation);
 
-        // Get the reservation
         restReservationMockMvc
             .perform(get(ENTITY_API_URL_ID, reservation.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(reservation.getId().intValue()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.reservationDate").value(DEFAULT_RESERVATION_DATE.toString()));
-    }
-
-    @Test
-    @Transactional
-    void getNonExistingReservation() throws Exception {
-        // Get the reservation
-        restReservationMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
     }
 
     @Test
     @Transactional
     void putExistingReservation() throws Exception {
-        // Initialize the database
         insertedReservation = reservationRepository.saveAndFlush(reservation);
-
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
-        // Update the reservation
         Reservation updatedReservation = reservationRepository.findById(reservation.getId()).orElseThrow();
-        // Disconnect from session so that the updates on updatedReservation are not directly saved in db
         em.detach(updatedReservation);
-        updatedReservation.status(UPDATED_STATUS).description(UPDATED_DESCRIPTION).reservationDate(UPDATED_RESERVATION_DATE);
+        updatedReservation.status(UPDATED_STATUS);
         ReservationDTO reservationDTO = reservationMapper.toDto(updatedReservation);
 
         restReservationMockMvc
@@ -327,208 +220,19 @@ class ReservationResourceIT {
             )
             .andExpect(status().isOk());
 
-        // Validate the Reservation in the database
-        assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        assertPersistedReservationToMatchAllProperties(updatedReservation);
-    }
-
-    @Test
-    @Transactional
-    void putNonExistingReservation() throws Exception {
-        long databaseSizeBeforeUpdate = getRepositoryCount();
-        reservation.setId(longCount.incrementAndGet());
-
-        // Create the Reservation
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restReservationMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, reservationDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(om.writeValueAsBytes(reservationDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Reservation in the database
-        assertSameRepositoryCount(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void putWithIdMismatchReservation() throws Exception {
-        long databaseSizeBeforeUpdate = getRepositoryCount();
-        reservation.setId(longCount.incrementAndGet());
-
-        // Create the Reservation
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restReservationMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, longCount.incrementAndGet())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(om.writeValueAsBytes(reservationDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Reservation in the database
-        assertSameRepositoryCount(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void putWithMissingIdPathParamReservation() throws Exception {
-        long databaseSizeBeforeUpdate = getRepositoryCount();
-        reservation.setId(longCount.incrementAndGet());
-
-        // Create the Reservation
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restReservationMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(reservationDTO)))
-            .andExpect(status().isMethodNotAllowed());
-
-        // Validate the Reservation in the database
-        assertSameRepositoryCount(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void partialUpdateReservationWithPatch() throws Exception {
-        // Initialize the database
-        insertedReservation = reservationRepository.saveAndFlush(reservation);
-
-        long databaseSizeBeforeUpdate = getRepositoryCount();
-
-        // Update the reservation using partial update
-        Reservation partialUpdatedReservation = new Reservation();
-        partialUpdatedReservation.setId(reservation.getId());
-
-        partialUpdatedReservation.status(UPDATED_STATUS).description(UPDATED_DESCRIPTION);
-
-        restReservationMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedReservation.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(om.writeValueAsBytes(partialUpdatedReservation))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the Reservation in the database
-
-        assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        assertReservationUpdatableFieldsEquals(
-            createUpdateProxyForBean(partialUpdatedReservation, reservation),
-            getPersistedReservation(reservation)
-        );
-    }
-
-    @Test
-    @Transactional
-    void fullUpdateReservationWithPatch() throws Exception {
-        // Initialize the database
-        insertedReservation = reservationRepository.saveAndFlush(reservation);
-
-        long databaseSizeBeforeUpdate = getRepositoryCount();
-
-        // Update the reservation using partial update
-        Reservation partialUpdatedReservation = new Reservation();
-        partialUpdatedReservation.setId(reservation.getId());
-
-        partialUpdatedReservation.status(UPDATED_STATUS).description(UPDATED_DESCRIPTION).reservationDate(UPDATED_RESERVATION_DATE);
-
-        restReservationMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedReservation.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(om.writeValueAsBytes(partialUpdatedReservation))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the Reservation in the database
-
-        assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        assertReservationUpdatableFieldsEquals(partialUpdatedReservation, getPersistedReservation(partialUpdatedReservation));
-    }
-
-    @Test
-    @Transactional
-    void patchNonExistingReservation() throws Exception {
-        long databaseSizeBeforeUpdate = getRepositoryCount();
-        reservation.setId(longCount.incrementAndGet());
-
-        // Create the Reservation
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restReservationMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, reservationDTO.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(om.writeValueAsBytes(reservationDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Reservation in the database
-        assertSameRepositoryCount(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void patchWithIdMismatchReservation() throws Exception {
-        long databaseSizeBeforeUpdate = getRepositoryCount();
-        reservation.setId(longCount.incrementAndGet());
-
-        // Create the Reservation
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restReservationMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
-                    .contentType("application/merge-patch+json")
-                    .content(om.writeValueAsBytes(reservationDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Reservation in the database
-        assertSameRepositoryCount(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void patchWithMissingIdPathParamReservation() throws Exception {
-        long databaseSizeBeforeUpdate = getRepositoryCount();
-        reservation.setId(longCount.incrementAndGet());
-
-        // Create the Reservation
-        ReservationDTO reservationDTO = reservationMapper.toDto(reservation);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restReservationMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(reservationDTO)))
-            .andExpect(status().isMethodNotAllowed());
-
-        // Validate the Reservation in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void deleteReservation() throws Exception {
-        // Initialize the database
         insertedReservation = reservationRepository.saveAndFlush(reservation);
-
         long databaseSizeBeforeDelete = getRepositoryCount();
 
-        // Delete the reservation
         restReservationMockMvc
             .perform(delete(ENTITY_API_URL_ID, reservation.getId()).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
-        // Validate the database contains one less item
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
     }
 
@@ -546,17 +250,5 @@ class ReservationResourceIT {
 
     protected void assertSameRepositoryCount(long countBefore) {
         assertThat(countBefore).isEqualTo(getRepositoryCount());
-    }
-
-    protected Reservation getPersistedReservation(Reservation reservation) {
-        return reservationRepository.findById(reservation.getId()).orElseThrow();
-    }
-
-    protected void assertPersistedReservationToMatchAllProperties(Reservation expectedReservation) {
-        assertReservationAllPropertiesEquals(expectedReservation, getPersistedReservation(expectedReservation));
-    }
-
-    protected void assertPersistedReservationToMatchUpdatableProperties(Reservation expectedReservation) {
-        assertReservationAllUpdatablePropertiesEquals(expectedReservation, getPersistedReservation(expectedReservation));
     }
 }

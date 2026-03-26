@@ -26,41 +26,41 @@ public class UserData implements Serializable {
 
     @NotNull
     @Size(max = 100)
-    @Column(name = "first_name", length = 100, nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Size(max = 100)
-    @Column(name = "second_name", length = 100)
+    @Column(name = "second_name")
     private String secondName;
 
     @NotNull
     @Size(max = 100)
-    @Column(name = "first_last_name", length = 100, nullable = false)
+    @Column(name = "first_last_name", nullable = false)
     private String firstLastName;
 
-    @Size(max = 100)
-    @Column(name = "second_last_name", length = 100)
+    @Column(name = "second_last_name")
     private String secondLastName;
 
     @NotNull
     @Size(max = 20)
-    @Column(name = "document", length = 20, nullable = false)
-    private String document;
+    @Column(name = "document_number", nullable = false, unique = true)
+    private String documentNumber;
 
     @NotNull
     @Size(max = 20)
-    @Column(name = "phone_number", length = 20, nullable = false)
-    private String phoneNumber;
+    @Column(name = "phone_number", nullable = false)
+    private String phone;
 
-    @Column(name = "birth_date")
+    @NotNull
+    @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @NotNull
-    @JoinColumn(unique = true)
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    @OneToMany(mappedBy = "registeredBy")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "registeredBy")
+    @JsonIgnoreProperties(value = { "course", "gymService", "registeredBy", "schedule" }, allowSetters = true)
     private Set<Reservation> reservations = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
@@ -68,7 +68,7 @@ public class UserData implements Serializable {
     private Set<Machine> machines = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userData")
-    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "payment", "invoiceServices", "paymentMethod", "userData", "service" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trainer")
@@ -79,20 +79,66 @@ public class UserData implements Serializable {
     @JsonIgnoreProperties(value = { "paymentMethod", "invoice", "registeredBy" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "userData" }, allowSetters = true)
+    @ManyToOne
+    @JoinColumn(name = "document_type_id", nullable = false)
     private DocumentType documentType;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public Long getId() {
-        return this.id;
-    }
+    // -------- METODOS FLUIDOS --------
 
     public UserData id(Long id) {
         this.setId(id);
         return this;
+    }
+
+    public UserData firstName(String firstName) {
+        this.setFirstName(firstName);
+        return this;
+    }
+
+    public UserData secondName(String secondName) {
+        this.setSecondName(secondName);
+        return this;
+    }
+
+    public UserData firstLastName(String firstLastName) {
+        this.setFirstLastName(firstLastName);
+        return this;
+    }
+
+    public UserData secondLastName(String secondLastName) {
+        this.setSecondLastName(secondLastName);
+        return this;
+    }
+
+    public UserData documentNumber(String documentNumber) {
+        this.setDocumentNumber(documentNumber);
+        return this;
+    }
+
+    public UserData phone(String phone) {
+        this.setPhone(phone);
+        return this;
+    }
+
+    public UserData birthDate(LocalDate birthDate) {
+        this.setBirthDate(birthDate);
+        return this;
+    }
+
+    public UserData user(User user) {
+        this.setUser(user);
+        return this;
+    }
+
+    public UserData documentType(DocumentType documentType) {
+        this.setDocumentType(documentType);
+        return this;
+    }
+
+    // -------- GETTERS Y SETTERS --------
+
+    public Long getId() {
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -103,22 +149,12 @@ public class UserData implements Serializable {
         return this.firstName;
     }
 
-    public UserData firstName(String firstName) {
-        this.setFirstName(firstName);
-        return this;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
     public String getSecondName() {
         return this.secondName;
-    }
-
-    public UserData secondName(String secondName) {
-        this.setSecondName(secondName);
-        return this;
     }
 
     public void setSecondName(String secondName) {
@@ -129,11 +165,6 @@ public class UserData implements Serializable {
         return this.firstLastName;
     }
 
-    public UserData firstLastName(String firstLastName) {
-        this.setFirstLastName(firstLastName);
-        return this;
-    }
-
     public void setFirstLastName(String firstLastName) {
         this.firstLastName = firstLastName;
     }
@@ -142,48 +173,28 @@ public class UserData implements Serializable {
         return this.secondLastName;
     }
 
-    public UserData secondLastName(String secondLastName) {
-        this.setSecondLastName(secondLastName);
-        return this;
-    }
-
     public void setSecondLastName(String secondLastName) {
         this.secondLastName = secondLastName;
     }
 
-    public String getDocument() {
-        return this.document;
+    public String getDocumentNumber() {
+        return this.documentNumber;
     }
 
-    public UserData document(String document) {
-        this.setDocument(document);
-        return this;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
-    public void setDocument(String document) {
-        this.document = document;
+    public String getPhone() {
+        return this.phone;
     }
 
-    public String getPhoneNumber() {
-        return this.phoneNumber;
-    }
-
-    public UserData phoneNumber(String phoneNumber) {
-        this.setPhoneNumber(phoneNumber);
-        return this;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public LocalDate getBirthDate() {
         return this.birthDate;
-    }
-
-    public UserData birthDate(LocalDate birthDate) {
-        this.setBirthDate(birthDate);
-        return this;
     }
 
     public void setBirthDate(LocalDate birthDate) {
@@ -198,10 +209,15 @@ public class UserData implements Serializable {
         this.user = user;
     }
 
-    public UserData user(User user) {
-        this.setUser(user);
-        return this;
+    public DocumentType getDocumentType() {
+        return this.documentType;
     }
+
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
+    }
+
+    // -------- RELACIONES --------
 
     public Set<Reservation> getReservations() {
         return this.reservations;
@@ -209,11 +225,9 @@ public class UserData implements Serializable {
 
     public void setReservations(Set<Reservation> reservations) {
         if (this.reservations != null) {
-            // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
             this.reservations.forEach(i -> i.setRegisteredBy(null));
         }
         if (reservations != null) {
-            // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
             reservations.forEach(i -> i.setRegisteredBy(this));
         }
         this.reservations = reservations;
@@ -226,14 +240,12 @@ public class UserData implements Serializable {
 
     public UserData addReservation(Reservation reservation) {
         this.reservations.add(reservation);
-        // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
         reservation.setRegisteredBy(this);
         return this;
     }
 
     public UserData removeReservation(Reservation reservation) {
         this.reservations.remove(reservation);
-        // CORRECCIÓN: Usar setRegisteredBy() en lugar de setUserData()
         reservation.setRegisteredBy(null);
         return this;
     }
@@ -362,50 +374,22 @@ public class UserData implements Serializable {
         return this;
     }
 
-    public DocumentType getDocumentType() {
-        return this.documentType;
-    }
-
-    public void setDocumentType(DocumentType documentType) {
-        this.documentType = documentType;
-    }
-
-    public UserData documentType(DocumentType documentType) {
-        this.setDocumentType(documentType);
-        return this;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // -------- EQUALS / HASHCODE --------
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof UserData)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (!(o instanceof UserData)) return false;
         return getId() != null && getId().equals(((UserData) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "UserData{" +
-            "id=" + getId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", secondName='" + getSecondName() + "'" +
-            ", firstLastName='" + getFirstLastName() + "'" +
-            ", secondLastName='" + getSecondLastName() + "'" +
-            ", document='" + getDocument() + "'" +
-            ", phoneNumber='" + getPhoneNumber() + "'" +
-            ", birthDate='" + getBirthDate() + "'" +
-            "}";
+        return "UserData{" + "id=" + getId() + ", documentNumber='" + getDocumentNumber() + "'" + "}";
     }
 }

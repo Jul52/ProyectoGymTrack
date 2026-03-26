@@ -9,9 +9,6 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data JPA repository for the Reservation entity.
- */
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     default Optional<Reservation> findOneWithEagerRelationships(Long id) {
@@ -27,18 +24,59 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     }
 
     @Query(
-        value = "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.registeredBy", // CAMBIO EN FETCH
+        value = "select reservation from Reservation reservation " +
+        "left join fetch reservation.course " +
+        "left join fetch reservation.gymService " +
+        "left join fetch reservation.registeredBy " +
+        "left join fetch reservation.schedule",
         countQuery = "select count(reservation) from Reservation reservation"
     )
     Page<Reservation> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.registeredBy" // CAMBIO EN FETCH
+        "select reservation from Reservation reservation " +
+        "left join fetch reservation.course " +
+        "left join fetch reservation.gymService " +
+        "left join fetch reservation.registeredBy " +
+        "left join fetch reservation.schedule"
     )
     List<Reservation> findAllWithToOneRelationships();
 
     @Query(
-        "select reservation from Reservation reservation left join fetch reservation.course left join fetch reservation.gymService left join fetch reservation.registeredBy where reservation.id =:id" // CAMBIO EN FETCH
+        "select reservation from Reservation reservation " +
+        "left join fetch reservation.course " +
+        "left join fetch reservation.gymService " +
+        "left join fetch reservation.registeredBy " +
+        "left join fetch reservation.schedule " +
+        "where reservation.id = :id"
     )
     Optional<Reservation> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query(
+        value = "select reservation from Reservation reservation " +
+        "left join fetch reservation.course " +
+        "left join fetch reservation.gymService " +
+        "left join fetch reservation.registeredBy " +
+        "left join fetch reservation.schedule " +
+        "where reservation.registeredBy.user.login = :login",
+        countQuery = "select count(reservation) from Reservation reservation " + "where reservation.registeredBy.user.login = :login"
+    )
+    Page<Reservation> findAllByUserLogin(@Param("login") String login, Pageable pageable);
+
+    @Query(
+        """
+        select count(r) from Reservation r
+        where r.registeredBy.id = :userId
+        and r.gymService.id = :serviceId
+        and r.course.id = :courseId
+        and r.status = true
+        """
+    )
+    long countActiveReservationsByUserServiceAndCourse(
+        @Param("userId") Long userId,
+        @Param("serviceId") Long serviceId,
+        @Param("courseId") Long courseId
+    );
+
+    boolean existsByRegisteredByIdAndScheduleId(Long registeredById, Long scheduleId);
 }

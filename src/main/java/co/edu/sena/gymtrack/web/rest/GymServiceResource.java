@@ -1,7 +1,8 @@
 package co.edu.sena.gymtrack.web.rest;
 
 import co.edu.sena.gymtrack.repository.GymServiceRepository;
-import co.edu.sena.gymtrack.security.AuthoritiesConstants;
+import co.edu.sena.gymtrack.repository.InvoiceRepository;
+import co.edu.sena.gymtrack.security.SecurityUtils;
 import co.edu.sena.gymtrack.service.GymServiceService;
 import co.edu.sena.gymtrack.service.dto.GymServiceDTO;
 import co.edu.sena.gymtrack.web.rest.errors.BadRequestAlertException;
@@ -9,7 +10,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -19,54 +25,37 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
-/**
- * REST controller for managing {@link co.edu.sena.gymtrack.domain.GymService}.
- */
 @RestController
 @RequestMapping("/api/gym-services")
-@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\") or hasAuthority(\"" + AuthoritiesConstants.USER + "\")")
 public class GymServiceResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(GymServiceResource.class);
-
     private static final String ENTITY_NAME = "gymService";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final GymServiceService gymServiceService;
-
     private final GymServiceRepository gymServiceRepository;
+    private final InvoiceRepository invoiceRepository;
 
-    public GymServiceResource(GymServiceService gymServiceService, GymServiceRepository gymServiceRepository) {
+    public GymServiceResource(
+        GymServiceService gymServiceService,
+        GymServiceRepository gymServiceRepository,
+        InvoiceRepository invoiceRepository
+    ) {
         this.gymServiceService = gymServiceService;
         this.gymServiceRepository = gymServiceRepository;
+        this.invoiceRepository = invoiceRepository;
     }
 
-    /**
-     * {@code POST  /gym-services} : Create a new gymService.
-     *
-     * @param gymServiceDTO the gymServiceDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new gymServiceDTO, or with status {@code 400 (Bad Request)} if the gymService has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<GymServiceDTO> createGymService(@Valid @RequestBody GymServiceDTO gymServiceDTO) throws URISyntaxException {
         LOG.debug("REST request to save GymService : {}", gymServiceDTO);
         if (gymServiceDTO.getId() != null) {
@@ -78,26 +67,7 @@ public class GymServiceResource {
             .body(gymServiceDTO);
     }
 
-    /**
-     * {@code PUT  /gym-services/:id} : Updates an existing gymService.
-     *
-     * @param id the id of the gymServiceDTO to save.
-     * @param gymServiceDTO the gymServiceDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated gymServiceDTO,
-     * or with status {@code 400 (Bad Request)} if the gymServiceDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the gymServiceDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/{id}")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<GymServiceDTO> updateGymService(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody GymServiceDTO gymServiceDTO
@@ -109,38 +79,16 @@ public class GymServiceResource {
         if (!Objects.equals(id, gymServiceDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-
         if (!gymServiceRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-
         gymServiceDTO = gymServiceService.update(gymServiceDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, gymServiceDTO.getId().toString()))
             .body(gymServiceDTO);
     }
 
-    /**
-     * {@code PATCH  /gym-services/:id} : Partial updates given fields of an existing gymService, field will ignore if it is null
-     *
-     * @param id the id of the gymServiceDTO to save.
-     * @param gymServiceDTO the gymServiceDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated gymServiceDTO,
-     * or with status {@code 400 (Bad Request)} if the gymServiceDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the gymServiceDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the gymServiceDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<GymServiceDTO> partialUpdateGymService(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody GymServiceDTO gymServiceDTO
@@ -152,36 +100,17 @@ public class GymServiceResource {
         if (!Objects.equals(id, gymServiceDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-
         if (!gymServiceRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
-
         Optional<GymServiceDTO> result = gymServiceService.partialUpdate(gymServiceDTO);
-
         return ResponseUtil.wrapOrNotFound(
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, gymServiceDTO.getId().toString())
         );
     }
 
-    /**
-     * {@code GET  /gym-services} : get all the gymServices.
-     *
-     * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of gymServices in body.
-     */
     @GetMapping("")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<List<GymServiceDTO>> getAllGymServices(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
@@ -197,49 +126,53 @@ public class GymServiceResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
-    /**
-     * {@code GET  /gym-services/:id} : get the "id" gymService.
-     *
-     * @param id the id of the gymServiceDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the gymServiceDTO, or with status {@code 404 (Not Found)}.
-     */
     @GetMapping("/{id}")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<GymServiceDTO> getGymService(@PathVariable("id") Long id) {
         LOG.debug("REST request to get GymService : {}", id);
         Optional<GymServiceDTO> gymServiceDTO = gymServiceService.findOne(id);
         return ResponseUtil.wrapOrNotFound(gymServiceDTO);
     }
 
-    /**
-     * {@code DELETE  /gym-services/:id} : delete the "id" gymService.
-     *
-     * @param id the id of the gymServiceDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
     @DeleteMapping("/{id}")
-    @PreAuthorize(
-        "hasAuthority(\"" +
-        AuthoritiesConstants.ADMIN +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.TRAINER +
-        "\") or hasAuthority(\"" +
-        AuthoritiesConstants.USER +
-        "\")"
-    )
     public ResponseEntity<Void> deleteGymService(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete GymService : {}", id);
         gymServiceService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/my-status")
+    public ResponseEntity<List<Map<String, Object>>> getMyServiceStatuses() {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow();
+
+        List<GymServiceDTO> allServices = gymServiceService.findAll(Pageable.unpaged()).getContent();
+
+        List<Object[]> purchases = invoiceRepository.findLatestPurchaseDateByUserLogin(login);
+        Map<Long, Instant> lastPurchaseByService = new HashMap<>();
+        for (Object[] row : purchases) {
+            lastPurchaseByService.put((Long) row[0], (Instant) row[1]);
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (GymServiceDTO svc : allServices) {
+            Instant purchaseDate = lastPurchaseByService.get(svc.getId());
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("serviceId", svc.getId());
+            entry.put("serviceName", svc.getServiceName());
+            if (purchaseDate == null) {
+                entry.put("status", "NOT_PURCHASED");
+                entry.put("purchaseDate", null);
+                entry.put("expirationDate", null);
+            } else {
+                Instant expiration = purchaseDate.plus(30, ChronoUnit.DAYS);
+                entry.put("status", Instant.now().isBefore(expiration) ? "ACTIVE" : "EXPIRED");
+                entry.put("purchaseDate", purchaseDate);
+                entry.put("expirationDate", expiration);
+            }
+            result.add(entry);
+        }
+
+        return ResponseEntity.ok(result);
     }
 }

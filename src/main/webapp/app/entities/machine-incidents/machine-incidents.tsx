@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'reactstrap';
-import { JhiItemCount, JhiPagination, Translate, byteSize, getPaginationState, openFile } from 'react-jhipster';
+import { JhiItemCount, JhiPagination, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
@@ -117,10 +117,6 @@ export const MachineIncidents = () => {
                   <Translate contentKey="gymtrackApp.machineIncidents.description">Description</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('description')} />
                 </th>
-                <th className="hand" onClick={sort('image')}>
-                  <Translate contentKey="gymtrackApp.machineIncidents.image">Image</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('image')} />
-                </th>
                 <th className="hand" onClick={sort('video')}>
                   <Translate contentKey="gymtrackApp.machineIncidents.video">Video</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('video')} />
@@ -143,24 +139,6 @@ export const MachineIncidents = () => {
                     </Button>
                   </td>
                   <td>{machineIncidents.description}</td>
-                  <td>
-                    {machineIncidents.image ? (
-                      <div>
-                        {machineIncidents.imageContentType ? (
-                          <a onClick={openFile(machineIncidents.imageContentType, machineIncidents.image)}>
-                            <img
-                              src={`data:${machineIncidents.imageContentType};base64,${machineIncidents.image}`}
-                              style={{ maxHeight: '30px' }}
-                            />
-                            &nbsp;
-                          </a>
-                        ) : null}
-                        <span>
-                          {machineIncidents.imageContentType}, {byteSize(machineIncidents.image)}
-                        </span>
-                      </div>
-                    ) : null}
-                  </td>
                   <td>{machineIncidents.video}</td>
                   <td>
                     {machineIncidents.incident ? (

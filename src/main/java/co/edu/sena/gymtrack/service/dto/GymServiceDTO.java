@@ -29,6 +29,10 @@ public class GymServiceDTO implements Serializable {
     @NotNull
     private CategoryDTO category;
 
+    private String courseAccessType;
+
+    private Integer maxReservationsPerCourse;
+
     public Long getId() {
         return id;
     }
@@ -75,6 +79,22 @@ public class GymServiceDTO implements Serializable {
 
     public void setCategory(CategoryDTO category) {
         this.category = category;
+    }
+
+    public String getCourseAccessType() {
+        return courseAccessType;
+    }
+
+    public void setCourseAccessType(String courseAccessType) {
+        this.courseAccessType = courseAccessType;
+    }
+
+    public Integer getMaxReservationsPerCourse() {
+        return maxReservationsPerCourse;
+    }
+
+    public void setMaxReservationsPerCourse(Integer maxReservationsPerCourse) {
+        this.maxReservationsPerCourse = maxReservationsPerCourse;
     }
 
     @Override

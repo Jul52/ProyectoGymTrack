@@ -1,5 +1,6 @@
 package co.edu.sena.gymtrack.domain;
 
+import static co.edu.sena.gymtrack.domain.GymServiceTestSamples.*;
 import static co.edu.sena.gymtrack.domain.InvoiceServiceTestSamples.*;
 import static co.edu.sena.gymtrack.domain.InvoiceTestSamples.*;
 import static co.edu.sena.gymtrack.domain.PaymentMethodTestSamples.*;
@@ -84,5 +85,17 @@ class InvoiceTest {
 
         invoice.userData(null);
         assertThat(invoice.getUserData()).isNull();
+    }
+
+    @Test
+    void serviceTest() {
+        Invoice invoice = getInvoiceRandomSampleGenerator();
+        GymService gymServiceBack = getGymServiceRandomSampleGenerator();
+
+        invoice.setService(gymServiceBack);
+        assertThat(invoice.getService()).isEqualTo(gymServiceBack);
+
+        invoice.service(null);
+        assertThat(invoice.getService()).isNull();
     }
 }

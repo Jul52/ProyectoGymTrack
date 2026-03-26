@@ -3,24 +3,24 @@
     "schedule": {
       "home": {
         "title": "Horarios",
-        "refreshListLabel": "Actualizar lista",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Horario",
         "createOrEditLabel": "Crear o editar Horario",
         "notFound": "No se encontraron Horarios"
       },
       "created": "Un nuevo Horario ha sido creado con el identificador {{ param }}",
-      "updated": "Un Horario ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Horario ha sido eliminado con el identificador {{ param }}",
+      "updated": "El Horario ha sido actualizado con el identificador {{ param }}",
+      "deleted": "El Horario ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar el Horario {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el Horario {{ id }}?"
       },
       "detail": {
-        "title": "Horario"
+        "title": "Detalle del Horario"
       },
       "id": "ID",
-      "dayOfWeek": "Día de la semana",
-      "startTime": "Hora de inicio",
-      "endTime": "Hora de fin",
+      "dayOfWeek": "Día de la Semana",
+      "startTime": "Hora de Inicio",
+      "endTime": "Hora de Fin",
       "course": "Curso"
     }
   }

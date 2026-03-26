@@ -13,22 +13,35 @@ export const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    return () => {
       dispatch(reset());
-    },
-    [],
-  );
+    };
+  }, [dispatch]);
 
   const currentLocale = useAppSelector(state => state.locale.currentLocale);
+  const successMessage = useAppSelector(state => state.register.successMessage);
 
-  const handleValidSubmit = ({ username, email, firstPassword }) => {
-    dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: currentLocale }));
+  const handleValidSubmit = formValues => {
+    dispatch(
+      handleRegister({
+        login: formValues.username,
+        email: formValues.email,
+        password: formValues.firstPassword,
+        langKey: currentLocale,
+        firstName: formValues.firstName,
+        secondName: formValues.secondName,
+        firstLastName: formValues.firstLastName,
+        secondLastName: formValues.secondLastName,
+        documentType: Number(formValues.documentType), // ✅ CORREGIDO: se convierte a number (Long en backend)
+        documentNumber: formValues.documentNumber,
+        phone: formValues.phone,
+        birthDate: formValues.birthDate,
+      }),
+    );
   };
 
   const updatePassword = event => setPassword(event.target.value);
-
-  const successMessage = useAppSelector(state => state.register.successMessage);
 
   useEffect(() => {
     if (successMessage) {
@@ -41,9 +54,10 @@ export const RegisterPage = () => {
       <Row className="justify-content-center">
         <Col md="8">
           <ValidatedForm id="register-form" onSubmit={handleValidSubmit}>
-            <h1 id="register-title" data-cy="registerTitle">
-              <Translate contentKey="register.title">Registration</Translate>
+            <h1 id="register-title">
+              <Translate contentKey="register.title">Registro</Translate>
             </h1>
+
             <ValidatedField
               name="username"
               label={translate('global.form.username.label')}
@@ -51,14 +65,14 @@ export const RegisterPage = () => {
               validate={{
                 required: { value: true, message: translate('register.messages.validate.login.required') },
                 pattern: {
-                  value: /^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/,
+                  value: /^[_.@A-Za-z0-9-]+$/,
                   message: translate('register.messages.validate.login.pattern'),
                 },
                 minLength: { value: 1, message: translate('register.messages.validate.login.minlength') },
                 maxLength: { value: 50, message: translate('register.messages.validate.login.maxlength') },
               }}
-              data-cy="username"
             />
+
             <ValidatedField
               name="email"
               label={translate('global.form.email.label')}
@@ -70,8 +84,8 @@ export const RegisterPage = () => {
                 maxLength: { value: 254, message: translate('global.messages.validate.email.maxlength') },
                 validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
               }}
-              data-cy="email"
             />
+
             <ValidatedField
               name="firstPassword"
               label={translate('global.form.newpassword.label')}
@@ -83,9 +97,75 @@ export const RegisterPage = () => {
                 minLength: { value: 4, message: translate('global.messages.validate.newpassword.minlength') },
                 maxLength: { value: 50, message: translate('global.messages.validate.newpassword.maxlength') },
               }}
-              data-cy="firstPassword"
             />
+
+            <ValidatedField
+              name="firstName"
+              label="Primer nombre"
+              placeholder="Primer nombre"
+              validate={{
+                required: { value: true, message: 'Este campo es obligatorio' },
+              }}
+            />
+
+            <ValidatedField name="secondName" label="Segundo nombre" placeholder="Segundo nombre" />
+
+            <ValidatedField
+              name="firstLastName"
+              label="Primer apellido"
+              placeholder="Primer apellido"
+              validate={{
+                required: { value: true, message: 'Este campo es obligatorio' },
+              }}
+            />
+
+            <ValidatedField name="secondLastName" label="Segundo apellido" placeholder="Segundo apellido" />
+
+            <ValidatedField
+              name="documentType"
+              label="Tipo de documento"
+              type="select"
+              validate={{
+                required: { value: true, message: 'Seleccione un tipo de documento' },
+                validate: v => Number(v) > 0 || 'Seleccione un tipo de documento válido',
+              }}
+            >
+              {/* ✅ CORREGIDO: values son IDs numéricos que corresponden a la tabla document_type */}
+              <option value={0}>Seleccione tipo de documento</option>
+              <option value={1}>Cédula de ciudadanía</option>
+              <option value={2}>Tarjeta de identidad</option>
+              <option value={3}>Cédula de extranjería</option>
+            </ValidatedField>
+
+            <ValidatedField
+              name="documentNumber"
+              label="Número de documento"
+              placeholder="Número de documento"
+              validate={{
+                required: { value: true, message: 'Este campo es obligatorio' },
+              }}
+            />
+
+            <ValidatedField
+              name="phone"
+              label="Teléfono"
+              placeholder="Teléfono"
+              validate={{
+                required: { value: true, message: 'Este campo es obligatorio' },
+              }}
+            />
+
+            <ValidatedField
+              name="birthDate"
+              label="Fecha de nacimiento"
+              type="date"
+              validate={{
+                required: { value: true, message: 'Este campo es obligatorio' },
+              }}
+            />
+
             <PasswordStrengthBar password={password} />
+
             <ValidatedField
               name="secondPassword"
               label={translate('global.form.confirmpassword.label')}
@@ -97,27 +177,20 @@ export const RegisterPage = () => {
                 maxLength: { value: 50, message: translate('global.messages.validate.confirmpassword.maxlength') },
                 validate: v => v === password || translate('global.messages.error.dontmatch'),
               }}
-              data-cy="secondPassword"
             />
-            <Button id="register-submit" color="primary" type="submit" data-cy="submit">
-              <Translate contentKey="register.form.button">Register</Translate>
+
+            <Button color="primary" type="submit">
+              <Translate contentKey="register.form.button">Registrarse</Translate>
             </Button>
           </ValidatedForm>
-          <p>&nbsp;</p>
+
+          <p />
+
           <Alert color="warning">
-            <span>
-              <Translate contentKey="global.messages.info.authenticated.prefix">If you want to</Translate>{' '}
-            </span>
+            <Translate contentKey="global.messages.info.authenticated.prefix">Si deseas</Translate>{' '}
             <Link to="/login" className="alert-link">
-              <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
+              <Translate contentKey="global.messages.info.authenticated.link">iniciar sesión</Translate>
             </Link>
-            <span>
-              <Translate contentKey="global.messages.info.authenticated.suffix">
-                , you can try the default accounts:
-                <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
-                <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
-              </Translate>
-            </span>
           </Alert>
         </Col>
       </Row>

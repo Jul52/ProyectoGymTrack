@@ -9,6 +9,8 @@
       "500": "Internal server error."
     },
     "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
-    "validation": "Validation error on the server."
+    "validation": "Validation error on the server.",
+    "alreadyReserved": "You already have a reservation for this schedule.",
+    "noBasicMembership": "You must purchase a basic membership before booking a course."
   }
 }

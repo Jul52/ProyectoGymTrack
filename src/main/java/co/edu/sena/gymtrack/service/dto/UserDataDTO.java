@@ -29,11 +29,11 @@ public class UserDataDTO implements Serializable {
 
     @NotNull
     @Size(max = 20)
-    private String document;
+    private String documentNumber; // ✅ CORREGIDO: era "document"
 
     @NotNull
     @Size(max = 20)
-    private String phoneNumber;
+    private String phone; // ✅ CORREGIDO: era "phoneNumber"
 
     private LocalDate birthDate;
 
@@ -83,21 +83,21 @@ public class UserDataDTO implements Serializable {
         this.secondLastName = secondLastName;
     }
 
-    public String getDocument() {
-        return document;
-    }
+    public String getDocumentNumber() {
+        return documentNumber;
+    } // ✅ CORREGIDO
 
-    public void setDocument(String document) {
-        this.document = document;
-    }
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
+    } // ✅ CORREGIDO
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    public String getPhone() {
+        return phone;
+    } // ✅ CORREGIDO
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    } // ✅ CORREGIDO
 
     public LocalDate getBirthDate() {
         return birthDate;
@@ -125,17 +125,10 @@ public class UserDataDTO implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof UserDataDTO)) {
-            return false;
-        }
-
+        if (this == o) return true;
+        if (!(o instanceof UserDataDTO)) return false;
         UserDataDTO userDataDTO = (UserDataDTO) o;
-        if (this.id == null) {
-            return false;
-        }
+        if (this.id == null) return false;
         return Objects.equals(this.id, userDataDTO.id);
     }
 
@@ -144,20 +137,38 @@ public class UserDataDTO implements Serializable {
         return Objects.hash(this.id);
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "UserDataDTO{" +
-            "id=" + getId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", secondName='" + getSecondName() + "'" +
-            ", firstLastName='" + getFirstLastName() + "'" +
-            ", secondLastName='" + getSecondLastName() + "'" +
-            ", document='" + getDocument() + "'" +
-            ", phoneNumber='" + getPhoneNumber() + "'" +
-            ", birthDate='" + getBirthDate() + "'" +
-            ", user=" + getUser() +
-            ", documentType=" + getDocumentType() +
-            "}";
+        return (
+            "UserDataDTO{" +
+            "id=" +
+            getId() +
+            ", firstName='" +
+            getFirstName() +
+            "'" +
+            ", secondName='" +
+            getSecondName() +
+            "'" +
+            ", firstLastName='" +
+            getFirstLastName() +
+            "'" +
+            ", secondLastName='" +
+            getSecondLastName() +
+            "'" +
+            ", documentNumber='" +
+            getDocumentNumber() +
+            "'" + // ✅ CORREGIDO
+            ", phone='" +
+            getPhone() +
+            "'" + // ✅ CORREGIDO
+            ", birthDate='" +
+            getBirthDate() +
+            "'" +
+            ", user=" +
+            getUser() +
+            ", documentType=" +
+            getDocumentType() +
+            "}"
+        );
     }
 }

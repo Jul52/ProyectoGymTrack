@@ -16,8 +16,8 @@ public class UserDataTestSamples {
             .secondName("secondName1")
             .firstLastName("firstLastName1")
             .secondLastName("secondLastName1")
-            .document("document1")
-            .phoneNumber("phoneNumber1");
+            .documentNumber("document1")
+            .phone("phoneNumber1");
     }
 
     public static UserData getUserDataSample2() {
@@ -27,8 +27,8 @@ public class UserDataTestSamples {
             .secondName("secondName2")
             .firstLastName("firstLastName2")
             .secondLastName("secondLastName2")
-            .document("document2")
-            .phoneNumber("phoneNumber2");
+            .documentNumber("document2")
+            .phone("phoneNumber2");
     }
 
     public static UserData getUserDataRandomSampleGenerator() {
@@ -38,7 +38,7 @@ public class UserDataTestSamples {
             .secondName(UUID.randomUUID().toString())
             .firstLastName(UUID.randomUUID().toString())
             .secondLastName(UUID.randomUUID().toString())
-            .document(UUID.randomUUID().toString())
-            .phoneNumber(UUID.randomUUID().toString());
+            .documentNumber(UUID.randomUUID().toString())
+            .phone(UUID.randomUUID().toString());
     }
 }

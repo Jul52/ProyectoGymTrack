@@ -3,25 +3,25 @@
     "incident": {
       "home": {
         "title": "Incidentes",
-        "refreshListLabel": "Actualizar lista",
-        "createLabel": "Crear nuevo incidente",
-        "createOrEditLabel": "Crear o editar incidente",
-        "notFound": "No se encontraron incidentes"
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Incidente",
+        "createOrEditLabel": "Crear o editar Incidente",
+        "notFound": "No se encontraron Incidentes"
       },
-      "created": "Un nuevo incidente ha sido creado con el identificador {{ param }}",
-      "updated": "Un incidente ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un incidente ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo Incidente ha sido creado con el identificador {{ param }}",
+      "updated": "El Incidente ha sido actualizado con el identificador {{ param }}",
+      "deleted": "El Incidente ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar el incidente {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el Incidente {{ id }}?"
       },
       "detail": {
-        "title": "Incidente"
+        "title": "Detalle del Incidente"
       },
       "id": "ID",
-      "incidentType": "Tipo de incidente",
+      "incidentType": "Tipo de Incidente",
       "description": "Descripción",
-      "reportedDate": "Fecha de reporte",
-      "machineIncidents": "Incidentes de máquina"
+      "reportedDate": "Fecha de Reporte",
+      "machineIncidents": "Incidentes de Máquina"
     }
   }
 }

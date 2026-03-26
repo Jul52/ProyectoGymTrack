@@ -39,9 +39,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Integration tests for the {@link UserDataResource} REST controller.
- */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
@@ -100,30 +97,21 @@ class UserDataResourceIT {
     private MockMvc restUserDataMockMvc;
 
     private UserData userData;
-
     private UserData insertedUserData;
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
     public static UserData createEntity(EntityManager em) {
         UserData userData = new UserData()
             .firstName(DEFAULT_FIRST_NAME)
             .secondName(DEFAULT_SECOND_NAME)
             .firstLastName(DEFAULT_FIRST_LAST_NAME)
             .secondLastName(DEFAULT_SECOND_LAST_NAME)
-            .document(DEFAULT_DOCUMENT)
-            .phoneNumber(DEFAULT_PHONE_NUMBER)
+            .documentNumber(DEFAULT_DOCUMENT)
+            .phone(DEFAULT_PHONE_NUMBER)
             .birthDate(DEFAULT_BIRTH_DATE);
-        // Add required entity
         User user = UserResourceIT.createEntity();
         em.persist(user);
         em.flush();
         userData.setUser(user);
-        // Add required entity
         DocumentType documentType;
         if (TestUtil.findAll(em, DocumentType.class).isEmpty()) {
             documentType = DocumentTypeResourceIT.createEntity();
@@ -136,27 +124,19 @@ class UserDataResourceIT {
         return userData;
     }
 
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
     public static UserData createUpdatedEntity(EntityManager em) {
         UserData updatedUserData = new UserData()
             .firstName(UPDATED_FIRST_NAME)
             .secondName(UPDATED_SECOND_NAME)
             .firstLastName(UPDATED_FIRST_LAST_NAME)
             .secondLastName(UPDATED_SECOND_LAST_NAME)
-            .document(UPDATED_DOCUMENT)
-            .phoneNumber(UPDATED_PHONE_NUMBER)
+            .documentNumber(UPDATED_DOCUMENT)
+            .phone(UPDATED_PHONE_NUMBER)
             .birthDate(UPDATED_BIRTH_DATE);
-        // Add required entity
         User user = UserResourceIT.createEntity();
         em.persist(user);
         em.flush();
         updatedUserData.setUser(user);
-        // Add required entity
         DocumentType documentType;
         if (TestUtil.findAll(em, DocumentType.class).isEmpty()) {
             documentType = DocumentTypeResourceIT.createUpdatedEntity();
@@ -186,7 +166,6 @@ class UserDataResourceIT {
     @Transactional
     void createUserData() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
-        // Create the UserData
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
         var returnedUserDataDTO = om.readValue(
             restUserDataMockMvc
@@ -197,30 +176,21 @@ class UserDataResourceIT {
                 .getContentAsString(),
             UserDataDTO.class
         );
-
-        // Validate the UserData in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
         var returnedUserData = userDataMapper.toEntity(returnedUserDataDTO);
         assertUserDataUpdatableFieldsEquals(returnedUserData, getPersistedUserData(returnedUserData));
-
         insertedUserData = returnedUserData;
     }
 
     @Test
     @Transactional
     void createUserDataWithExistingId() throws Exception {
-        // Create the UserData with an existing ID
         userData.setId(1L);
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
         long databaseSizeBeforeCreate = getRepositoryCount();
-
-        // An entity with an existing ID cannot be created, so this API call must fail
         restUserDataMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDataDTO)))
             .andExpect(status().isBadRequest());
-
-        // Validate the UserData in the database
         assertSameRepositoryCount(databaseSizeBeforeCreate);
     }
 
@@ -228,16 +198,11 @@ class UserDataResourceIT {
     @Transactional
     void checkFirstNameIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
         userData.setFirstName(null);
-
-        // Create the UserData, which fails.
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
         restUserDataMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDataDTO)))
             .andExpect(status().isBadRequest());
-
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
@@ -245,16 +210,11 @@ class UserDataResourceIT {
     @Transactional
     void checkFirstLastNameIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
         userData.setFirstLastName(null);
-
-        // Create the UserData, which fails.
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
         restUserDataMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDataDTO)))
             .andExpect(status().isBadRequest());
-
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
@@ -262,16 +222,11 @@ class UserDataResourceIT {
     @Transactional
     void checkDocumentIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        userData.setDocument(null);
-
-        // Create the UserData, which fails.
+        userData.setDocumentNumber(null);
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
         restUserDataMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDataDTO)))
             .andExpect(status().isBadRequest());
-
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
@@ -279,26 +234,18 @@ class UserDataResourceIT {
     @Transactional
     void checkPhoneNumberIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        userData.setPhoneNumber(null);
-
-        // Create the UserData, which fails.
+        userData.setPhone(null);
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
         restUserDataMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDataDTO)))
             .andExpect(status().isBadRequest());
-
         assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     void getAllUserData() throws Exception {
-        // Initialize the database
         insertedUserData = userDataRepository.saveAndFlush(userData);
-
-        // Get all the userDataList
         restUserDataMockMvc
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
@@ -308,24 +255,21 @@ class UserDataResourceIT {
             .andExpect(jsonPath("$.[*].secondName").value(hasItem(DEFAULT_SECOND_NAME)))
             .andExpect(jsonPath("$.[*].firstLastName").value(hasItem(DEFAULT_FIRST_LAST_NAME)))
             .andExpect(jsonPath("$.[*].secondLastName").value(hasItem(DEFAULT_SECOND_LAST_NAME)))
-            .andExpect(jsonPath("$.[*].document").value(hasItem(DEFAULT_DOCUMENT)))
-            .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER)))
+            .andExpect(jsonPath("$.[*].documentNumber").value(hasItem(DEFAULT_DOCUMENT))) // ✅ corregido
+            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE_NUMBER))) // ✅ corregido
             .andExpect(jsonPath("$.[*].birthDate").value(hasItem(DEFAULT_BIRTH_DATE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
     void getAllUserDataWithEagerRelationshipsIsEnabled() throws Exception {
         when(userDataServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
         restUserDataMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
         verify(userDataServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({ "unchecked" })
     void getAllUserDataWithEagerRelationshipsIsNotEnabled() throws Exception {
         when(userDataServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
         restUserDataMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
         verify(userDataRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
@@ -333,10 +277,7 @@ class UserDataResourceIT {
     @Test
     @Transactional
     void getUserData() throws Exception {
-        // Initialize the database
         insertedUserData = userDataRepository.saveAndFlush(userData);
-
-        // Get the userData
         restUserDataMockMvc
             .perform(get(ENTITY_API_URL_ID, userData.getId()))
             .andExpect(status().isOk())
@@ -346,40 +287,33 @@ class UserDataResourceIT {
             .andExpect(jsonPath("$.secondName").value(DEFAULT_SECOND_NAME))
             .andExpect(jsonPath("$.firstLastName").value(DEFAULT_FIRST_LAST_NAME))
             .andExpect(jsonPath("$.secondLastName").value(DEFAULT_SECOND_LAST_NAME))
-            .andExpect(jsonPath("$.document").value(DEFAULT_DOCUMENT))
-            .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER))
+            .andExpect(jsonPath("$.documentNumber").value(DEFAULT_DOCUMENT)) // ✅ corregido
+            .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE_NUMBER)) // ✅ corregido
             .andExpect(jsonPath("$.birthDate").value(DEFAULT_BIRTH_DATE.toString()));
     }
 
     @Test
     @Transactional
     void getNonExistingUserData() throws Exception {
-        // Get the userData
         restUserDataMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
     void putExistingUserData() throws Exception {
-        // Initialize the database
         insertedUserData = userDataRepository.saveAndFlush(userData);
-
         long databaseSizeBeforeUpdate = getRepositoryCount();
-
-        // Update the userData
         UserData updatedUserData = userDataRepository.findById(userData.getId()).orElseThrow();
-        // Disconnect from session so that the updates on updatedUserData are not directly saved in db
         em.detach(updatedUserData);
         updatedUserData
             .firstName(UPDATED_FIRST_NAME)
             .secondName(UPDATED_SECOND_NAME)
             .firstLastName(UPDATED_FIRST_LAST_NAME)
             .secondLastName(UPDATED_SECOND_LAST_NAME)
-            .document(UPDATED_DOCUMENT)
-            .phoneNumber(UPDATED_PHONE_NUMBER)
+            .documentNumber(UPDATED_DOCUMENT)
+            .phone(UPDATED_PHONE_NUMBER)
             .birthDate(UPDATED_BIRTH_DATE);
         UserDataDTO userDataDTO = userDataMapper.toDto(updatedUserData);
-
         restUserDataMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, userDataDTO.getId())
@@ -387,8 +321,6 @@ class UserDataResourceIT {
                     .content(om.writeValueAsBytes(userDataDTO))
             )
             .andExpect(status().isOk());
-
-        // Validate the UserData in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assertPersistedUserDataToMatchAllProperties(updatedUserData);
     }
@@ -398,11 +330,7 @@ class UserDataResourceIT {
     void putNonExistingUserData() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         userData.setId(longCount.incrementAndGet());
-
-        // Create the UserData
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUserDataMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, userDataDTO.getId())
@@ -410,8 +338,6 @@ class UserDataResourceIT {
                     .content(om.writeValueAsBytes(userDataDTO))
             )
             .andExpect(status().isBadRequest());
-
-        // Validate the UserData in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
@@ -420,11 +346,7 @@ class UserDataResourceIT {
     void putWithIdMismatchUserData() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         userData.setId(longCount.incrementAndGet());
-
-        // Create the UserData
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUserDataMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, longCount.incrementAndGet())
@@ -432,8 +354,6 @@ class UserDataResourceIT {
                     .content(om.writeValueAsBytes(userDataDTO))
             )
             .andExpect(status().isBadRequest());
-
-        // Validate the UserData in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
@@ -442,33 +362,25 @@ class UserDataResourceIT {
     void putWithMissingIdPathParamUserData() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         userData.setId(longCount.incrementAndGet());
-
-        // Create the UserData
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUserDataMockMvc
             .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDataDTO)))
             .andExpect(status().isMethodNotAllowed());
-
-        // Validate the UserData in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void partialUpdateUserDataWithPatch() throws Exception {
-        // Initialize the database
         insertedUserData = userDataRepository.saveAndFlush(userData);
-
         long databaseSizeBeforeUpdate = getRepositoryCount();
-
-        // Update the userData using partial update
         UserData partialUpdatedUserData = new UserData();
         partialUpdatedUserData.setId(userData.getId());
-
-        partialUpdatedUserData.firstLastName(UPDATED_FIRST_LAST_NAME).secondLastName(UPDATED_SECOND_LAST_NAME).document(UPDATED_DOCUMENT);
-
+        partialUpdatedUserData
+            .firstName(UPDATED_FIRST_NAME)
+            .firstLastName(UPDATED_FIRST_LAST_NAME)
+            .documentNumber(UPDATED_DOCUMENT)
+            .phone(UPDATED_PHONE_NUMBER);
         restUserDataMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedUserData.getId())
@@ -476,9 +388,6 @@ class UserDataResourceIT {
                     .content(om.writeValueAsBytes(partialUpdatedUserData))
             )
             .andExpect(status().isOk());
-
-        // Validate the UserData in the database
-
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assertUserDataUpdatableFieldsEquals(createUpdateProxyForBean(partialUpdatedUserData, userData), getPersistedUserData(userData));
     }
@@ -486,24 +395,18 @@ class UserDataResourceIT {
     @Test
     @Transactional
     void fullUpdateUserDataWithPatch() throws Exception {
-        // Initialize the database
         insertedUserData = userDataRepository.saveAndFlush(userData);
-
         long databaseSizeBeforeUpdate = getRepositoryCount();
-
-        // Update the userData using partial update
         UserData partialUpdatedUserData = new UserData();
         partialUpdatedUserData.setId(userData.getId());
-
         partialUpdatedUserData
             .firstName(UPDATED_FIRST_NAME)
             .secondName(UPDATED_SECOND_NAME)
             .firstLastName(UPDATED_FIRST_LAST_NAME)
             .secondLastName(UPDATED_SECOND_LAST_NAME)
-            .document(UPDATED_DOCUMENT)
-            .phoneNumber(UPDATED_PHONE_NUMBER)
+            .documentNumber(UPDATED_DOCUMENT)
+            .phone(UPDATED_PHONE_NUMBER)
             .birthDate(UPDATED_BIRTH_DATE);
-
         restUserDataMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedUserData.getId())
@@ -511,9 +414,6 @@ class UserDataResourceIT {
                     .content(om.writeValueAsBytes(partialUpdatedUserData))
             )
             .andExpect(status().isOk());
-
-        // Validate the UserData in the database
-
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assertUserDataUpdatableFieldsEquals(partialUpdatedUserData, getPersistedUserData(partialUpdatedUserData));
     }
@@ -523,11 +423,7 @@ class UserDataResourceIT {
     void patchNonExistingUserData() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         userData.setId(longCount.incrementAndGet());
-
-        // Create the UserData
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUserDataMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, userDataDTO.getId())
@@ -535,8 +431,6 @@ class UserDataResourceIT {
                     .content(om.writeValueAsBytes(userDataDTO))
             )
             .andExpect(status().isBadRequest());
-
-        // Validate the UserData in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
@@ -545,11 +439,7 @@ class UserDataResourceIT {
     void patchWithIdMismatchUserData() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         userData.setId(longCount.incrementAndGet());
-
-        // Create the UserData
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUserDataMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
@@ -557,8 +447,6 @@ class UserDataResourceIT {
                     .content(om.writeValueAsBytes(userDataDTO))
             )
             .andExpect(status().isBadRequest());
-
-        // Validate the UserData in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
@@ -567,33 +455,21 @@ class UserDataResourceIT {
     void patchWithMissingIdPathParamUserData() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
         userData.setId(longCount.incrementAndGet());
-
-        // Create the UserData
         UserDataDTO userDataDTO = userDataMapper.toDto(userData);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restUserDataMockMvc
             .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(userDataDTO)))
             .andExpect(status().isMethodNotAllowed());
-
-        // Validate the UserData in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void deleteUserData() throws Exception {
-        // Initialize the database
         insertedUserData = userDataRepository.saveAndFlush(userData);
-
         long databaseSizeBeforeDelete = getRepositoryCount();
-
-        // Delete the userData
         restUserDataMockMvc
             .perform(delete(ENTITY_API_URL_ID, userData.getId()).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
     }
 

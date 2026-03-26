@@ -3,19 +3,19 @@
     "invoiceService": {
       "home": {
         "title": "Servicios de Factura",
-        "refreshListLabel": "Actualizar lista",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Servicio de Factura",
         "createOrEditLabel": "Crear o editar Servicio de Factura",
         "notFound": "No se encontraron Servicios de Factura"
       },
       "created": "Un nuevo Servicio de Factura ha sido creado con el identificador {{ param }}",
-      "updated": "Un Servicio de Factura ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Servicio de Factura ha sido eliminado con el identificador {{ param }}",
+      "updated": "El Servicio de Factura ha sido actualizado con el identificador {{ param }}",
+      "deleted": "El Servicio de Factura ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar el Servicio de Factura {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el Servicio de Factura {{ id }}?"
       },
       "detail": {
-        "title": "Servicio de Factura"
+        "title": "Detalle del Servicio de Factura"
       },
       "id": "ID",
       "quantity": "Cantidad",

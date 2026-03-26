@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="20260213-1" author="gymtrack">
+
+    <createTable tableName="rel_gym_service__course">
+      <column name="gym_service_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="course_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey
+      columnNames="gym_service_id, course_id"
+      tableName="rel_gym_service__course"
+      constraintName="pk_rel_gym_service__course"/>
+
+    <addForeignKeyConstraint
+      baseTableName="rel_gym_service__course"
+      baseColumnNames="gym_service_id"
+      referencedTableName="gym_service"
+      referencedColumnNames="id"
+      constraintName="fk_rel_gym_service"/>
+
+    <addForeignKeyConstraint
+      baseTableName="rel_gym_service__course"
+      baseColumnNames="course_id"
+      referencedTableName="course"
+      referencedColumnNames="id"
+      constraintName="fk_rel_course"/>
+
+  </changeSet>
+
+  <changeSet id="20260213-2-data" author="gymtrack" context="faker">
+
+    <loadData
+      file="config/liquibase/fake-data/rel_gym_service__course.csv"
+      separator=";"
+      tableName="rel_gym_service__course">
+
+      <column name="gym_service_id" type="numeric"/>
+      <column name="course_id" type="numeric"/>
+
+    </loadData>
+
+  </changeSet>
+
+</databaseChangeLog>

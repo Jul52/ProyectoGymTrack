@@ -8,6 +8,7 @@
     "clientFramework": "react",
     "clientTheme": "cyborg",
     "clientThemeVariant": "dark",
+    "creationTimestamp": 1771785566597,
     "devDatabaseType": "mariadb",
     "enableTranslation": true,
     "entities": [

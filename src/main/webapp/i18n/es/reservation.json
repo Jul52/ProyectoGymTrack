@@ -2,28 +2,28 @@
   "gymtrackApp": {
     "reservation": {
       "home": {
-        "title": "Reservas",
-        "refreshListLabel": "Actualizar lista",
-        "createLabel": "Crear nueva reserva",
-        "createOrEditLabel": "Crear o editar reserva",
-        "notFound": "No se encontraron reservas"
+        "title": "Reservaciones",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nueva Reservación",
+        "createOrEditLabel": "Crear o editar Reservación",
+        "notFound": "No se encontraron Reservaciones"
       },
-      "created": "Una nueva reserva ha sido creada con el identificador {{ param }}",
-      "updated": "Una reserva ha sido actualizada con el identificador {{ param }}",
-      "deleted": "Una reserva ha sido eliminada con el identificador {{ param }}",
+      "created": "Una nueva Reservación ha sido creada con el identificador {{ param }}",
+      "updated": "La Reservación ha sido actualizada con el identificador {{ param }}",
+      "deleted": "La Reservación ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Está seguro que quiere eliminar la reserva {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la Reservación {{ id }}?"
       },
       "detail": {
-        "title": "Reserva"
+        "title": "Detalle de la Reservación"
       },
       "id": "ID",
       "status": "Estado",
       "description": "Descripción",
-      "reservationDate": "Fecha de reserva",
+      "reservationDate": "Fecha de Reservación",
       "course": "Curso",
-      "gymService": "Servicio de Gimnasio",
-      "userData": "Datos de Usuario"
+      "gymService": "Servicio del Gym",
+      "registeredBy": "Datos de Usuario"
     }
   }
 }

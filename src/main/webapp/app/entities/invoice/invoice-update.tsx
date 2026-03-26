@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button, Col, FormText, Row } from 'reactstrap';
 import { Translate, ValidatedField, ValidatedForm, isNumber, translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,19 +10,24 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntities as getPayments } from 'app/entities/payment/payment.reducer';
 import { getEntities as getPaymentMethods } from 'app/entities/payment-method/payment-method.reducer';
 import { getEntities as getUserData } from 'app/entities/user-data/user-data.reducer';
+import { getEntities as getGymServices } from 'app/entities/gym-service/gym-service.reducer';
 import { createEntity, getEntity, reset, updateEntity } from './invoice.reducer';
 
 export const InvoiceUpdate = () => {
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
-
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
+  const [searchParams] = useSearchParams();
+
+  // Leemos serviceId y price de la URL si vienen desde gym-service
+  const preselectedServiceId = searchParams.get('serviceId');
+  const preselectedPrice = searchParams.get('price');
 
   const payments = useAppSelector(state => state.payment.entities);
   const paymentMethods = useAppSelector(state => state.paymentMethod.entities);
   const userData = useAppSelector(state => state.userData.entities);
+  const gymServices = useAppSelector(state => state.gymService.entities);
   const invoiceEntity = useAppSelector(state => state.invoice.entity);
   const loading = useAppSelector(state => state.invoice.loading);
   const updating = useAppSelector(state => state.invoice.updating);
@@ -38,10 +43,10 @@ export const InvoiceUpdate = () => {
     } else {
       dispatch(getEntity(id));
     }
-
     dispatch(getPayments({}));
     dispatch(getPaymentMethods({}));
     dispatch(getUserData({}));
+    dispatch(getGymServices({}));
   }, []);
 
   useEffect(() => {
@@ -65,6 +70,7 @@ export const InvoiceUpdate = () => {
       payment: payments.find(it => it.id.toString() === values.payment?.toString()),
       paymentMethod: paymentMethods.find(it => it.id.toString() === values.paymentMethod?.toString()),
       userData: userData.find(it => it.id.toString() === values.userData?.toString()),
+      service: gymServices.find(it => it.id.toString() === values.service?.toString()),
     };
 
     if (isNew) {
@@ -74,18 +80,24 @@ export const InvoiceUpdate = () => {
     }
   };
 
-  const defaultValues = () =>
-    isNew
-      ? {
-          createdDate: displayDefaultDateTime(),
-        }
-      : {
-          ...invoiceEntity,
-          createdDate: convertDateTimeFromServer(invoiceEntity.createdDate),
-          payment: invoiceEntity?.payment?.id,
-          paymentMethod: invoiceEntity?.paymentMethod?.id,
-          userData: invoiceEntity?.userData?.id,
-        };
+  const defaultValues = () => {
+    if (isNew) {
+      return {
+        createdDate: displayDefaultDateTime(),
+        // Prellenamos con los query params si vienen de gym-service
+        total: preselectedPrice ?? '',
+        service: preselectedServiceId ?? '',
+      };
+    }
+    return {
+      ...invoiceEntity,
+      createdDate: convertDateTimeFromServer(invoiceEntity.createdDate),
+      payment: invoiceEntity?.payment?.id,
+      paymentMethod: invoiceEntity?.paymentMethod?.id,
+      userData: invoiceEntity?.userData?.id,
+      service: invoiceEntity?.service?.id,
+    };
+  };
 
   return (
     <div>
@@ -187,6 +199,22 @@ export const InvoiceUpdate = () => {
               <FormText>
                 <Translate contentKey="entity.validation.required">This field is required.</Translate>
               </FormText>
+              <ValidatedField
+                id="invoice-service"
+                name="service"
+                data-cy="service"
+                label={translate('gymtrackApp.invoice.service')}
+                type="select"
+              >
+                <option value="" key="0" />
+                {gymServices
+                  ? gymServices.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.serviceName}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/invoice" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

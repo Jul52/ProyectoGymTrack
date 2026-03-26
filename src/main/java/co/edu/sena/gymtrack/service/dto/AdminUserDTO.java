@@ -3,15 +3,16 @@ package co.edu.sena.gymtrack.service.dto;
 import co.edu.sena.gymtrack.config.Constants;
 import co.edu.sena.gymtrack.domain.Authority;
 import co.edu.sena.gymtrack.domain.User;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * A DTO representing a user, with his authorities.
- */
 public class AdminUserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,6 +34,14 @@ public class AdminUserDTO implements Serializable {
     @Size(min = 5, max = 254)
     private String email;
 
+    // ✅ Campos de UserData — limpios y sin duplicados
+    private String secondName;
+    private String firstLastName;
+    private String secondLastName;
+    private String phone;
+    private LocalDate birthDate;
+    private String documentNumber;
+
     @Size(max = 256)
     private String imageUrl;
 
@@ -42,19 +51,15 @@ public class AdminUserDTO implements Serializable {
     private String langKey;
 
     private String createdBy;
-
     private Instant createdDate;
-
     private String lastModifiedBy;
-
     private Instant lastModifiedDate;
 
     private Set<String> authorities;
 
-    public AdminUserDTO() {
-        // Empty constructor needed for Jackson.
-    }
+    public AdminUserDTO() {}
 
+    // ✅ Constructor limpio — solo lee campos que User realmente tiene
     public AdminUserDTO(User user) {
         this.id = user.getId();
         this.login = user.getLogin();
@@ -101,6 +106,54 @@ public class AdminUserDTO implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public String getFirstLastName() {
+        return firstLastName;
+    }
+
+    public void setFirstLastName(String firstLastName) {
+        this.firstLastName = firstLastName;
+    }
+
+    public String getSecondLastName() {
+        return secondLastName;
+    }
+
+    public void setSecondLastName(String secondLastName) {
+        this.secondLastName = secondLastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
 
     public String getEmail() {
@@ -173,24 +226,5 @@ public class AdminUserDTO implements Serializable {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "AdminUserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
     }
 }

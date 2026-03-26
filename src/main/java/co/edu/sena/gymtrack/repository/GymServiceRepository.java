@@ -37,4 +37,11 @@ public interface GymServiceRepository extends JpaRepository<GymService, Long> {
 
     @Query("select gymService from GymService gymService left join fetch gymService.category where gymService.id =:id")
     Optional<GymService> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query(
+        "select distinct is.service from InvoiceService is " +
+        "where is.invoice.userData.user.login = :login " +
+        "and is.service.status = true"
+    )
+    List<GymService> findServicesByUserLogin(@Param("login") String login);
 }

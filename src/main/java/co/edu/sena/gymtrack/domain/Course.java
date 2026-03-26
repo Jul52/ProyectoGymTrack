@@ -66,6 +66,10 @@ public class Course implements Serializable {
     @JsonIgnoreProperties(value = { "course", "gymService", "userData" }, allowSetters = true)
     private Set<Reservation> reservations = new HashSet<>();
 
+    @ManyToMany(mappedBy = "courses")
+    @JsonIgnoreProperties(value = { "invoiceServices", "category", "reservations", "courses" }, allowSetters = true)
+    private Set<GymService> gymServices = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -242,6 +246,14 @@ public class Course implements Serializable {
         this.reservations.remove(reservation);
         reservation.setCourse(null);
         return this;
+    }
+
+    public Set<GymService> getGymServices() {
+        return this.gymServices;
+    }
+
+    public void setGymServices(Set<GymService> gymServices) {
+        this.gymServices = gymServices;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

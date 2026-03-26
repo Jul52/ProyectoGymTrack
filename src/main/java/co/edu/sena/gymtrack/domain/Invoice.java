@@ -53,30 +53,11 @@ public class Invoice implements Serializable {
     )
     private UserData userData;
 
-    // ========================================
-    // NUEVO CAMPO GYMSERVICE
-    // ========================================
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "invoices", "otherFields" }, allowSetters = true) // Ajusta "otherFields" según GymService
-    private GymService gymService;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "invoiceServices", "category", "reservations" }, allowSetters = true)
+    private GymService service;
 
-    public GymService getGymService() {
-        return this.gymService;
-    }
-
-    public void setGymService(GymService gymService) {
-        this.gymService = gymService;
-    }
-
-    public Invoice gymService(GymService gymService) {
-        this.setGymService(gymService);
-        return this;
-    }
-
-    // ========================================
     // jhipster-needle-entity-add-field - JHipster will add fields here
-    // ========================================
 
     public Long getId() {
         return this.id;
@@ -187,9 +168,20 @@ public class Invoice implements Serializable {
         return this;
     }
 
-    // ========================================
+    public GymService getService() {
+        return this.service;
+    }
+
+    public void setService(GymService gymService) {
+        this.service = gymService;
+    }
+
+    public Invoice service(GymService gymService) {
+        this.setService(gymService);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-    // ========================================
 
     @Override
     public boolean equals(Object o) {
@@ -208,8 +200,13 @@ public class Invoice implements Serializable {
         return getClass().hashCode();
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
-        return "Invoice{" + "id=" + getId() + ", total=" + getTotal() + ", createdDate='" + getCreatedDate() + "'" + "}";
+        return "Invoice{" +
+            "id=" + getId() +
+            ", total=" + getTotal() +
+            ", createdDate='" + getCreatedDate() + "'" +
+            "}";
     }
 }
