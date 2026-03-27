@@ -129,13 +129,13 @@ export const UserData = () => {
                   <Translate contentKey="gymtrackApp.userData.secondLastName">Second Last Name</Translate>{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('secondLastName')} />
                 </th>
-                <th className="hand" onClick={sort('document')}>
-                  <Translate contentKey="gymtrackApp.userData.document">Document</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('document')} />
+                <th className="hand" onClick={sort('documentNumber')}>
+                  <Translate contentKey="gymtrackApp.userData.documentNumber">Document</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('documentNumber')} />
                 </th>
-                <th className="hand" onClick={sort('phoneNumber')}>
-                  <Translate contentKey="gymtrackApp.userData.phoneNumber">Phone Number</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('phoneNumber')} />
+                <th className="hand" onClick={sort('phone')}>
+                  <Translate contentKey="gymtrackApp.userData.phone">Phone Number</Translate>{' '}
+                  <FontAwesomeIcon icon={getSortIconByFieldName('phone')} />
                 </th>
                 <th className="hand" onClick={sort('birthDate')}>
                   <Translate contentKey="gymtrackApp.userData.birthDate">Birth Date</Translate>{' '}
@@ -162,8 +162,8 @@ export const UserData = () => {
                   <td>{userData.secondName}</td>
                   <td>{userData.firstLastName}</td>
                   <td>{userData.secondLastName}</td>
-                  <td>{userData.document}</td>
-                  <td>{userData.phoneNumber}</td>
+                  <td>{userData.documentNumber}</td>
+                  <td>{userData.phone}</td>
                   <td>
                     {userData.birthDate ? <TextFormat type="date" value={userData.birthDate} format={APP_LOCAL_DATE_FORMAT} /> : null}
                   </td>

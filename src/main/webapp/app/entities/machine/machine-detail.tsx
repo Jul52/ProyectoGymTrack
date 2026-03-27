@@ -52,7 +52,7 @@ export const MachineDetail = () => {
           <dt>
             <Translate contentKey="gymtrackApp.machine.admin">Admin</Translate>
           </dt>
-          <dd>{machineEntity.admin ? machineEntity.admin.document : ''}</dd>
+          <dd>{machineEntity.admin ? machineEntity.admin.documentNumber : ''}</dd>
         </dl>
         <Button tag={Link} to="/machine" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

@@ -8,8 +8,8 @@ export interface IUserData {
   secondName?: string | null;
   firstLastName?: string;
   secondLastName?: string | null;
-  document?: string;
-  phoneNumber?: string;
+  documentNumber?: string;
+  phone?: string;
   birthDate?: dayjs.Dayjs | null;
   user?: IUser;
   documentType?: IDocumentType;

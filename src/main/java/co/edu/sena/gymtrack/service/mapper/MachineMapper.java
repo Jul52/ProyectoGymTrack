@@ -17,6 +17,6 @@ public interface MachineMapper extends EntityMapper<MachineDTO, Machine> {
     @Named("userDataDocument")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "documentNumber", source = "documentNumber") // ✅ CORREGIDO: target ahora coincide con UserDataDTO
+    @Mapping(target = "documentNumber", source = "documentNumber")
     UserDataDTO toDtoUserDataDocument(UserData userData);
 }

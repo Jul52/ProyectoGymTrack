@@ -61,13 +61,13 @@ export const UserDataDetail = () => {
               <Translate contentKey="gymtrackApp.userData.document">Document</Translate>
             </span>
           </dt>
-          <dd>{userDataEntity.document}</dd>
+          <dd>{userDataEntity.documentNumber}</dd>
           <dt>
             <span id="phoneNumber">
               <Translate contentKey="gymtrackApp.userData.phoneNumber">Phone Number</Translate>
             </span>
           </dt>
-          <dd>{userDataEntity.phoneNumber}</dd>
+          <dd>{userDataEntity.phone}</dd>
           <dt>
             <span id="birthDate">
               <Translate contentKey="gymtrackApp.userData.birthDate">Birth Date</Translate>

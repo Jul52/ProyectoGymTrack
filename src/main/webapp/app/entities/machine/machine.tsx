@@ -141,7 +141,7 @@ export const Machine = () => {
                   <td>{machine.serial}</td>
                   <td>{machine.description}</td>
                   <td>{machine.status ? 'true' : 'false'}</td>
-                  <td>{machine.admin ? <Link to={`/user-data/${machine.admin.id}`}>{machine.admin.document}</Link> : ''}</td>
+                  <td>{machine.admin ? <Link to={`/user-data/${machine.admin.id}`}>{machine.admin.documentNumber}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`/machine/${machine.id}`} color="info" size="sm" data-cy="entityDetailsButton">
