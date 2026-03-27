@@ -633,7 +633,7 @@ const AdminPaymentForm = () => {
                 <option value="" key="0" />
                 {userData?.map(u => (
                   <option value={u.id} key={u.id}>
-                    {u.document}
+                    {u.documentNumber}
                   </option>
                 ))}
               </ValidatedField>

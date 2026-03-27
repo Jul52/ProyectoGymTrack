@@ -191,7 +191,7 @@ export const InvoiceUpdate = () => {
                 {userData
                   ? userData.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.document}
+                        {otherEntity.documentNumber}
                       </option>
                     ))
                   : null}
