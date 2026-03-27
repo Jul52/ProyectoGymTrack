@@ -20,6 +20,9 @@ public class PaymentDTO implements Serializable {
     @NotNull
     private Instant paymentDate;
 
+    @NotNull
+    private String serviceName;
+
     @Size(max = 100)
     private String transactionId;
 
@@ -55,6 +58,14 @@ public class PaymentDTO implements Serializable {
 
     public void setPaymentDate(Instant paymentDate) {
         this.paymentDate = paymentDate;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public String getTransactionId() {
@@ -117,6 +128,7 @@ public class PaymentDTO implements Serializable {
             "id=" + getId() +
             ", amountPaid=" + getAmountPaid() +
             ", paymentDate='" + getPaymentDate() + "'" +
+            ", serviceName='" + getServiceName() + "'" +
             ", transactionId='" + getTransactionId() + "'" +
             ", status='" + getStatus() + "'" +
             ", paymentMethod=" + getPaymentMethod() +

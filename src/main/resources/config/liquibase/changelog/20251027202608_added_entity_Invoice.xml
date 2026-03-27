@@ -49,16 +49,17 @@
     -->
     <changeSet id="20251027202608-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/invoice.csv"
-                  separator=";"
-                  tableName="invoice"
-                  usePreparedStatements="true">
-            <column name="id" type="numeric"/>
-            <column name="total" type="numeric"/>
-            <column name="created_date" type="date"/>
-            <column name="payment_method_id" type="numeric"/>
-            <column name="user_data_id" type="numeric"/>
-            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+          file="config/liquibase/fake-data/invoice.csv"
+          separator=";"
+          tableName="invoice"
+          usePreparedStatements="true">
+          <column name="id" type="numeric"/>
+          <column name="total" type="numeric"/>
+          <column name="created_date" type="date"/>
+          <column name="payment_id" type="numeric"/>
+          <column name="payment_method_id" type="numeric"/>
+          <column name="user_data_id" type="numeric"/>
+          <column name="service_id" type="numeric"/>
         </loadData>
     </changeSet>
 </databaseChangeLog>

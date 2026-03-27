@@ -35,6 +35,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     )
     List<Invoice> findAllWithToOneRelationships();
 
+    @Query("select i from Invoice i left join fetch i.service where i.payment.id = :paymentId")
+    Optional<Invoice> findByPaymentId(@Param("paymentId") Long paymentId);
+
     @Query(
         "select invoice from Invoice invoice left join fetch invoice.paymentMethod left join fetch invoice.userData left join fetch invoice.service where invoice.id =:id"
     )
@@ -54,6 +57,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query(
         """
         SELECT i FROM Invoice i
+        LEFT JOIN FETCH i.payment
         LEFT JOIN FETCH i.paymentMethod
         LEFT JOIN FETCH i.userData ud
         LEFT JOIN FETCH i.service

@@ -160,7 +160,7 @@ export const InvoiceDetail = () => {
               {[
                 { label: 'N° Factura', value: `#${inv.id}`, icon: '🔢' },
                 { label: 'Servicio', value: inv.service?.serviceName ?? '—', icon: '🏋️' },
-                { label: 'Cliente', value: inv.userData?.document ?? '—', icon: '👤' },
+                { label: 'Cliente', value: inv.userData?.documentNumber ?? '—', icon: '👤' },
                 { label: 'Método de pago', value: methodName ? `${getMethodIcon(methodName)} ${methodName}` : '—', icon: '💳' },
                 { label: 'Pago ID', value: inv.payment?.id ? `#${inv.payment.id}` : '—', icon: '🧾' },
                 {

@@ -119,13 +119,10 @@ export const Payment = () => {
                   <Translate contentKey="gymtrackApp.payment.paymentDate" />{' '}
                   <FontAwesomeIcon icon={getSortIconByFieldName('paymentDate')} />
                 </th>
-                <th className="hand" onClick={sort('transactionId')}>
-                  <Translate contentKey="gymtrackApp.payment.transactionId" />{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('transactionId')} />
-                </th>
                 <th className="hand" onClick={sort('status')}>
                   <Translate contentKey="gymtrackApp.payment.status" /> <FontAwesomeIcon icon={getSortIconByFieldName('status')} />
                 </th>
+                <th>Servicio</th> {/* ← NUEVO */}
                 <th>
                   <Translate contentKey="gymtrackApp.payment.paymentMethod" /> <FontAwesomeIcon icon="sort" />
                 </th>
@@ -147,8 +144,8 @@ export const Payment = () => {
                   </td>
                   <td>{payment.amountPaid}</td>
                   <td>{payment.paymentDate ? <TextFormat type="date" value={payment.paymentDate} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{payment.transactionId}</td>
                   <td>{payment.status}</td>
+                  <td>{payment.serviceName ?? '—'}</td> {/* ← NUEVO */}
                   <td>
                     {payment.paymentMethod ? (
                       <Link to={`/payment-method/${payment.paymentMethod.id}`}>{payment.paymentMethod.methodName}</Link>
@@ -159,7 +156,7 @@ export const Payment = () => {
                   {isAdmin && (
                     <td>
                       {payment.registeredBy ? (
-                        <Link to={`/user-data/${payment.registeredBy.id}`}>{payment.registeredBy.document}</Link>
+                        <Link to={`/user-data/${payment.registeredBy.id}`}>{payment.registeredBy.documentNumber}</Link>
                       ) : (
                         ''
                       )}

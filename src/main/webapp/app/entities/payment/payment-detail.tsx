@@ -187,7 +187,8 @@ export const PaymentDetail = () => {
                   value: methodName ? `${getMethodIcon(methodName)} ${methodName}` : '—',
                   icon: '💳',
                 },
-                { label: 'Registrado por', value: p.registeredBy?.document || '—', icon: '👤' },
+                { label: 'Servicio', value: p.serviceName ?? '—', icon: '🏋️' },
+                { label: 'Registrado por', value: p.registeredBy?.documentNumber || '—', icon: '👤' },
               ].map((item, idx) => (
                 <div
                   key={idx}
